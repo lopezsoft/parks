@@ -5,15 +5,57 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Darsboard</title>
         <!-- Fonts -->
-        <base href="/dash/">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href  = "https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link rel   = "stylesheet" href="/css/site.css"> 
+        <script type="text/javascript">
+            var Ext = Ext || {}; // Ext namespace won't be defined yet...
+    
+            // This function is called by the Microloader after it has performed basic
+            // device detection. The results are provided in the "tags" object. You can
+            // use these tags here or even add custom tags. These can be used by platform
+            // filters in your manifest or by platformConfig expressions in your app.
+            //
+            Ext.beforeLoad = function (tags) {
+                var s = location.search,  // the query string (ex "?foo=1&bar")
+                    profile;
+    
+                // For testing look for "?classic" or "?modern" in the URL to override
+                // device detection default.
+                //
+                if (s.match(/\bclassic\b/)) {
+                    profile = 'classic';
+                }
+                else if (s.match(/\bmodern\b/)) {
+                    profile = 'modern';
+                }
+                // uncomment this if you have added native build profiles to your app.json
+                /*else if (tags.webview) {
+                    if (tags.ios) {
+                        profile = 'ios';
+                    }
+                    // add other native platforms here
+                }*/
+                else {
+                    //profile = tags.desktop ? 'classic' : 'modern';
+                    profile = tags.phone ? 'modern' : 'classic';
+                }
+    
+                Ext.manifest = profile; // this name must match a build profile name
+    
+                // This function is called once the manifest is available but before
+                // any data is pulled from it.
+                //
+                //return function (manifest) {
+                    // peek at / modify the manifest object
+                //};
+            };
+        </script>
+        <!-- The line below must be kept intact for Sencha Cmd to build your application -->
+        <script id="microloader" type="text/javascript" src="bootstrap.js" ></script>
     </head>
     <body>
-    
-    <ngx-app>Cargando...</ngx-app>
 
-    <style>@-webkit-keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@-moz-keyframes spin{0%{-moz-transform:rotate(0)}100%{-moz-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}.spinner{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1003;background: #000000;overflow:hidden}  .spinner div:first-child{display:block;position:relative;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;box-shadow:0 3px 3px 0 rgba(255,56,106,1);transform:translate3d(0,0,0);animation:spin 2s linear infinite}  .spinner div:first-child:after,.spinner div:first-child:before{content:'';position:absolute;border-radius:50%}  .spinner div:first-child:before{top:5px;left:5px;right:5px;bottom:5px;box-shadow:0 3px 3px 0 rgb(255, 228, 32);-webkit-animation:spin 3s linear infinite;animation:spin 3s linear infinite}  .spinner div:first-child:after{top:15px;left:15px;right:15px;bottom:15px;box-shadow:0 3px 3px 0 rgba(61, 175, 255,1);animation:spin 1.5s linear infinite}</style>
-    <div id="nb-global-spinner" class="spinner">
+    <div id="global-spinner" class="spinner">
         <div class="blob blob-0"></div>
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -21,11 +63,6 @@
         <div class="blob blob-4"></div>
         <div class="blob blob-5"></div>
     </div>
-    <script src="/dash/runtime.js"> </script>
-    <script src="/dash/polyfills.js"> </script>
-    <script src="/dash/styles.js"> </script>
-    <script src="/dash/vendor.js"> </script>
-    <script src="/dash/main.js"> </script>
-    <script src="/dash/app-pages-pages-module.js"></script>
+    
     </body>
 </html>

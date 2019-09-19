@@ -2,7 +2,7 @@
 
 namespace App\models\dashboard;
 
-use app\core\CoreModel;
+use App\core\CoreModel;
 
 class BranchOffices extends CoreModel
 {
