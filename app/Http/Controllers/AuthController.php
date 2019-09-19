@@ -14,12 +14,14 @@ class AuthController extends Controller
     public function signup(Request $request)
     {
         $request->validate([
-            'full_name'         => 'required|string',
+            'first_name'        => 'required|string',
+            'last_name'         => 'required|string',
             'email'             => 'required|string|email|unique:users',
             'password'          => 'required|string|confirmed',
         ]);
         $user = new User([
-            'full_name'        => $request->fullName,
+            'first_name'        => $request->first_name,
+            'last_name'         => $request->last_name,
             'email'             => $request->email,
             'password'          => bcrypt($request->password),
         ]);
@@ -56,6 +58,7 @@ class AuthController extends Controller
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),
+            'user'         => $user
         ]);
     }
 
