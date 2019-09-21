@@ -8,6 +8,7 @@ Ext.define('Admin.view.products.views.LinesView',{
         this.callParent(arguments);
         this.setTitle('Agregar/Editar Línea de Productos');
     },
+    store       : 'LinesStore',
     items: [
         {
             xtype       : 'customForm',
@@ -17,6 +18,7 @@ Ext.define('Admin.view.products.views.LinesView',{
                     name        : 'line_name'
                 },
                 {
+                    xtype       : 'colorfield',
                     fieldLabel  : 'Color',
                     name        : 'color',
                     allowBlank  : true

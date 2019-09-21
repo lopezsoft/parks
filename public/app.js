@@ -13,7 +13,6 @@ Ext.application({
     // explicitly.
     //
     requires: [
-        'Ext.window.Toast',
         'Admin.*'
     ]
 });

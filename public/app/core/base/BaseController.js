@@ -182,7 +182,7 @@ Ext.define('Admin.core.base.BaseController', {
         this.setConfigVar();
 
         var me		= this,
-            cUrl = me.urlBase +'login/close_session_redirect',
+            cUrl    = Global.getUrlBase() +'api/auth/logout',
             bUrl	= me.urlLoc;
 
         Ext.Msg.show({
@@ -192,20 +192,7 @@ Ext.define('Admin.core.base.BaseController', {
             icon	: Ext.Msg.QUESTION,
             fn: function(btn) {
                 if (btn === 'yes') {
-                    Ext.Msg.wait('Por favor espere...','Cerrando sesión');
-
-                    Ext.Ajax.request({
-                        url		: cUrl,
-                        //timeout	: 2000,
-                        success: function(response){
-                            Ext.Msg.hide();
-                            window.location = bUrl;
-                        },
-                        failure: function (response) {
-                            Ext.Msg.hide();
-                            me.app.onAlert('No se puede cerrar la sesión');
-                        }
-                    });
+                    AuthToken.onLogout();
                 }
             }
         });
@@ -394,7 +381,7 @@ Ext.define('Admin.core.base.BaseController', {
     getIframe : function (xUrl, xFormat) {
         var
             me  = this;
-        Ext.require('Admin.core.docs.IframeView');
+        // Ext.require('Admin.core.docs.IframeView');
         Ext.onReady(function () {
             if (xFormat == 'pdf') {
                 var

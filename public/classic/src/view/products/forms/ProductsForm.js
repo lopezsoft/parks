@@ -5,7 +5,11 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
     requires: [
         'Admin.view.products.ProductsController',
         'Admin.store.products.ProductsStore',
-        'Admin.core.field.CheckBoxField'
+        'Admin.core.field.CheckBoxField',
+        'Admin.core.combo.ComboCategories',
+        'Admin.core.combo.ComboLines',
+        'Admin.core.combo.ComboBranchOffices',
+        'Admin.core.field.NumberField'
     ],
     controlle : 'products',
     initComponent: function () {

@@ -5,14 +5,8 @@ Ext.define('Admin.store.company.CompanyStore',{
     pageSize  : 1,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_company',
             query       : ''
-        },
-        api: {
-            create  : 'company/insertcompany',
-            read    : 'company/getcompany',
-            update  : 'company/setcompany',
-            destroy : 'company/deletecompany'
         }
     },
     requires: [

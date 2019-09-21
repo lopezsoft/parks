@@ -7,7 +7,8 @@ Ext.define('Admin.Application', {
 		'Admin.sockets.data.proxy.SocketIo',
 		'Admin.sockets.Socket',
         'Ext.util.TaskRunner',
-		'Admin.view.config.Configs'
+        'Admin.view.config.Configs',
+        'Ext.window.Toast'
     ],
 
     stores: [

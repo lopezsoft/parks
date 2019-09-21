@@ -5,7 +5,8 @@ Ext.define('Admin.view.products.forms.LinesForm',{
     requires: [
         'Admin.view.products.ProductsController',
         'Admin.store.products.LinesStore',
-        'Admin.core.field.CheckBoxField'
+        'Admin.core.field.CheckBoxField',
+        'Ext.ux.colorpick.Field'
     ],
     controlle : 'products',
     initComponent: function () {
@@ -45,8 +46,15 @@ Ext.define('Admin.view.products.forms.LinesForm',{
             xtype       : 'customGrid',
             store       : 'LinesStore',
             columns: [
-                { text: 'Nombre de la línea', dataIndex: 'line_name'},
-                { text: 'Color', dataIndex: 'color', width : 100 },
+                { text: 'Nombre de la línea', dataIndex: 'line_name', width : 250},
+                { 
+                    text: 'Color', 
+                    dataIndex: 'color', 
+                    width : 100,
+                    renderer : function (val) {
+                        return '<span style="color:#' + val + ';">' + val + '</span>';
+                    }
+                },
                 { text: 'Activa', dataIndex: 'active', width : 80, xtype: 'checkcolumn', stopSelection: false }
             ],
             dockedItems: [

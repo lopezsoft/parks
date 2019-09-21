@@ -14,17 +14,9 @@ Ext.define('Admin.view.products.views.ProductsView',{
             xtype       : 'customForm',
             items: [
                 {
-                    fieldLabel  : 'Nombre del producto',
-                    name        : 'product_name'
-                },
-                {
                     fieldLabel  : 'Código',
                     name        : 'code',
                     allowBlank  : true
-                },
-                {
-                    fieldLabel  : 'Dirección',
-                    name        : 'address'
                 },
                 {
                     fieldLabel  : 'Código de barras',
@@ -32,7 +24,21 @@ Ext.define('Admin.view.products.views.ProductsView',{
                     allowBlank  : true
                 },
                 {
+                    fieldLabel  : 'Nombre del producto',
+                    name        : 'product_name'
+                },
+                {
+                    xtype       : 'combobranchoffices'
+                },
+                {
+                    xtype       : 'combocategories'
+                },
+                {
+                    xtype       : 'combolines'
+                },
+                {
                     fieldLabel  : 'Precio de venta',
+                    xtype       : 'numberField',
                     name        : 'price',
                     allowBlank  : true
                 },

@@ -46,6 +46,23 @@ Ext.define('Admin.security.TokenStorage', {
         return this.recover() ? true : false;
     },
 
+    onLogout: function (params) {
+        var me  = this,
+            app = Admin.getApplication();
+        Ext.Ajax.request({
+            url     : Global.getUrlBase() + 'api/auth/logout',
+            params : me.recoverParams(),
+            method      : 'GET',
+            success: function(response, opts) {
+            //    window.reload();
+                me.clear();
+            },
+            failure: function(response, opts) {
+                app.showResult('server-side failure with status code ' + response.status);
+            }
+        });
+    },
+
     onLogin : function (params, cont) {
         var me  = this,
             app = Admin.getApplication();

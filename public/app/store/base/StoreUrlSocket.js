@@ -78,6 +78,7 @@ Ext.define('Admin.store.base.StoreUrlSocket',{
 			datos 	= xStore; // Guardamos el Store
 			proxy 	= datos.getProxy(); // Obtenemos el PROXY de Ajax
 			pUrl	= proxy.url; // Obtenemos la URL que se ha pasado para la consulta el servidor
+			
 			pApi	= proxy.getApi();
 			if (proxy.typeData == 'Ajax'){
 				if (me.urlCrtl === '') { // La Url no ha sido cargada, se carga.

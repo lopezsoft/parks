@@ -4,6 +4,6 @@ Ext.define('Admin.model.products.LinesModel',{
         { name: 'id', type : 'int' },
         { name: 'line_name'},
         { name: 'color' },
-        { name: 'active', type : 'bool' }
+        { name: 'active' }
     ]
 });

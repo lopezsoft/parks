@@ -179,6 +179,9 @@ Ext.define('Admin.view.main.MainController', {
                     Ext.onReady(function () {
                         me.unMask();
                         app.onStore('products.ProductsStore');
+                        app.onStore('products.LinesStore');
+                        app.onStore('products.CategoriesStore');
+                        app.onStore('company.BranchOfficesStore');
                         me.setCurrentView(id);
                     });
                     break;            

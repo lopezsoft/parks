@@ -5,7 +5,8 @@ Ext.define('Admin.view.products.forms.CategoriesForm',{
     requires: [
         'Admin.view.products.ProductsController',
         'Admin.store.products.CategoriesStore',
-        'Admin.core.field.CheckBoxField'
+        'Admin.core.field.CheckBoxField',
+        'Ext.ux.colorpick.Field'
     ],
     controlle : 'products',
     initComponent: function () {
@@ -45,8 +46,15 @@ Ext.define('Admin.view.products.forms.CategoriesForm',{
             xtype       : 'customGrid',
             store       : 'CategoriesStore',
             columns: [
-                { text: 'Nombre de la categoria', dataIndex: 'category_name'},
-                { text: 'Color', dataIndex: 'color', width : 100 },
+                { text: 'Nombre de la categoria', dataIndex: 'category_name', width : 250},
+                { 
+                    text        : 'Color', 
+                    dataIndex   : 'color', 
+                    width       : 100,
+                    renderer    : function (val) {
+                        return '<span style="color:#' + val + ';">' + val + '</span>';
+                    }
+                },
                 { text: 'Activa', dataIndex: 'active', width : 80, xtype: 'checkcolumn', stopSelection: false }
             ],
             dockedItems: [

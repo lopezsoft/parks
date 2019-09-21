@@ -10,6 +10,10 @@ Ext.define('Admin.store.general.CountryStore',{
     ],
     model   : 'Admin.model.general.CountryModel',
     proxy   : {
-        url : 'general/getcountries'
+        url : 'master/getdata',
+        extraParams : {
+            pdbTable    : 'tb_countries',
+            query       : ''
+        }
     }
 });
