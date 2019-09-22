@@ -5,14 +5,8 @@ Ext.define('Admin.store.products.ProductsStore',{
     pageSize  : 100,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_products',
             query       : ''
-        },
-        api: {
-            create  : 'products/insertproducts',
-            read    : 'products/getproducts',
-            update  : 'products/setproducts',
-            destroy : 'products/deleteproducts'
         }
     },
     requires: [

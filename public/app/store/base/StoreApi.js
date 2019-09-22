@@ -5,10 +5,10 @@ Ext.define('Admin.store.base.StoreApi',{
     proxy: {
 		type	: 'ajax',
 	    api: {
-			    create  : 'c_general/insert_data',
-			    read    : 'c_general/get_select',
-			    update  : 'c_general/update_data',
-			    destroy : 'c_general/delete_data'
+			    create  : 'master/insertdata',
+			    read    : 'master/getdata',
+			    update  : 'master/setdata',
+			    destroy : 'master/deletedata'
 		},
 	    writer : {
 			type 			: 'json',

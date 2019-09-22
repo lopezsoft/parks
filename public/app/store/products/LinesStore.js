@@ -2,17 +2,11 @@
 Ext.define('Admin.store.products.LinesStore',{
     extend  : 'Admin.store.base.StoreApi',
     storeId : 'LinesStore',
-    pageSize  : 100,
+    pageSize  : 1000,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_product_lines',
             query       : ''
-        },
-        api: {
-            create  : 'products/insertlines',
-            read    : 'products/getlines',
-            update  : 'products/setlines',
-            destroy : 'products/deletelines'
         }
     },
     requires: [

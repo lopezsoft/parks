@@ -42,7 +42,10 @@ Ext.define('Admin.store.base.StoreUrl',{
 			proxy 	= datos.getProxy(); // Obtenemos el PROXY de Ajax
 			pUrl	= proxy.url; // Obtenemos la URL que se ha pasado para la consulta el servidor
 			pApi	= proxy.getApi();
-			proxy.setExtraParams(param);
+			xparams	= proxy.getExtraParams();
+			xparams.Authorization 	= param.token_type +' '+ param.token;
+			proxy.setExtraParams(xparams);
+
 			if (me.urlCrtl === '') { // La Url no ha sido cargada, se carga.
 				if (pUrl === '') {
 
@@ -82,7 +85,9 @@ Ext.define('Admin.store.base.StoreUrl',{
 			proxy 	= datos.getProxy(); // Obtenemos el PROXY de Ajax
 			pUrl	= proxy.url; // Obtenemos la URL que se ha pasado para la consulta el servidor
 			pApi	= proxy.getApi();
-			proxy.setExtraParams(param);
+			xparams	= proxy.getExtraParams();
+			xparams.Authorization 	= param.token_type +' '+ param.token;
+			proxy.setExtraParams(xparams);
 
 			if (me.urlCrtl === '') { // La Url no ha sido cargada, se carga.
 				if (pUrl === '') {

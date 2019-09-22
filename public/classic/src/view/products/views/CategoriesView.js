@@ -18,6 +18,7 @@ Ext.define('Admin.view.products.views.CategoriesView',{
                     name        : 'category_name'
                 },
                 {
+                    xtype       : 'colorfield',
                     fieldLabel  : 'Color',
                     name        : 'color',
                     allowBlank  : true

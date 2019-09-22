@@ -69,13 +69,6 @@ Ext.define('Admin.view.main.Main', {
                 //     hrefTarget: '_self',
                 //     tooltip: 'See latest search'
                 // },
-                // {
-                //     iconCls:'x-fa fa-envelope',
-                //     ui: 'header',
-                //     href: '#email',
-                //     hrefTarget: '_self',
-                //     tooltip: 'Check your email'
-                // },
                 {
                     iconCls:'x-fa fa-question',
                     ui: 'header',
@@ -89,6 +82,13 @@ Ext.define('Admin.view.main.Main', {
                     href: '#profile',
                     hrefTarget: '_self',
                     tooltip: 'Perfil de usuario'
+                },
+                {
+                    iconCls     :'x-fa fa-sign-out',
+                    ui          : 'header',
+                    handler     : 'onCloseSesion',
+                    text        : 'Salir',
+                    tooltip     : 'Cerrar sesión y salir del sistema'
                 },
                 {
                     xtype: 'tbtext',

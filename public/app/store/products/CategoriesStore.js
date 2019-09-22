@@ -2,17 +2,11 @@
 Ext.define('Admin.store.products.CategoriesStore',{
     extend  : 'Admin.store.base.StoreApi',
     storeId : 'CategoriesStore',
-    pageSize  : 100,
+    pageSize  : 1000,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_product_categories',
             query       : ''
-        },
-        api: {
-            create  : 'products/insertcategories',
-            read    : 'products/getcategories',
-            update  : 'products/setcategories',
-            destroy : 'products/deletecategories'
         }
     },
     requires: [

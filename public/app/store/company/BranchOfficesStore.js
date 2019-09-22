@@ -5,14 +5,8 @@ Ext.define('Admin.store.company.BranchOfficesStore',{
     pageSize  : 10,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_branch_offices',
             query       : ''
-        },
-        api: {
-            create  : 'company/insertbranchoffices',
-            read    : 'company/getbranchoffices',
-            update  : 'company/setbranchoffices',
-            destroy : 'company/deletebranchoffices'
         }
     },
     requires: [
