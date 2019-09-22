@@ -192,7 +192,7 @@ Ext.define('Admin.core.base.BaseController', {
             icon	: Ext.Msg.QUESTION,
             fn: function(btn) {
                 if (btn === 'yes') {
-                    AuthToken.onLogout();
+                    AuthToken.onLogout(me);
                 }
             }
         });
