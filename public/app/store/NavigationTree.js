@@ -19,20 +19,20 @@ Ext.define('Admin.store.NavigationTree', {
             },
             {
                 text        : 'Empresa',
-                iconCls     : 'x-fa fa-send',
+                iconCls     : 'fas fa-building',
                 leaf        : false,
                 expanded : false,
                 children : [
                     {
                         text: 'Datos de la empresa',
-                        iconCls: 'x-fa fa-file-o',
+                        iconCls     : 'fas fa-building',
                         viewType    : 'companyform',
                         routeId     : 'company',
                         leaf        : true
                     },
                     {
                         text        : 'Sucursales',
-                        iconCls     : 'x-fa fa-file-o',
+                        iconCls     : 'fas fa-home',
                         viewType    : 'branchsform',
                         routeId     : 'branchoffices',
                         leaf        : true
@@ -41,54 +41,63 @@ Ext.define('Admin.store.NavigationTree', {
             },
             {
                 text: 'Ventas',
-                iconCls: 'x-fa fa-user',
+                iconCls: 'fas fa-store',
                 leaf: false,
                 expanded: false,
                 children: [
                     {
-                        text: 'Parametros',
-                        iconCls: 'x-fa fa-file-o',
-                        viewType: 'pageblank',
-                        leaf: true
+                        text        : 'Servicios',
+                        iconCls     : 'x-fa fa-money',
+                        viewType    : 'servicesform',
+                        routeId     : 'sales/services',
+                        leaf        : true
                     },
                     {
-                        text: 'Procesos',
-                        iconCls: 'x-fa fa-exclamation-triangle',
-                        leaf: false,
-                        expanded: false,
-                        viewType: 'reciboporpredioform'
+                        text        : 'Servicios por sucursal',
+                        iconCls     : 'x-fa fa-money',
+                        viewType    : 'branchservicesform',
+                        routeId     : 'sales/branchservices',
+                        leaf        : true
                     },
                     {
-                        text: 'Consultas',
-                        iconCls: 'x-fa fa-times-circle',
-                        viewType: 'page500',
-                        leaf: true
+                        text        : 'Calcetines',
+                        iconCls     : 'x-fa fa-money',
+                        viewType    : 'footwearform',
+                        routeId     : 'sales/footwear',
+                        leaf        : true
+                    },
+                    {
+                        text        : 'Calcetines por sucursal',
+                        iconCls     : 'x-fa fa-money',
+                        viewType    : 'branchfoorwearform',
+                        routeId     : 'sales/branchfootwear',
+                        leaf        : true
                     }
                 ]
             },
             {
                 text: 'Productos',
-                iconCls: 'x-fa fa-file-o',
+                iconCls: 'fas fa-box-open',
                 leaf     : false,
                 expanded : false,
                 children : [
                     {
                         text        : 'Productos',
-                        iconCls     : 'x-fa fa-file-o',
+                        iconCls     : 'fas fa-box-open',
                         viewType    : 'productsform',
                         routeId     : 'products',
                         leaf        : true
                     },
                     {
                         text: 'Lineas',
-                        iconCls: 'x-fa fa-file-o',
+                        iconCls: 'x-fa fa-money',
                         viewType    : 'linesform',
                         routeId     : 'products/lines',
                         leaf        : true
                     },
                     {
                         text: 'Categorias',
-                        iconCls: 'x-fa fa-file-o',
+                        iconCls: 'x-fa fa-money',
                         viewType: 'categoriesform',
                         routeId     : 'products/categories',
                         leaf: true
@@ -97,19 +106,19 @@ Ext.define('Admin.store.NavigationTree', {
             },
             {
                 text: 'Personas',
-                iconCls: 'x-fa fa-search',
+                iconCls: 'x-fa fa-users',
                 viewType: 'faq',
                 leaf: true
             },
             {
                 text: 'Usuarios',
-                iconCls: 'x-fa fa-leanpub',
+                iconCls: 'x-fa  fa-user',
                 expanded: false,
                 selectable: false,
                 children: [
                     {
                         text: 'Blank Page',
-                        iconCls: 'x-fa fa-file-o',
+                        iconCls: 'x-fa fa-money',
                         viewType: 'pageblank',
                         leaf: true
                     },
@@ -155,13 +164,13 @@ Ext.define('Admin.store.NavigationTree', {
             },
             {
                 text: 'Ajustes',
-                iconCls: 'x-fa fa-flask',
+                iconCls: 'x-fa fa-cogs',
                 viewType: 'widgets',
                 leaf: true
             },
             {
                 text: 'Login',
-                iconCls: 'x-fa fa-flask',
+                iconCls: 'x-fa fa-sign-in',
                 viewType: 'login',
                 // routeId: 'login',
                 leaf: true

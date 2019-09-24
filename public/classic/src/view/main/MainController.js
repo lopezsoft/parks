@@ -205,6 +205,50 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
+                case 'sales/services':
+                    Ext.require([
+                        'Admin.view.sales.forms.ServicesForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('sales.ServicesStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
+                case 'sales/branchservices':
+                    Ext.require([
+                        'Admin.view.sales.forms.BranchServicesForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('sales.BranchServicesStore');
+                        app.onStore('sales.ServicesStore');
+                        app.onStore('company.BranchOfficesStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
+                    case 'sales/footwear':
+                    Ext.require([
+                        'Admin.view.sales.forms.FootWearForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('sales.FootWearStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
+                    case 'sales/branchfootwear':
+                    Ext.require([
+                        'Admin.view.sales.forms.BranchFootWearForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('sales.BranchFootWearStore');
+                        app.onStore('sales.FootWearStore');
+                        app.onStore('company.BranchOfficesStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
                 default:
                     me.unMask();
                     me.setCurrentView(id);
