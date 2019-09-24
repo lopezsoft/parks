@@ -1,25 +1,22 @@
-Ext.define('Admin.view.products.forms.ProductsForm',{
+Ext.define('Admin.view.sales.forms.ServicesForm',{
     extend : 'Admin.core.forms.CustomForm',
-    xtype   : 'productsform',
-    alias   : 'widget.productsform',
+    xtype   : 'servicesform',
+    alias   : 'widget.servicesform',
     requires: [
-        'Admin.view.products.ProductsController',
-        'Admin.store.products.ProductsStore',
+        'Admin.view.sales.SalesController',
+        'Admin.store.sales.ServicesStore',
         'Admin.core.field.CheckBoxField',
-        'Admin.core.combo.ComboCategories',
-        'Admin.core.combo.ComboLines',
-        'Admin.core.combo.ComboBranchOffices',
         'Admin.core.field.NumberField'
     ],
-    controller : 'products',
+    controller: 'sales',
     initComponent: function () {
         this.callParent(arguments);
-        this.setTitle('Datos de los productos');
+        this.setTitle('Servcios');
     },
     buildWindow: function () {
         var
             me = this.getApp();
-        this.winObject = Ext.create('Admin.view.products.views.ProductsView');
+        this.winObject = Ext.create('Admin.view.sales.views.ServicesView');
     },
     showWindow: function (btn) {
         var me = this.app,
@@ -27,7 +24,7 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
             data = ts.down('grid').getSelection()[0],
             form = [];
         Ext.require([
-            'Admin.view.products.views.ProductsView'
+            'Admin.view.sales.views.ServicesView'
         ]);
 
         Ext.onReady(function () {
@@ -47,12 +44,11 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
     items: [
         {
             xtype       : 'customGrid',
-            store       : 'ProductsStore',
+            store       : 'ServicesStore',
             columns: [
-                { text: 'Código', dataIndex: 'code', width : 100 },
-                { text: 'Nombre del producto', dataIndex: 'product_name', width : 250 },
-                { text: 'Precio', dataIndex: 'price', width : 100, formatter: 'usMoney' },
-                { text: 'Código de barras', dataIndex: 'bar_code', width : 150 }
+                { text: 'Descripción', dataIndex: 'time_name', width : 150 },
+                { text: 'Tiempo', dataIndex: 'time', width : 250 },
+                { text: 'Activo', dataIndex: 'active', width : 80, xtype: 'checkcolumn' }
             ],
             dockedItems: [
                 {

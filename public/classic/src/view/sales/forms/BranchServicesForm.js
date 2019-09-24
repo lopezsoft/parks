@@ -1,25 +1,24 @@
-Ext.define('Admin.view.products.forms.ProductsForm',{
+Ext.define('Admin.view.sales.forms.BranchServicesForm',{
     extend : 'Admin.core.forms.CustomForm',
-    xtype   : 'productsform',
-    alias   : 'widget.productsform',
+    xtype   : 'branchservicesform',
+    alias   : 'widget.branchservicesform',
     requires: [
-        'Admin.view.products.ProductsController',
-        'Admin.store.products.ProductsStore',
-        'Admin.core.field.CheckBoxField',
-        'Admin.core.combo.ComboCategories',
-        'Admin.core.combo.ComboLines',
+        'Admin.view.sales.SalesController',
+        'Admin.store.sales.BranchServicesStore',
+        'Admin.core.combo.ComboServices',
         'Admin.core.combo.ComboBranchOffices',
+        'Admin.core.field.CheckBoxField',
         'Admin.core.field.NumberField'
     ],
-    controller : 'products',
+    controller : 'sales',
     initComponent: function () {
         this.callParent(arguments);
-        this.setTitle('Datos de los productos');
+        this.setTitle('Servcios por sucursal');
     },
     buildWindow: function () {
         var
             me = this.getApp();
-        this.winObject = Ext.create('Admin.view.products.views.ProductsView');
+        this.winObject = Ext.create('Admin.view.sales.views.BranchServicesView');
     },
     showWindow: function (btn) {
         var me = this.app,
@@ -27,7 +26,7 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
             data = ts.down('grid').getSelection()[0],
             form = [];
         Ext.require([
-            'Admin.view.products.views.ProductsView'
+            'Admin.view.sales.views.BranchServicesView'
         ]);
 
         Ext.onReady(function () {
@@ -47,12 +46,13 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
     items: [
         {
             xtype       : 'customGrid',
-            store       : 'ProductsStore',
+            store       : 'BranchServicesStore',
             columns: [
-                { text: 'Código', dataIndex: 'code', width : 100 },
-                { text: 'Nombre del producto', dataIndex: 'product_name', width : 250 },
-                { text: 'Precio', dataIndex: 'price', width : 100, formatter: 'usMoney' },
-                { text: 'Código de barras', dataIndex: 'bar_code', width : 150 }
+                { text: 'Surcusal', dataIndex: 'id_branch', width : 100 },
+                { text: 'Servicio', dataIndex: 'id_time', width : 100 },
+                { text: 'Precio', dataIndex: 'price', width : 150, formatter: 'usMoney' },
+                { text: 'T. Ilimitado', dataIndex: 'unlimited_time', width : 120,  xtype: 'checkcolumn' },
+                { text: 'Activo', dataIndex: 'active', width : 80, xtype: 'checkcolumn' }
             ],
             dockedItems: [
                 {

@@ -8,7 +8,7 @@ Ext.define('Admin.view.products.forms.LinesForm',{
         'Admin.core.field.CheckBoxField',
         'Ext.ux.colorpick.Field'
     ],
-    controlle : 'products',
+    controller : 'products',
     initComponent: function () {
         this.callParent(arguments);
         this.setTitle('Datos de las lineas de produstos');

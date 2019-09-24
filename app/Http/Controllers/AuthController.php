@@ -11,6 +11,31 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function registercustomer(Request $request)
+    {
+        $request->validate([
+            'first_name'        => 'required|string',
+            'last_name'         => 'required|string',
+            'birthday'          => 'required|date',
+            'email'             => 'required|string|email|unique:users',
+            'password'          => 'required|string|confirmed',
+        ]);
+        $user = new User([
+            'first_name'        => $request->first_name,
+            'last_name'         => $request->last_name,
+            'birthday'          => $request->birthday,
+            'email'             => $request->email,
+            'password'          => bcrypt($request->password),
+        ]);
+        $user->save();
+
+        // $avatar = Avatar::create($user->first_name)->getImageObject()->encode('png');
+        // Storage::put('avatars/'.$user->id.'/avatar.png', (string) $avatar);
+
+        return response()->json([
+            'message' => 'Cliente registrado con exito!'], 201);
+    }
+    
     public function signup(Request $request)
     {
         $request->validate([
@@ -33,6 +58,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Successfully created user!'], 201);
     }
+
     public function login(Request $request)
     {
         $request->validate([
@@ -43,7 +69,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'Unauthorized'], 401);
+                'message' => 'No autorizado'], 401);
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
