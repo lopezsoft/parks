@@ -7,8 +7,8 @@ Ext.define('Admin.core.field.YearField',{
 	minValue	: 1950,
 	alias		: 'widget.yearField',
 	hideTrigger	: false,
-	tooltip     : 'Cambiar año lectivo',
-	itemId      : 'yearField',
+	tooltip     : 'Año lectivo',
+	// itemId      : 'yearField',
 	labelAlign	: 'top',
 	fieldLabel	: 'Año'
 });

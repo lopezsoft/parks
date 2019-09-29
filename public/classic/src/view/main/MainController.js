@@ -227,7 +227,7 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
-                    case 'sales/footwear':
+                case 'sales/footwear':
                     Ext.require([
                         'Admin.view.sales.forms.FootWearForm'
                     ]);
@@ -237,7 +237,7 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
-                    case 'sales/branchfootwear':
+                case 'sales/branchfootwear':
                     Ext.require([
                         'Admin.view.sales.forms.BranchFootWearForm'
                     ]);
@@ -249,13 +249,36 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
+                case 'settings/invoice':
+                    Ext.require([
+                        'Admin.view.settings.forms.ConfInvoiceForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('settings.ConfInvoiceStore');
+                        app.onStore('company.BranchOfficesStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
                 default:
-                    me.unMask();
-                    me.setCurrentView(id);
+                    Ext.require([
+                        'Admin.*'
+                    ]);
+                    Ext.onReady(function(){
+                        me.unMask();
+                        me.setCurrentView(id);
+                    })
                     break;
             }
         }else{
-            this.setCurrentView("login");
+            Ext.require([
+                'Admin.view.auth.Login'
+            ]);
+            Ext.onReady(function(){
+                var win = Admin.getApplication().getWindow(null,'Admin.view.auth.Login');
+                win.show();
+                me.setCurrentView("login");
+            })
         }
     },
 

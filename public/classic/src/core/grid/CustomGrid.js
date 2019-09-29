@@ -54,7 +54,7 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 	reserveScrollbar	: true,
 	frame   	: false,
 	minHeight	: 300,
-	maxHeight	: 600,
+	maxHeight	: 550,
 	scrollable	: true,
 	// iconCls		: 'x-fa fa-th',
 	allowDeselect : true,

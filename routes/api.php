@@ -18,7 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
+    Route::post('loginclient', 'AuthController@loginclient');
     Route::post('signup', 'AuthController@signup');
+    Route::post('register', 'AuthController@registercustomer');
   
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
@@ -26,8 +28,14 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::group(['prefix' => 'report'], function () {
+    Route::get('getticketservices', 'ReportController@getTicketServices');
+
+});
+
 Route::group(['prefix' => 'master'], function () {
     Route::get('getdata', 'MasterController@getTable');
+    Route::get('getsalesservice', 'MasterController@getSalesService');
     Route::post('setdata', 'MasterController@setTable');
     Route::post('insertdata', 'MasterController@insertData');
     Route::post('deletedata', 'MasterController@deleteData');

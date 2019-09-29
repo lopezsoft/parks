@@ -1,7 +1,7 @@
 Ext.define('Admin.core.field.NumberField',{
 	extend	: 'Ext.form.field.Number',
 	minValue 	: 0,
-	maxValue	: 1000000000,
+	maxValue	: 100000000000000,
 	allowDecimals 	: true,
 	decimalSeparator:'.',
 	hideTrigger		: true,

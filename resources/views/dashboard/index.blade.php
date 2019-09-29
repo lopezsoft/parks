@@ -3,10 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Darsboard</title>
         <!-- Fonts -->
         <link href  = "https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link rel   = "stylesheet" href="/css/site.css"> 
+        <link rel   = "stylesheet" href="{{ ('css/site.css') }}"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
         <script type="text/javascript">

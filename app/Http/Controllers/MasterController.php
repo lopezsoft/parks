@@ -14,6 +14,13 @@ class MasterController extends Controller
         echo $val->getTable($table);
     }
 
+    public function getSalesService(Request $request)
+    {
+        $type= $request->input('type');
+        $val    = new MasterModel();
+        echo $val->getSalesService($type);
+    }
+
     public function setTable(Request $request)
     {       
         $table      = $request->input('pdbTable');

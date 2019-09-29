@@ -7,7 +7,7 @@
     /**
      * The version of the application.
      */
-    "version": "1.0.0.0",
+    "version": "1.0.1.2",
 
     /**
      * The relative path to the application's markup file (html, jsp, asp, etc.).
@@ -198,9 +198,9 @@
     "classic": {
         "js": [
 //            // Remove this entry to individually load sources from the framework.
-//            {
-//                "path": "${framework.dir}/build/ext-all-rtl-debug.js"
-//            }
+           {
+               "path": "${framework.dir}/build/ext-all.js"
+           }
         ]
     },
 
@@ -390,14 +390,14 @@
      *      }
      *
      */
-    "output": {
-        "base": "${ext.dir}/build/examples/admin-dashboard/${build.id}",
-        "page": "../index.html",
-        "manifest": "../${build.id}.json",
-        "appCache": {
-            "enable": false
-        }
-    },
+    // "output": {
+    //     "base": "${ext.dir}/build/examples/admin-dashboard/${build.id}",
+    //     "page": "../index.html",
+    //     "manifest": "../${build.id}.json",
+    //     "appCache": {
+    //         "enable": false
+    //     }
+    // },
 
     /**
     * Controls for localStorage caching

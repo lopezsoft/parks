@@ -61,14 +61,14 @@ Ext.define('Admin.store.NavigationTree', {
                     },
                     {
                         text        : 'Calcetines',
-                        iconCls     : 'x-fa fa-money',
+                        iconCls     : 'fas fa-shoe-prints',
                         viewType    : 'footwearform',
                         routeId     : 'sales/footwear',
                         leaf        : true
                     },
                     {
                         text        : 'Calcetines por sucursal',
-                        iconCls     : 'x-fa fa-money',
+                        iconCls     : 'fas fa-shoe-prints',
                         viewType    : 'branchfoorwearform',
                         routeId     : 'sales/branchfootwear',
                         leaf        : true
@@ -105,43 +105,17 @@ Ext.define('Admin.store.NavigationTree', {
                 ]
             },
             {
-                text: 'Personas',
-                iconCls: 'x-fa fa-users',
-                viewType: 'faq',
-                leaf: true
+                text        : 'Clientes',
+                iconCls     : 'fas fa-user-friends',
+                viewType    : 'customers',
+                leaf        : true
             },
             {
                 text: 'Usuarios',
-                iconCls: 'x-fa  fa-user',
+                iconCls: 'fas  fa-users-cog',
                 expanded: false,
                 selectable: false,
                 children: [
-                    {
-                        text: 'Blank Page',
-                        iconCls: 'x-fa fa-money',
-                        viewType: 'pageblank',
-                        leaf: true
-                    },
-
-                    {
-                        text: '404 Error',
-                        iconCls: 'x-fa fa-exclamation-triangle',
-                        viewType: 'page404',
-                        leaf: true
-                    },
-                    {
-                        text: '500 Error',
-                        iconCls: 'x-fa fa-times-circle',
-                        viewType: 'page500',
-                        leaf: true
-                    },
-                    {
-                        text: 'Lock Screen',
-                        iconCls: 'x-fa fa-lock',
-                        viewType: 'lockscreen',
-                        leaf: true
-                    },
-
                     {
                         text: 'Login',
                         iconCls: 'x-fa fa-check',
@@ -163,18 +137,33 @@ Ext.define('Admin.store.NavigationTree', {
                 ]
             },
             {
-                text: 'Ajustes',
-                iconCls: 'x-fa fa-cogs',
-                viewType: 'widgets',
-                leaf: true
-            },
-            {
-                text: 'Login',
-                iconCls: 'x-fa fa-sign-in',
-                viewType: 'login',
-                // routeId: 'login',
-                leaf: true
+                text        : 'Ajustes',
+                iconCls     : 'x-fa fa-cogs',
+                leaf        : false,
+                expanded    : false,
+                children : [
+                    {
+                        text        : 'tickets',
+                        iconCls     : 'fas fa-receipt',
+                        viewType    : 'confinvoiceform',
+                        routeId     : 'settings/invoice',
+                        leaf        : true
+                    },
+                    {
+                        text: 'Cajas/Terminales',
+                        iconCls: 'fas fa-cash-register',
+                        viewType: 'settings/cashregister',
+                        leaf: true
+                    }
+                ]
             }
+            // {
+            //     text: 'Login',
+            //     iconCls: 'x-fa fa-sign-in',
+            //     viewType: 'login',
+            //     // routeId: 'login',
+            //     leaf: true
+            // }
         ]
     }
 });
