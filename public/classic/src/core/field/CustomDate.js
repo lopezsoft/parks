@@ -9,6 +9,6 @@ Ext.define('Admin.core.field.CustomDate',{
 	msgTarget	: 'side',
 	value		: new Date(),
 	fieldLabel	: 'Fecha',
-	format 		: 'Y-m-d',
+	format 		: 'd/m/Y',
 	tooltip : ''
 });

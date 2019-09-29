@@ -8,8 +8,10 @@ Ext.define('Admin.Application', {
 		'Admin.sockets.Socket',
         'Ext.util.TaskRunner',
         'Admin.view.config.Configs',
+        'Admin.view.main*',
         'Ext.window.Toast'
     ],
+
 
     stores: [
         'NavigationTree'

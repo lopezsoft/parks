@@ -16,6 +16,7 @@ class AuthController extends Controller
         $request->validate([
             'first_name'        => 'required|string',
             'last_name'         => 'required|string',
+            'dni'               => 'required|string',
             'birthday'          => 'required|date',
             'email'             => 'required|string|email|unique:users',
             'password'          => 'required|string|confirmed',
@@ -25,6 +26,8 @@ class AuthController extends Controller
             'last_name'         => $request->last_name,
             'birthday'          => $request->birthday,
             'email'             => $request->email,
+            'dni'               => $request->dni,
+            'type'              => $request->type,
             'password'          => bcrypt($request->password),
         ]);
         $user->save();
@@ -33,7 +36,10 @@ class AuthController extends Controller
         // Storage::put('avatars/'.$user->id.'/avatar.png', (string) $avatar);
 
         return response()->json([
-            'message' => 'Cliente registrado con exito!'], 201);
+            'message'   => 'Cliente registrado con exito!',
+            'success'   => true,
+            'user'      => $user
+        ], 201);
     }
     
     public function signup(Request $request)
@@ -59,7 +65,7 @@ class AuthController extends Controller
             'message' => 'Successfully created user!'], 201);
     }
 
-    public function login(Request $request)
+    public function loginclient(Request $request)
     {
         $request->validate([
             'email'       => 'required|string|email',
@@ -69,7 +75,8 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'No autorizado'], 401);
+                'message' => 'No autorizado',
+                'success' => false], 401);
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -81,6 +88,38 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
+            'success'      => true, 
+            'expires_at'   => Carbon::parse(
+                $tokenResult->token->expires_at)
+                    ->toDateTimeString(),
+            'user'         => $user
+        ]);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email'       => 'required|string|email',
+            'password'    => 'required|string',
+            'remember_me' => 'boolean',
+        ]);
+        $credentials = request(['email', 'password']);
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'No autorizado',
+                'success' => false], 401);
+        }
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        }
+        $token->save();
+        return response()->json([
+            'access_token' => $tokenResult->accessToken,
+            'token_type'   => 'Bearer',
+            'success'      => true, 
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),

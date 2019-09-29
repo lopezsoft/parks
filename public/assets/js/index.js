@@ -1,123 +1,43 @@
 
-$('#chekrelas').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 7; index <  12; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked     = this.checked;
-       elem.getElementById(elemNam).disabled    = !elem.getElementById(elemNam).disabled
-    }
-});
-
-$('#checkries').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 27; index <  32; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-});
+//  initialize keyboard (required) 
+   $(function(){
+       $('#email').keyboard();
+       $('#password').keyboard();
+       $('#first_name').keyboard();
+       $('#last_name').keyboard();
+       $('#dni').keyboard();
+       $('#password_confirmation').keyboard();
+   });
 
 
-$('#checkelem').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 12; index <  17; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-});
-
-$('#checkherram').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 71; index <  75; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-});
-
-$('#checkorden').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 75; index <  81; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-});
-
-
-
-$('#formCheck-6').on('change', function(e) {
-    e.preventDefault();
-    var elem	  = document;
-    for (let index = 7; index <  17; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-
-    for (let index = 27; index <  32; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-
-    for (let index = 71; index <  81; index++) {
-        var  elemNam    = 'formCheck-' + index ;
-       elem.getElementById(elemNam).checked = this.checked;
-    }
-});
-
-$('#btnClose').on('click',function (e) {
-    var url_e   = 'home/closeSession',
-      elem	  = document,
-      data          = {};
-    $.ajax({
-        type	: "POST",
-        url	    : url_e,
-        success: function(data)
-        {
-            window.location.reload();               
-        },
-        failure: function (data) {
-            alertify.message('Error inesperado...!');
-        }
-    });
-});
-
-
-
-$('.formsave').on('submit', function(e) {
+$('.register').on('submit', function(e) {
   e.preventDefault();
   var url_e   = $(this).attr("action"),
-      elem	  = document,
+      elem	    = document,
+      redirec   = '/parks',
       data          = {};
     $('input').each(function () {
         data[this.name] = this.value;
     });
-    $('textarea').each(function () {
-        data[this.name] = this.value;
-    });
+
+    data['id_document'] = 1;
+    data['type']        = 3;
     $.ajax({
         type	: "POST",
         url	    : url_e,
-        data	: {
-            records : JSON.stringify(data) // Adjuntar los campos del formulario enviado.
-        },
-        success: function(data)
-        {
-            var
-                res = JSON.parse(data),
-                req = res.success;
-            if (req == true) {
-                alertify.message('Se han guardado los datos correctamente.');
-                window.location.reload();               
-            } else {
-                alertify.message('No se han guardado los datos!');
-            }
-        },
-        failure: function (data) {
-            alertify.message('Error inesperado...!');
+        data	: data,
+    }).done(function(data){
+        var
+            res = data
+            req = res.success;
+        if (req) {
+            alertify.message('Se han guardado los datos correctamente.');
+            window.location.href =  redirec;               
+        } else {
+            alertify.message('No se han guardado los datos!');
         }
+    }).fail(function (error) {
+        alertify.message('Error inesperado...!');
     });
 });
 
@@ -126,34 +46,40 @@ $('.login').on('submit', function(e) {
   var $this = $(this),
       url_e   = $(this).attr("action"),
       elem	  = document,
-      data          = {};
+      redirec   = '/client/services',
+      data      = {};
     data = {
-        user  : elem.getElementById('username').value,
-        pass  : Sha1.hash(elem.getElementById('password').value)
+        email       : elem.getElementById('email').value,
+        password    : elem.getElementById('password').value
     };
+    
     $.ajax({
         type	: "POST",
         url	    : url_e,
-        data	: data, // Adjuntar los campos del formulario enviado.
-        success: function(data)
-        {
-            var
-                res = JSON.parse(data),
-                req = res.request;
-            if (req) {
-                if (req == 1) {
-                    alertify.message('Ingresando al sistema');
-                    window.location.reload();
-                } else {
-                    alertify.message('No se han guardado los datos!');
+        data	: data // Adjuntar los campos del formulario enviado.
+    }).done( function(data) {
+        var
+            req = data.success;
+        if (req == true && data.user.type == 3) {
+            localStorage.setItem('token-customers', JSON.stringify(data));
+            alertify.message('Ingresando al sistema');
+            window.location.href =  redirec;  
+        } else {
+            alertify.message('Error de autenticación!');
+            $.ajax({
+                type	: "GET",
+                url	    : '/api/auth/logout',
+                // data	: data, 
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader ("Authorization", data.token_type +' ' + data.access_token);
+                },
+                success: function (r){
+                },
+                failer : function(r){
                 }
-            } else {
-                alertify.message('No se han guardado los datos!');
-            }
-
-        },
-        failure: function (data) {
-            alertify.message('Error inesperado...!');
+            });
         }
+    }).fail( function(error) {
+        alertify.message('Error de autenticación o no está registrado en el sistema!');
     });
 });

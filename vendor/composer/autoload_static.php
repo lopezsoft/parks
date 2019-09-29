@@ -14,9 +14,10 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
+        'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'cf97c57bfe0f23854afd2f3818abb7a0' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/create_uploaded_file.php',
         '9bf37a3d0dad93e29cb4e1b1bfab04e9' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_headers_from_sapi.php',
         'ce70dccb4bcc2efc6e94d2ee526e6972' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/marshal_method_from_sapi.php',
@@ -25,7 +26,6 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         '0b0974a5566a1077e4f2e111341112c1' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/normalize_server.php',
         '1ca3bc274755662169f9629d5412a1da' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/normalize_uploaded_files.php',
         '40360c0b9b437e69bcbb7f1349ce029e' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/parse_cookie_header.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         '9cdd7b9056abc3081735233ba9dd9c7f' => __DIR__ . '/..' . '/facade/flare-client-php/src/helpers.php',
@@ -98,6 +98,7 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
+            'Picqer\\Barcode\\' => 15,
             'PhpParser\\' => 10,
         ),
         'O' => 
@@ -112,6 +113,7 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Mike42\\' => 7,
         ),
         'L' => 
         array (
@@ -164,6 +166,7 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'C' => 
         array (
             'Cron\\' => 5,
+            'Codedge\\Fpdf\\' => 13,
             'Carbon\\' => 7,
         ),
         'A' => 
@@ -324,6 +327,10 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
+        'Picqer\\Barcode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/picqer/php-barcode-generator/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -343,6 +350,10 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
+        ),
+        'Mike42\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
         ),
         'League\\OAuth2\\Server\\' => 
         array (
@@ -456,6 +467,10 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
+        'Codedge\\Fpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codedge/laravel-fpdf/src',
+        ),
         'Carbon\\' => 
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
@@ -484,6 +499,10 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
             ),
+            'Milon\\Barcode' => 
+            array (
+                0 => __DIR__ . '/..' . '/milon/barcode/src',
+            ),
         ),
         'H' => 
         array (
@@ -508,6 +527,11 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\MasterController' => __DIR__ . '/../..' . '/app/Http/Controllers/MasterController.php',
+        'App\\Http\\Controllers\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReportController.php',
+        'App\\Http\\Controllers\\dashboard\\CompanyController' => __DIR__ . '/../..' . '/app/Http/Controllers/dashboard/CompanyController.php',
+        'App\\Http\\Controllers\\general\\GeneralController' => __DIR__ . '/../..' . '/app/Http/Controllers/general/GeneralController.php',
+        'App\\Http\\Controllers\\products\\ProductsController' => __DIR__ . '/../..' . '/app/Http/Controllers/products/ProductsController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
@@ -522,6 +546,15 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
+        'App\\core\\CoreModel' => __DIR__ . '/../..' . '/app/core/CoreModel.php',
+        'App\\core\\MasterModel' => __DIR__ . '/../..' . '/app/core/MasterModel.php',
+        'App\\models\\Report' => __DIR__ . '/../..' . '/app/models/Report.php',
+        'App\\models\\dashboard\\BranchOffices' => __DIR__ . '/../..' . '/app/models/dashboard/BranchOffices.php',
+        'App\\models\\dashboard\\Company' => __DIR__ . '/../..' . '/app/models/dashboard/Company.php',
+        'App\\models\\general\\Countries' => __DIR__ . '/../..' . '/app/models/general/Countries.php',
+        'App\\models\\products\\Categories' => __DIR__ . '/../..' . '/app/models/products/Categories.php',
+        'App\\models\\products\\Lines' => __DIR__ . '/../..' . '/app/models/products/Lines.php',
+        'App\\models\\products\\Products' => __DIR__ . '/../..' . '/app/models/products/Products.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonImmutable' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonImmutable.php',
         'Carbon\\CarbonInterface' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterface.php',
@@ -556,6 +589,9 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'Carbon\\Traits\\Units' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Traits/Units.php',
         'Carbon\\Traits\\Week' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Traits/Week.php',
         'Carbon\\Translator' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Translator.php',
+        'Codedge\\Fpdf\\Facades\\Fpdf' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/Facades/Fpdf.php',
+        'Codedge\\Fpdf\\FpdfServiceProvider' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/FpdfServiceProvider.php',
+        'Codedge\\Fpdf\\Fpdf\\Fpdf' => __DIR__ . '/..' . '/codedge/laravel-fpdf/src/Fpdf/Fpdf.php',
         'Cron\\AbstractField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/AbstractField.php',
         'Cron\\CronExpression' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/CronExpression.php',
         'Cron\\DayOfMonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/DayOfMonthField.php',
@@ -2566,6 +2602,39 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'League\\OAuth2\\Server\\ResponseTypes\\BearerTokenResponse' => __DIR__ . '/..' . '/league/oauth2-server/src/ResponseTypes/BearerTokenResponse.php',
         'League\\OAuth2\\Server\\ResponseTypes\\RedirectResponse' => __DIR__ . '/..' . '/league/oauth2-server/src/ResponseTypes/RedirectResponse.php',
         'League\\OAuth2\\Server\\ResponseTypes\\ResponseTypeInterface' => __DIR__ . '/..' . '/league/oauth2-server/src/ResponseTypes/ResponseTypeInterface.php',
+        'Mike42\\Escpos\\CapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfile.php',
+        'Mike42\\Escpos\\CapabilityProfiles\\DefaultCapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfiles/DefaultCapabilityProfile.php',
+        'Mike42\\Escpos\\CapabilityProfiles\\EposTepCapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfiles/EposTepCapabilityProfile.php',
+        'Mike42\\Escpos\\CapabilityProfiles\\P822DCapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfiles/P822DCapabilityProfile.php',
+        'Mike42\\Escpos\\CapabilityProfiles\\SimpleCapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfiles/SimpleCapabilityProfile.php',
+        'Mike42\\Escpos\\CapabilityProfiles\\StarCapabilityProfile' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CapabilityProfiles/StarCapabilityProfile.php',
+        'Mike42\\Escpos\\CodePage' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/CodePage.php',
+        'Mike42\\Escpos\\Devices\\AuresCustomerDisplay' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/Devices/AuresCustomerDisplay.php',
+        'Mike42\\Escpos\\EscposImage' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/EscposImage.php',
+        'Mike42\\Escpos\\GdEscposImage' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/GdEscposImage.php',
+        'Mike42\\Escpos\\ImagickEscposImage' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/ImagickEscposImage.php',
+        'Mike42\\Escpos\\NativeEscposImage' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/NativeEscposImage.php',
+        'Mike42\\Escpos\\PrintBuffers\\EscposPrintBuffer' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintBuffers/EscposPrintBuffer.php',
+        'Mike42\\Escpos\\PrintBuffers\\ImagePrintBuffer' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintBuffers/ImagePrintBuffer.php',
+        'Mike42\\Escpos\\PrintBuffers\\PrintBuffer' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintBuffers/PrintBuffer.php',
+        'Mike42\\Escpos\\PrintConnectors\\ApiPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/ApiPrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\CupsPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/CupsPrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\DummyPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/DummyPrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\FilePrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/FilePrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\NetworkPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/NetworkPrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\PrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/PrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\UriPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/UriPrintConnector.php',
+        'Mike42\\Escpos\\PrintConnectors\\WindowsPrintConnector' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/PrintConnectors/WindowsPrintConnector.php',
+        'Mike42\\Escpos\\Printer' => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42/Escpos/Printer.php',
+        'Milon\\Barcode\\BarcodeServiceProvider' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/BarcodeServiceProvider.php',
+        'Milon\\Barcode\\DNS1D' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/DNS1D.php',
+        'Milon\\Barcode\\DNS2D' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/DNS2D.php',
+        'Milon\\Barcode\\Datamatrix' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Datamatrix.php',
+        'Milon\\Barcode\\Facades\\DNS1DFacade' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Facades/DNS1DFacade.php',
+        'Milon\\Barcode\\Facades\\DNS2DFacade' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/Facades/DNS2DFacade.php',
+        'Milon\\Barcode\\PDF417' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/PDF417.php',
+        'Milon\\Barcode\\QRcode' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/QRcode.php',
+        'Milon\\Barcode\\WrongCheckDigitException' => __DIR__ . '/..' . '/milon/barcode/src/Milon/Barcode/WrongCheckDigitException.php',
         'Mockery' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery.php',
         'Mockery\\Adapter\\Phpunit\\Legacy\\TestListenerForV5' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/Legacy/TestListenerForV5.php',
         'Mockery\\Adapter\\Phpunit\\Legacy\\TestListenerForV6' => __DIR__ . '/..' . '/mockery/mockery/library/Mockery/Adapter/Phpunit/Legacy/TestListenerForV6.php',
@@ -3482,6 +3551,17 @@ class ComposerStaticInit16f981369ee86252beb0c842d037953a
         'PhpParser\\Parser\\Tokens' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Parser/Tokens.php',
         'PhpParser\\PrettyPrinterAbstract' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinterAbstract.php',
         'PhpParser\\PrettyPrinter\\Standard' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinter/Standard.php',
+        'Picqer\\Barcode\\BarcodeGenerator' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/BarcodeGenerator.php',
+        'Picqer\\Barcode\\BarcodeGeneratorHTML' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/BarcodeGeneratorHTML.php',
+        'Picqer\\Barcode\\BarcodeGeneratorJPG' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/BarcodeGeneratorJPG.php',
+        'Picqer\\Barcode\\BarcodeGeneratorPNG' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/BarcodeGeneratorPNG.php',
+        'Picqer\\Barcode\\BarcodeGeneratorSVG' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/BarcodeGeneratorSVG.php',
+        'Picqer\\Barcode\\Exceptions\\BarcodeException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/BarcodeException.php',
+        'Picqer\\Barcode\\Exceptions\\InvalidCharacterException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/InvalidCharacterException.php',
+        'Picqer\\Barcode\\Exceptions\\InvalidCheckDigitException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/InvalidCheckDigitException.php',
+        'Picqer\\Barcode\\Exceptions\\InvalidFormatException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/InvalidFormatException.php',
+        'Picqer\\Barcode\\Exceptions\\InvalidLengthException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/InvalidLengthException.php',
+        'Picqer\\Barcode\\Exceptions\\UnknownTypeException' => __DIR__ . '/..' . '/picqer/php-barcode-generator/src/Exceptions/UnknownTypeException.php',
         'Prophecy\\Argument' => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy/Argument.php',
         'Prophecy\\Argument\\ArgumentsWildcard' => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy/Argument/ArgumentsWildcard.php',
         'Prophecy\\Argument\\Token\\AnyValueToken' => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy/Argument/Token/AnyValueToken.php',

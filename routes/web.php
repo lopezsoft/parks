@@ -23,6 +23,10 @@ Route::get('/client/register', function () {
     return view('users/customer_registration');
 });
 
+Route::get('/client/services', function () {
+    return view('users/index');
+});
+
 Route::get('/fastfood', function () {
     return view('fastfood/index');
 });

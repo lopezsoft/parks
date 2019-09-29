@@ -32,7 +32,7 @@ Ext.define('Admin.view.sales.views.BranchServicesView',{
                 {
                     xtype           : 'checkBoxField',
                     boxLabel        : 'Tiempo Ilimitado?',
-                    name            : 'active'
+                    name            : 'unlimited_time'
                 },
                 {
                     xtype           : 'checkBoxField',

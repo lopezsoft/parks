@@ -13,7 +13,19 @@ class MasterModel
      */
     public  $primaryKey = "id";
 
+    public function getSaleMaster($id = 0)
+    {
+        $table  = DB::select("CALL sp_sales_master(".$id.")");
+        return $table;
+    }
     
+    public function getConfigInvoive()
+    {
+        $result = DB::table('tb_configure_invoice')->get();
+        return  $result;
+    }
+
+
     /**
      * Borra los cambios en la tabla pasada como parametro
      * 
@@ -83,6 +95,17 @@ class MasterModel
      * 
      */
 
+    public function getSalesService($type)
+    {
+        $table  = DB::select("CALL sp_services(".$type.")");
+        return $this->json_response($table);
+    }
+
+    /**
+     * Retorna los datos de un select a un tabla
+     * 
+     */
+
     public function getTable(String $tb = null)
     {
         $table  = DB::table($tb)->get();
@@ -110,6 +133,14 @@ class MasterModel
        return json_encode(array(
            'success'   => TRUE,
            'data'   => $lis
+       ));
+   }
+
+   public function json_response_succes_error($lis = '')
+   {
+       return json_encode(array(
+           'success'   => FALSE,
+           'error'   => $lis
        ));
    }
 }

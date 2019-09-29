@@ -77,10 +77,19 @@ Ext.define('Admin.security.TokenStorage', {
             },
             method      : 'POST',
             success: function(response, opts) {
-               var text = response.responseText;
-               me.save(text);
-               app.showResult('Bienvenido al sistema, te has autenticado correctamente.');
-               cont.redirectTo("dashboard");
+               var 
+                    text    = response.responseText
+                    obj     = Ext.decode(response.responseText);
+                if(obj.success == true){
+                    me.save(text);
+                    app.showResult('Bienvenido al sistema, te has autenticado correctamente.');
+                    cont.redirectTo("dashboard");
+                    if(obj.user.type !== 1){
+                        me.onLogout(cont);
+                    }
+                }else{
+                    app.showResult('Error de autenticación.');
+                }
             },
             failure: function(response, opts) {
                 app.showResult('server-side failure with status code ' + response.status);
