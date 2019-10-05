@@ -7,6 +7,15 @@ use App\core\MasterModel;
 
 class MasterController extends Controller
 {
+
+    public function getProducts(Request $request)
+    {
+        $type   = $request->input('branch');
+        $val    = new MasterModel();
+        echo $val->getProducts($type);
+    }
+
+    
     public function getTable(Request $request)
     {       
         $table = $request->input('pdbTable');
@@ -19,6 +28,14 @@ class MasterController extends Controller
         $type= $request->input('type');
         $val    = new MasterModel();
         echo $val->getSalesService($type);
+    }
+
+    public function setImageProd(Request $request)
+    {       
+        $table      = $request->input('pdbTable');
+        $val        = new MasterModel();
+        $file       = $request->file('image');
+        echo $val->setImageProd($file, $request->input('id'));
     }
 
     public function setTable(Request $request)
@@ -34,7 +51,8 @@ class MasterController extends Controller
         $table      = $request->input('pdbTable');
         $records    = json_decode($request->input('records'));
         $val        = new MasterModel();
-        echo $val->insertData($records,$table);
+        $file       = $request->file('image');
+        echo $val->insertData($records,$table, $file);
     }
 
     public function deleteData(Request $request)

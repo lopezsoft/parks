@@ -83,3 +83,46 @@ $('.login').on('submit', function(e) {
         alertify.message('Error de autenticación o no está registrado en el sistema!');
     });
 });
+
+$('.login-fast').on('submit', function(e) {
+  e.preventDefault();
+  var $this = $(this),
+      url_e   = $(this).attr("action"),
+      elem	  = document,
+      redirec   = '/fastfood/menu',
+      data      = {};
+    data = {
+        email       : elem.getElementById('email').value,
+        password    : elem.getElementById('password').value
+    };
+    
+    $.ajax({
+        type	: "POST",
+        url	    : url_e,
+        data	: data // Adjuntar los campos del formulario enviado.
+    }).done( function(data) {
+        var
+            req = data.success;
+        if (req == true && data.user.type == 1) {
+            localStorage.setItem('token-fastfood', JSON.stringify(data));
+            alertify.message('Ingresando al sistema');
+            window.location.href =  redirec;  
+        } else {
+            alertify.message('Error de autenticación!');
+            $.ajax({
+                type	: "GET",
+                url	    : '/api/auth/logout',
+                // data	: data, 
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader ("Authorization", data.token_type +' ' + data.access_token);
+                },
+                success: function (r){
+                },
+                failer : function(r){
+                }
+            });
+        }
+    }).fail( function(error) {
+        alertify.message('Error de autenticación o no está registrado en el sistema!');
+    });
+});

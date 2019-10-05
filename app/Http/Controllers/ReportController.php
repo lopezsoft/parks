@@ -7,6 +7,16 @@ use App\models\Report;
 
 class ReportController extends Controller
 {
+
+
+    public function setTicketFastFood(Request $request)
+    {
+        $report = new Report();
+        $records    = json_decode($request->input('records'));
+        $user       = $request->input('user');
+        echo $report->setTicketFastFood(null, $records, $user);
+    }
+
     public function getTicketServices(Request $request)
     {
         $report = new Report();

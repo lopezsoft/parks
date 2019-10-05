@@ -203,6 +203,7 @@ $include-admin-view-products-forms-linesform: dynamic(true);;
 $include-admin-view-products-forms-productsform: dynamic(true);;
 $include-admin-view-products-views-categoriesview: dynamic(true);;
 $include-admin-view-products-views-linesview: dynamic(true);;
+$include-admin-view-products-views-productsigameview: dynamic(true);;
 $include-admin-view-products-views-productsview: dynamic(true);;
 $include-admin-view-profile-description: dynamic(true);;
 $include-admin-view-profile-notifications: dynamic(true);;

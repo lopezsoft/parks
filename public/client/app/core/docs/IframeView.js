@@ -36,7 +36,9 @@ Ext.define('Admin.core.docs.IframeView',{
                 {
                     xtype   : 'customButton',
                     iconCls :'x-fa fa-sign-out',
+                    iconAlign   : 'left',
                     text    : 'Cerrar',
+                    cls     : 'button-close',
                     handler: function (btn) {
                         Admin.getApplication().onClose(btn);    
                     }

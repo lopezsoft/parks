@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-6 col-lg-4 item">
                         <div class="box"><i class="fas fa-diagnoses" style="height: 128px;width: 128px;font-size: 128px;"></i>
-                            <h3 class="name"><a href="{{ url('/fastfood') }}">Comida rapida</a></h3>
+                            <h3 class="name"><a href="{{ url('/fastfood/menu') }}">Comida rapida</a></h3>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 item">
