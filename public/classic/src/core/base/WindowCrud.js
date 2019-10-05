@@ -23,7 +23,8 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 	config			: {
 		winObject	: undefined,
 		app			: undefined,
-		store		: undefined
+		store		: undefined,
+		reloadStore	: true
 	},
 	initComponent	: function(){
     	this.callParent(arguments);
@@ -62,9 +63,10 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 
 	onSave	: function(btn){
 		var
-			store = this.getStore();
+			me		= this,
+			store 	= this.getStore();
 		if (store) {
-			this.saveData(store);
+			this.saveData(store, me.getReloadStore());
 		}
 	},
 

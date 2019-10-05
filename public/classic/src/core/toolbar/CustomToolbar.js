@@ -8,5 +8,5 @@ Ext.define('Admin.core.toolbar.CustomToolbar', {
     scrollable  : true,
     cls : 'color-tool',
     frmBind	: true,
-    defaultType : 'btnBase'
+    defaultType : 'customButton'
 });

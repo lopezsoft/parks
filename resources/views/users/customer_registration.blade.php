@@ -47,9 +47,9 @@
                                 <div class="form-group">
                                     <input class="form-control form-control-lg" type="text" id="last_name" name="last_name" placeholder="Apellidos" autocomplete="on" required="">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <input class="form-control form-control-lg" type="text" id="dni" name="dni" placeholder="Documento de identidad" autocomplete="on" required="">
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label class="text-left" style="width: 100%;">Fecha de nacimiento</label>
                                     <input class="form-control form-control-lg" type="date" id="birthday" name="birthday" required="">

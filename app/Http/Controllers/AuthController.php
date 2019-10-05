@@ -16,7 +16,7 @@ class AuthController extends Controller
         $request->validate([
             'first_name'        => 'required|string',
             'last_name'         => 'required|string',
-            'dni'               => 'required|string',
+            // 'dni'               => 'required|string',
             'birthday'          => 'required|date',
             'email'             => 'required|string|email|unique:users',
             'password'          => 'required|string|confirmed',
@@ -26,7 +26,7 @@ class AuthController extends Controller
             'last_name'         => $request->last_name,
             'birthday'          => $request->birthday,
             'email'             => $request->email,
-            'dni'               => $request->dni,
+            // 'dni'               => $request->dni,
             'type'              => $request->type,
             'password'          => bcrypt($request->password),
         ]);

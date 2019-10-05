@@ -125,6 +125,10 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 				me.down('#customButton').setDisabled(!selected.length);
 			}
 
+			if (me.down('#buttomImage')) {
+				me.down('#buttomImage').setDisabled(!selected.length);
+			}
+
 		}
 	},
 	dockedItems: [
