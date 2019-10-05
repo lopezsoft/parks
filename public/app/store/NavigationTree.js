@@ -107,8 +107,24 @@ Ext.define('Admin.store.NavigationTree', {
             {
                 text        : 'Clientes',
                 iconCls     : 'fas fa-user-friends',
-                viewType    : 'customers',
-                leaf        : true
+                leaf        : false,
+                expanded    : true,
+                children    : [
+                    {
+                        text        : 'Listado de Clientes',
+                        iconCls     : 'fas fa-user-friends',
+                        viewType    : 'customersform',
+                        routeId     : 'customers',
+                        leaf        : true
+                    },
+                    {
+                        text        : 'Lstado de PRE-TICKETS',
+                        iconCls     : 'fas fa-receipt',
+                        viewType    : 'preticketsform',
+                        routeId     : 'customers/pretikets',
+                        leaf        : true
+                    }
+                ]
             },
             {
                 text: 'Usuarios',
@@ -148,22 +164,15 @@ Ext.define('Admin.store.NavigationTree', {
                         viewType    : 'confinvoiceform',
                         routeId     : 'settings/invoice',
                         leaf        : true
-                    },
-                    {
-                        text: 'Cajas/Terminales',
-                        iconCls: 'fas fa-cash-register',
-                        viewType: 'settings/cashregister',
-                        leaf: true
                     }
+                    // {
+                    //     text: 'Cajas/Terminales',
+                    //     iconCls: 'fas fa-cash-register',
+                    //     viewType: 'settings/cashregister',
+                    //     leaf: true
+                    // }
                 ]
             }
-            // {
-            //     text: 'Login',
-            //     iconCls: 'x-fa fa-sign-in',
-            //     viewType: 'login',
-            //     // routeId: 'login',
-            //     leaf: true
-            // }
         ]
     }
 });

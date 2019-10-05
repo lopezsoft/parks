@@ -31,13 +31,15 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'report'], function () {
     Route::get('getticketservices', 'ReportController@getTicketServices');
     Route::get('getticketfastfood', 'ReportController@setTicketFastFood');
-
+    Route::get('settickets', 'ReportController@setTickets');
 });
 
 Route::group(['prefix' => 'master'], function () {
     Route::get('getdata', 'MasterController@getTable');
     Route::get('getsalesservice', 'MasterController@getSalesService');
     Route::get('getproducts', 'MasterController@getProducts');
+    Route::get('getusers', 'MasterController@getUsers');
+    Route::get('getpretickets', 'MasterController@getPreTickets');
     Route::post('setdata', 'MasterController@setTable');
     Route::post('setimageprod', 'MasterController@setImageProd');
     Route::post('insertdata', 'MasterController@insertData');

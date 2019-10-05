@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
+use App\User;
 
 class MasterModel
 {
@@ -13,7 +14,60 @@ class MasterModel
     /**
      * Nombre del campo de clave primaria de la tabla
      */
-    public  $primaryKey = "id";
+    public  $primaryKey     = "id";
+    public  $queryField     = "";
+    public  $queryString    = "";
+
+
+    public function getSaleDetail($id = 0, $type = 1)
+    {
+        $table  = DB::select("CALL sp_sales_detail(".$id.",".$type.")");
+        return $table;  
+    }
+
+    public function getPreTickets()
+    {
+        return $this->json_response($this->getSaleMaster(0), 0);
+    }
+
+    public function getUsers($query = null, $start = 0, $limit = 0, $type = 3, $fields = null) 
+    {
+        try {
+            if (!is_null($query) && !is_null($fields)) {
+                $search = json_decode($fields);
+                foreach ($search as $value) {
+                    $select = User::where($value, 'like', '%' .$query. '%')
+                    ->where('type',$type)
+                    ->limit(1)
+                    ->get();
+                    if($select->count() > 0 ){
+                        $this->queryField   = $value;
+                        break;
+                    }
+                }
+                if(strlen($this->queryField) >0 ){
+                    $select = User::where($this->queryField, 'like', '%' .$query. '%')
+                    ->where('type',$type)
+                    ->limit($limit, $start)
+                    ->get();
+                }else{
+                    $select = User::where('first_name', 'like', '%' .$query. '%')
+                    ->where('type',$type)
+                    ->limit($limit, $start)
+                    ->get();
+                }
+            }else{
+                $select = User::where('type',$type)->
+                                limit($limit, $start)->
+                                get();
+            }
+            $result     = $this->json_response($select, $select->count());
+        } catch (\Throwable $th) {
+            $result     = $this->json_response_succes_error('Error en la consulta');
+            throw       $th;
+        }
+        return $result;
+    }
 
     public function getProducts($id = 1)
     {

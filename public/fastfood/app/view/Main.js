@@ -154,6 +154,7 @@ Ext.define('Admin.view.Main',{
                                 iconCls : null,
                                 tooltip : d.data.line_name,
                                 handler : function(btn){
+                                    var me  = this.up('form');
                                     me.onFilterLines(btn);
                                 }
                             };
@@ -182,6 +183,7 @@ Ext.define('Admin.view.Main',{
                         iconCls : 'fas fa-sync',
                         tooltip : 'Actulizar la lista de los productos',
                         handler : function(btn){
+                            var me  = this.up('form');
                             me.onRefresh(btn);
                         }
                     };
@@ -191,6 +193,7 @@ Ext.define('Admin.view.Main',{
                         iconCls : 'fas fa-broom',
                         tooltip : 'Quita el filtro aplicado y muestra la lista de todos los productos',
                         handler : function(btn){
+                            var me  = this.up('form');
                             me.onClear(btn);
                         }
                     };
@@ -207,6 +210,7 @@ Ext.define('Admin.view.Main',{
                             iconCls : null,
                             tooltip : d.data.category_name,
                             handler : function(btn){
+                                var me  = this.up('form');
                                 me.onFilterCategories(btn);
                             }
                         };
