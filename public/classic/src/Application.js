@@ -33,6 +33,35 @@ Ext.define('Admin.Application', {
             }
         );
     },
+
+    /**
+     * Funcion que muestra un Iframe con el informe devuelto del servidor
+     * @param xUrl - La ruta del informe
+     */
+     getIframe : function (xUrl, xFormat, obj) {
+        var
+            me  = this;
+        Ext.require('Admin.core.docs.IframeView');
+        Ext.onReady(function () {
+            if (xFormat == 'pdf') {
+                var
+                    cHtml = '<object><embed width="100%" height="100%" src="'+xUrl+'"></object>';
+                var win	= Ext.create('Admin.core.docs.IframeView',{
+                    title 	: 'Vista previa del enlace',
+                    html  	: cHtml,
+                    width   : 700,
+                    height  : 550,
+                    maximized   : true
+                });
+                document.addEventListener("afterprint", function(){
+                    console.log('onafterprint');
+                });
+                win.show();
+            }else{
+                me.onOpenUrl(xUrl);
+            }
+        });
+    },
     
 
     /*

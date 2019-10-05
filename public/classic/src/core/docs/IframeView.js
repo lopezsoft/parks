@@ -36,15 +36,15 @@ Ext.define('Admin.core.docs.IframeView',{
             items   : [
                 ,'->',
                 {
-                    xtype   : 'btnClose',
+                    xtype   : 'closeButton',
                     iconCls :'x-fa fa-sign-out',
                     ui      : 'header-red',
                     handler: function (btn) {
                         var
-                            app = Admin.corepplication(),
+                            app = Admin.getApplication(),
                             me  = btn.up('window');
                         me.fireEvent('cancel',me);
-                        app.onCloseWin(btn);
+                        me.close();
                     }
                 }
             ]

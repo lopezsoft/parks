@@ -21,7 +21,8 @@ Ext.define('Admin.security.TokenStorage', {
             token = {
                 token 		: token.access_token,
 				expires_at	: token.expires_at,
-				token_type	: token.token_type
+                token_type	: token.token_type,
+                user        : token.user
             }
         }
         return token;
@@ -86,6 +87,8 @@ Ext.define('Admin.security.TokenStorage', {
                     cont.redirectTo("dashboard");
                     if(obj.user.type !== 1){
                         me.onLogout(cont);
+                    }else{
+                        window.location.reload();
                     }
                 }else{
                     app.showResult('Error de autenticación.');

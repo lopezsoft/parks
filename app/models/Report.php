@@ -10,6 +10,334 @@ use App\Barcode\FpdfBarcode;
 
 class Report extends MasterModel
 {
+    
+    public function setTicketsServ($records = null, $user = 0, $type = 0)
+    {
+        
+        if (!is_null($records)) {
+            $total  = 0;
+            $data   = [];
+            try {
+                DB::beginTransaction();
+                $data['discount']       = $records->discount;
+                $data['value_paid']     = $records->value_paid;
+                $data['change']         = $records->change;
+                $data['state']          = 'TICKET';
+                $res    = DB::table('tb_sales_master')
+                                ->where('id', $records->id)
+                                ->update($data);
+                $id_sale    = $records->id;
+
+                DB::commit();
+                $config     = $this->getConfigInvoive();
+                $saleMaster = $this->getSaleMaster($id_sale, 1);
+                $saleDetail = $this->getSaleDetail($id_sale, 1);
+                $line   = "------------------------------------------------------------------------------------------------------";
+                $leftSpace  = 8;
+                $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
+                $pdf->AddPage();
+                $pdf->SetLeftMargin(8);
+                $pdf->SetRightMargin(8);
+                $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
+                $textypos   = 5;
+                $cellHeight = 2;
+                $pdf->setY(2);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$textypos,'',0,"C");
+                foreach ($config as $key => $value) {
+                    if (!empty($value->headerline1)) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline1)),0,"C");
+                    }
+                    if (!empty($value->headerline2)) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline2)),0,"C");
+                    }
+                }
+                $pdf->SetX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,utf8_decode('TICKET DE VENTA'),0,"C");
+                $nro_folio  = 0;
+                $nro_user   = 0;
+                $pdf->MultiCell(0,$cellHeight,'',0,"C");
+                foreach ($saleMaster as $key => $value) {
+                    $pdf->setX($leftSpace);
+                    $pdf->SetFont('Arial','B',4);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
+                    $nro_folio  = $value->nro_sale;
+                    $nro_user   = $value->id_user;
+                    $pdf->setX($leftSpace);
+                    $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->first_name." ".$value->last_name."  Nº. CLIENTE: ".$value->id_user));
+                }
+                $path_report = "reports/tiket-f".$nro_folio."-u".$nro_user."-t".date('d-m-Y-h-i-s-A').".pdf";
+                DB::update('UPDATE tb_sales_master SET document_ok = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
+                $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                                                    PRECIO                    TOTAL');
+                $total =0;
+                $off = $pdf->GetY();
+                $pdf->SetFont('Arial','',5);
+                
+                foreach($saleDetail as $pro){
+                    $pdf->SetY($off);
+                    $pdf->setX($leftSpace + 2);
+                    $pdf->Cell(5,$cellHeight,  $pro->amount,0,0,"R");
+                    $pdf->setX($leftSpace +6);
+                    $pdf->Cell(40,$cellHeight,  Trim($pro->detail));
+                    $pdf->setX(41);
+                    $pdf->Cell(15,$cellHeight,  "$".number_format($pro->unit_price,2,".",",") ,0,0,"R");
+                    $pdf->setX(57);
+                    $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
+                    $off+=2;
+                }
+                $textypos= 2 + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $pdf->MultiCell(0,$cellHeight,utf8_decode('FORMA DE PAGO'),0,"C");
+
+                $textypos= 0 + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"SUBTOTAL: " );
+
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->subtotal,2,".",","),0,0,"R");
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"DESCUENTO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->discount,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"TOTAL: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->total,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"EFECTIVO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->value_paid,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"CAMBIO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->change,2,".",","),0,0,"R");
+
+                $textypos+=2;
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $textypos = $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->setX($leftSpace);
+                foreach ($config as $key => $value) {
+                    if (!empty(trim($value->footline1))) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline1)),0,"C");
+                    }
+                    if (!empty(trim($value->footline2))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline2)),0,"C");
+                    }
+                    if (!empty(trim($value->footline3))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
+                    }
+                    if (!empty(trim($value->footline4))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                    }
+                }
+                $textypos= $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $textypos= 1 + $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->EAN13(20,$textypos,$nro_folio,6);
+                $pdf->AutoPrint();
+                $pdf->output("F",$path_report);
+                $result = $this->json_response(array(
+                    'report'    => $path_report
+                ));
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $result = $this->json_response_succes_error('Error al intentar guardar los cambios');
+                throw $th;
+            }
+        }else{
+            $result = $this->json_response_succes_error('Error en los datos recibidos');
+        }
+
+        return  $result;
+    }
+
+    public function setTicketsFast($records = null, $user = 0, $type = 0)
+    {
+        
+        if (!is_null($records)) {
+            $total  = 0;
+            $data   = [];
+            try {
+                DB::beginTransaction();
+                $data['discount']       = $records->discount;
+                $data['value_paid']     = $records->value_paid;
+                $data['change']         = $records->change;
+                $data['state']          = 'TICKET';
+                $res    = DB::table('tb_sales_master')
+                                ->where('id', $records->id)
+                                ->update($data);
+                $id_sale    = $records->id;
+
+                DB::commit();
+                $config     = $this->getConfigInvoive();
+                $saleMaster = $this->getSaleMaster($id_sale, 2);
+                $saleDetail = $this->getSaleDetail($id_sale, 2);
+                $line   = "------------------------------------------------------------------------------------------------------";
+                $leftSpace  = 8;
+                $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
+                $pdf->AddPage();
+                $pdf->SetLeftMargin(8);
+                $pdf->SetRightMargin(8);
+                $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
+                $textypos   = 5;
+                $cellHeight = 2;
+                $pdf->setY(2);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$textypos,'',0,"C");
+                foreach ($config as $key => $value) {
+                    if (!empty($value->headerline1)) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline1)),0,"C");
+                    }
+                    if (!empty($value->headerline2)) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline2)),0,"C");
+                    }
+                }
+                $pdf->SetX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,utf8_decode('TICKET DE VENTA'),0,"C");
+                $nro_folio  = 0;
+                $nro_user   = 0;
+                $pdf->MultiCell(0,$cellHeight,'',0,"C");
+                foreach ($saleMaster as $key => $value) {
+                    $pdf->setX($leftSpace);
+                    $pdf->SetFont('Arial','B',4);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
+                    $nro_folio  = $value->nro_sale;
+                    $pdf->setX($leftSpace);
+                    $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: MOSTRADOR"));
+                }
+                $path_report = "reports/tiket-f".$nro_folio."-d".date('d-m-Y-h-i-s-A').".pdf";
+                DB::update('UPDATE tb_sales_master SET document_ok = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
+                $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                                                    PRECIO                    TOTAL');
+                $total =0;
+                $off = $pdf->GetY();
+                $pdf->SetFont('Arial','',5);
+                
+                foreach($saleDetail as $pro){
+                    $pdf->SetY($off);
+                    $pdf->setX($leftSpace + 2);
+                    $pdf->Cell(5,$cellHeight,  $pro->amount,0,0,"R");
+                    $pdf->setX($leftSpace +6);
+                    $pdf->Cell(40,$cellHeight,  Trim($pro->product_name));
+                    $pdf->setX(41);
+                    $pdf->Cell(15,$cellHeight,  "$".number_format($pro->unit_price,2,".",",") ,0,0,"R");
+                    $pdf->setX(57);
+                    $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
+                    $off+=2;
+                }
+                $textypos= 2 + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $pdf->MultiCell(0,$cellHeight,utf8_decode('FORMA DE PAGO'),0,"C");
+
+                $textypos= 0 + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"SUBTOTAL: " );
+
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->subtotal,2,".",","),0,0,"R");
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"DESCUENTO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->discount,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"TOTAL: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->total,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"EFECTIVO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->value_paid,2,".",","),0,0,"R");
+
+                $textypos= $cellHeight + $pdf->GetY();
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->Cell(5,$cellHeight,"CAMBIO: " );
+                $pdf->setX(63);
+                $pdf->Cell(6,$cellHeight,"$ ".number_format($saleMaster[0]->change,2,".",","),0,0,"R");
+
+                $textypos+=2;
+                $pdf->SetY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $textypos = $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->setX($leftSpace);
+                foreach ($config as $key => $value) {
+                    if (!empty(trim($value->footline1))) {
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline1)),0,"C");
+                    }
+                    if (!empty(trim($value->footline2))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline2)),0,"C");
+                    }
+                    if (!empty(trim($value->footline3))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
+                    }
+                    if (!empty(trim($value->footline4))) {
+                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                    }
+                }
+                $textypos= $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->setX($leftSpace);
+                $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+                $textypos= 1 + $pdf->GetY();
+                $pdf->setY($textypos);
+                $pdf->EAN13(20,$textypos,$nro_folio,6);
+                $pdf->AutoPrint();
+                $pdf->output("F",$path_report);
+                $result = $this->json_response(array(
+                    'report'    => $path_report
+                ));
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $result = $this->json_response_succes_error('Error al intentar guardar los cambios');
+                throw $th;
+            }
+        }else{
+            $result = $this->json_response_succes_error('Error en los datos recibidos');
+        }
+
+        return  $result;
+    }
+
     public function setTicketFastFood(string $tb = null, $records = null, $user = 0)
     {
         
@@ -24,6 +352,7 @@ class Report extends MasterModel
                 $data['subtotal']   = $total;
                 $data['id_branch']  = 1;
                 $data['state']      = "PRE";
+                $data['type']       = "2";
                 $id_sale    = DB::table('tb_sales_master')->insertGetId($data);
 
                 if($id_sale > 0 ){
@@ -74,6 +403,7 @@ class Report extends MasterModel
                         // $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->first_name." ".$value->last_name."  Nº. CLIENTE: ".$value->id_user));
                     }
                     $path_report = "reports/tiket-f".$nro_folio."-d".date('d-m-Y-h-i-s-A').".pdf";
+                    DB::update('UPDATE tb_sales_master SET document = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
                     $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
@@ -154,6 +484,7 @@ class Report extends MasterModel
 
         return  $result;
     }
+    
     public function getTicketServices(string $tb = null, $records = null, $user = 0)
     {
         
@@ -239,7 +570,7 @@ class Report extends MasterModel
                     $total =0;
                     $off = $pdf->GetY();
                     $pdf->SetFont('Arial','',5);
-                   
+                    
                     foreach($records as $pro){
                         $pdf->SetY($off);
                         $pdf->setX($leftSpace + 2);
@@ -292,6 +623,7 @@ class Report extends MasterModel
                     $result = $this->json_response(array(
                         'report'    => $path_report
                     ));
+                    DB::update('UPDATE tb_sales_master SET document = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
                 }else{
                     DB::rollback();
                     $result = $this->json_response_succes_error('Error al intentar guardar los cambios');

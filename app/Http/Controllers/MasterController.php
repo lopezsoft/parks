@@ -8,6 +8,23 @@ use App\core\MasterModel;
 class MasterController extends Controller
 {
 
+    public function getPreTickets(Request $request)
+    {
+        $val    = new MasterModel();
+        echo $val->getPreTickets();
+    }
+
+    public function getUsers(Request $request)
+    {
+        $type   = $request->input('type');
+        $query  = $request->input('query');
+        $start  = $request->input('start');
+        $limit  = $request->input('limit');
+        $fields  = $request->input('fields');
+        $val    = new MasterModel();
+        echo $val->getUsers($query, $start, $limit, $type, $fields);
+    }
+
     public function getProducts(Request $request)
     {
         $type   = $request->input('branch');
@@ -18,7 +35,10 @@ class MasterController extends Controller
     
     public function getTable(Request $request)
     {       
-        $table = $request->input('pdbTable');
+        $table  = $request->input('pdbTable');
+        $query  = $request->input('query');
+        $start  = $request->input('start');
+        $limit  = $request->input('limit');
         $val    = new MasterModel();
         echo $val->getTable($table);
     }

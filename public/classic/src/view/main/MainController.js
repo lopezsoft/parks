@@ -260,6 +260,26 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
+                case 'customers':
+                    Ext.require([
+                        'Admin.view.users.forms.CustomersForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.UsersStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
+                case 'customers/pretikets':
+                    Ext.require([
+                        'Admin.view.users.forms.PreTicketsForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.PreTicketsStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
                 default:
                     Ext.require([
                         'Admin.*'
