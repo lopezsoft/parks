@@ -37,6 +37,8 @@ Route::group(['prefix' => 'report'], function () {
 Route::group(['prefix' => 'master'], function () {
     Route::get('getdata', 'MasterController@getTable');
     Route::get('getsalesservice', 'MasterController@getSalesService');
+    Route::get('getbranchservices', 'MasterController@getBranchServices');
+    Route::get('getbranchfootWear', 'MasterController@getBranchFootWear');
     Route::get('getproducts', 'MasterController@getProducts');
     Route::get('getusers', 'MasterController@getUsers');
     Route::get('getpretickets', 'MasterController@getPreTickets');

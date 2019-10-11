@@ -10,7 +10,8 @@ use App\Barcode\FpdfBarcode;
 
 class Report extends MasterModel
 {
-    
+    public $path_logo_reports  = "resources/images/logo_reports.jpeg";
+
     public function setTicketsServ($records = null, $user = 0, $type = 0)
     {
         
@@ -39,7 +40,8 @@ class Report extends MasterModel
                 $pdf->SetLeftMargin(8);
                 $pdf->SetRightMargin(8);
                 $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
-                $textypos   = 5;
+                $pdf->Image($this->path_logo_reports,2,5,75,45);
+                $textypos   = 50;
                 $cellHeight = 2;
                 $pdf->setY(2);
                 $pdf->setX($leftSpace);
@@ -203,7 +205,8 @@ class Report extends MasterModel
                 $pdf->SetLeftMargin(8);
                 $pdf->SetRightMargin(8);
                 $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
-                $textypos   = 5;
+                $pdf->Image($this->path_logo_reports,2,5,75,45);
+                $textypos   = 50;
                 $cellHeight = 2;
                 $pdf->setY(2);
                 $pdf->setX($leftSpace);
@@ -370,12 +373,14 @@ class Report extends MasterModel
                     $saleMaster = $this->getSaleMaster($id_sale, 2);
                     $line   = "------------------------------------------------------------------------------------------------------";
                     $leftSpace  = 8;
+
                     $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
                     $pdf->AddPage();
                     $pdf->SetLeftMargin(8);
                     $pdf->SetRightMargin(8);
                     $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
-                    $textypos   = 5;
+                    $pdf->Image($this->path_logo_reports,2,5,75,45);
+                    $textypos   = 50;
                     $cellHeight = 2;
                     $pdf->setY(2);
                     $pdf->setX($leftSpace);
@@ -535,7 +540,8 @@ class Report extends MasterModel
                     $pdf->SetLeftMargin(8);
                     $pdf->SetRightMargin(8);
                     $pdf->SetFont('Arial','B',5);    //Letra Arial, negrita (Bold), tam. 20
-                    $textypos   = 5;
+                    $pdf->Image($this->path_logo_reports,2,5,75,45);
+                    $textypos   = 50;
                     $cellHeight = 2;
                     $pdf->setY(2);
                     $pdf->setX($leftSpace);

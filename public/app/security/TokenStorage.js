@@ -12,6 +12,7 @@ Ext.define('Admin.security.TokenStorage', {
     clear: function (cont) {
         localStorage.removeItem(this.getStorageKey());
         cont.redirectTo("login");
+        window.location.reload();
     },
 
     recoverParams : function(){

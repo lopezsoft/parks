@@ -267,6 +267,11 @@ Ext.define('Admin.view.main.MainController', {
                     Ext.onReady(function () {
                         me.unMask();
                         app.onStore('general.UsersStore');
+                        app.setParamStore('UsersStore',{
+                            pdbTable    : 'users',
+                            query       : '',
+                            type        : 3
+                        });
                         me.setCurrentView(id);
                     });
                     break;            
@@ -277,6 +282,21 @@ Ext.define('Admin.view.main.MainController', {
                     Ext.onReady(function () {
                         me.unMask();
                         app.onStore('general.PreTicketsStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
+                case 'users/list':
+                    Ext.require([
+                        'Admin.view.users.forms.UsersForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.UsersStore');
+                        app.setParamStore('UsersStore',{
+                            pdbTable    : 'users',
+                            query       : '',
+                            type        : 2
+                        });
                         me.setCurrentView(id);
                     });
                     break;            
