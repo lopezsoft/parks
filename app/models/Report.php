@@ -423,7 +423,7 @@ class Report extends MasterModel
                         $pdf->setX($leftSpace + 2);
                         $pdf->Cell(5,$cellHeight,  $pro->cant,0,0,"R");
                         $pdf->setX($leftSpace +6);
-                        $pdf->Cell(40,$cellHeight,  Trim($pro->product_name));
+                        $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->product_name)));
                         $pdf->setX(41);
                         $pdf->Cell(15,$cellHeight,  "$".number_format($pro->price,2,".",",") ,0,0,"R");
                         $pdf->setX(57);
@@ -581,7 +581,7 @@ class Report extends MasterModel
                     foreach($records as $pro){
                         $pdf->SetY($off);
                         $pdf->setX($leftSpace + 2);
-                        $pdf->Cell(50,$cellHeight,  $pro->shoe_name);
+                        $pdf->Cell(50,$cellHeight,  utf8_decode($pro->shoe_name));
                         $pdf->setX(53);
                         $pdf->Cell(15,$cellHeight,  "$".number_format($pro->price,2,".",",") ,0,0,"R");
                         $total += $pro->price;
