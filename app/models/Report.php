@@ -37,9 +37,9 @@ class Report extends MasterModel
                 $leftSpace  = 8;
                 $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
                 $pdf->AddPage();
-                $pdf->SetLeftMargin(8);
-                $pdf->SetRightMargin(8);
-                $pdf->SetFont('Arial','B',8);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->SetLeftMargin(5);
+                $pdf->SetRightMargin(5);
+                $pdf->SetFont('Helvetica','B',8);    //Letra Helvetica, negrita (Bold), tam. 20
                 $pdf->Image($this->path_logo_reports,2,5,75,45);
                 $textypos   = 50;
                 $cellHeight = 3;
@@ -61,7 +61,7 @@ class Report extends MasterModel
                 $pdf->MultiCell(0,$cellHeight,'',0,"C");
                 foreach ($saleMaster as $key => $value) {
                     $pdf->setX($leftSpace);
-                    $pdf->SetFont('Arial','B',6);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
                     $nro_folio  = $value->nro_sale;
                     $nro_user   = $value->id_user;
@@ -70,14 +70,14 @@ class Report extends MasterModel
                 }
                 $path_report = "reports/tiket-f".$nro_folio."-u".$nro_user."-t".date('d-m-Y-h-i-s-A').".pdf";
                 DB::update('UPDATE tb_sales_master SET document_ok = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
-                $pdf->SetFont('Arial','B',7);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
                 $pdf->setX($leftSpace);
                 $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                 $pdf->setX($leftSpace);
                 $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                          PRECIO         TOTAL');
                 $total =0;
                 $off = $pdf->GetY();
-                $pdf->SetFont('Arial','',7);
+                $pdf->SetFont('Helvetica','',7);
                 
                 foreach($saleDetail as $pro){
                     $pdf->SetY($off);
@@ -202,9 +202,9 @@ class Report extends MasterModel
                 $leftSpace  = 8;
                 $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
                 $pdf->AddPage();
-                $pdf->SetLeftMargin(8);
-                $pdf->SetRightMargin(8);
-                $pdf->SetFont('Arial','B',8);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->SetLeftMargin(5);
+                $pdf->SetRightMargin(5);
+                $pdf->SetFont('Helvetica','B',8);    //Letra Helvetica, negrita (Bold), tam. 20
                 $pdf->Image($this->path_logo_reports,2,5,75,45);
                 $textypos   = 50;
                 $cellHeight = 3;
@@ -226,7 +226,7 @@ class Report extends MasterModel
                 $pdf->MultiCell(0,$cellHeight,'',0,"C");
                 foreach ($saleMaster as $key => $value) {
                     $pdf->setX($leftSpace);
-                    $pdf->SetFont('Arial','B',6);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
                     $nro_folio  = $value->nro_sale;
                     $pdf->setX($leftSpace);
@@ -234,14 +234,14 @@ class Report extends MasterModel
                 }
                 $path_report = "reports/tiket-f".$nro_folio."-d".date('d-m-Y-h-i-s-A').".pdf";
                 DB::update('UPDATE tb_sales_master SET document_ok = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
-                $pdf->SetFont('Arial','B',7);    //Letra Arial, negrita (Bold), tam. 20
+                $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
                 $pdf->setX($leftSpace);
                 $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                 $pdf->setX($leftSpace);
                 $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                          PRECIO         TOTAL');
                 $total =0;
                 $off = $pdf->GetY();
-                $pdf->SetFont('Arial','B',7);
+                $pdf->SetFont('Helvetica','B',7);
                 
                 foreach($saleDetail as $pro){
                     $pdf->SetY($off);
@@ -376,9 +376,9 @@ class Report extends MasterModel
 
                     $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
                     $pdf->AddPage();
-                    $pdf->SetLeftMargin(8);
-                    $pdf->SetRightMargin(8);
-                    $pdf->SetFont('Arial','B',8);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetLeftMargin(5);
+                    $pdf->SetRightMargin(5);
+                    $pdf->SetFont('Helvetica','B',8);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->Image($this->path_logo_reports,2,5,75,45);
                     $textypos   = 50;
                     $cellHeight = 3;
@@ -400,7 +400,7 @@ class Report extends MasterModel
                     $pdf->MultiCell(0,$cellHeight,'',0,"C");
                     foreach ($saleMaster as $key => $value) {
                         $pdf->setX($leftSpace);
-                        $pdf->SetFont('Arial','B',6);    //Letra Arial, negrita (Bold), tam. 20
+                        $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
                         $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
                         $nro_folio  = $value->nro_sale;
                         // $nro_user   = $value->id_user;
@@ -409,14 +409,14 @@ class Report extends MasterModel
                     }
                     $path_report = "reports/tiket-f".$nro_folio."-d".date('d-m-Y-h-i-s-A').".pdf";
                     DB::update('UPDATE tb_sales_master SET document = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
-                    $pdf->SetFont('Arial','B',7);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                          PRECIO         TOTAL');
                     $total =0;
                     $off = $pdf->GetY();
-                    $pdf->SetFont('Arial','B',7);
+                    $pdf->SetFont('Helvetica','B',7);
                     $cellHeight = 3;
                     foreach($records as $pro){
                         $pdf->SetY($off);
@@ -538,9 +538,9 @@ class Report extends MasterModel
                     $leftSpace  = 8;
                     $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));
                     $pdf->AddPage();
-                    $pdf->SetLeftMargin(8);
-                    $pdf->SetRightMargin(8);
-                    $pdf->SetFont('Arial','B',8);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetLeftMargin(5);
+                    $pdf->SetRightMargin(5);
+                    $pdf->SetFont('Helvetica','B',8);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->Image($this->path_logo_reports,2,5,75,45);
                     $textypos   = 50;
                     $cellHeight = 3;
@@ -561,7 +561,7 @@ class Report extends MasterModel
                     $nro_user   = 0;
                     foreach ($saleMaster as $key => $value) {
                         $pdf->setX($leftSpace);
-                        $pdf->SetFont('Arial','B',6);    //Letra Arial, negrita (Bold), tam. 20
+                        $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
                         $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d/m/Y',strtotime($value->date))." HORA: ".date('h:i:s A',strtotime($value->date))."     FOLIO: ".$value->nro_sale);
                         $nro_folio  = $value->nro_sale;
                         $nro_user   = $value->id_user;
@@ -569,14 +569,14 @@ class Report extends MasterModel
                         $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->first_name." ".$value->last_name."  Nº. CLIENTE: ".$value->id_user));
                     }
                     $path_report = "reports/tiket-f".$nro_folio."-u".$nro_user."-t".date('d-m-Y-h-i-s-A').".pdf";
-                    $pdf->SetFont('Arial','B',7);    //Letra Arial, negrita (Bold), tam. 20
+                    $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,'CONCEPTO                                                    TOTAL');
                     $total =0;
                     $off = $pdf->GetY();
-                    $pdf->SetFont('Arial','',7);
+                    $pdf->SetFont('Helvetica','',7);
                     $cellHeight = 3;
                     foreach($records as $pro){
                         $pdf->SetY($off);
