@@ -235,6 +235,7 @@ $include-admin-view-settings-views-confinvoiceview: dynamic(true);;
 $include-admin-view-users-userscontroller: dynamic(true);;
 $include-admin-view-users-forms-customersform: dynamic(true);;
 $include-admin-view-users-forms-preticketsform: dynamic(true);;
+$include-admin-view-users-forms-usersform: dynamic(true);;
 $include-admin-view-users-views-receiveview: dynamic(true);;
 $include-admin-view-users-views-usersview: dynamic(true);;
 $include-admin-view-widgets-widgeta: dynamic(true);;

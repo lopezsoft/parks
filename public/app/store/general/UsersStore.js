@@ -4,7 +4,7 @@
 Ext.define('Admin.store.general.UsersStore',{
     extend  : 'Admin.store.base.StoreApi',
     storeId : 'UsersStore',
-    pageSize: 300,
+    pageSize: 30,
     requires    : [
         'Admin.model.general.UsersModel'
     ],

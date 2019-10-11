@@ -8,6 +8,52 @@ use App\core\MasterModel;
 class MasterController extends Controller
 {
 
+
+    /**
+     * Calcetines por sucursal
+     */
+    public function getBranchFootWear(Request $request)
+    {       
+        $table  = $request->input('pdbTable');
+        $query  = $request->input('query');
+        $start  = $request->input('start');
+        $limit  = $request->input('limit');
+        $sqlQuery   = "SELECT t1.*, t2.shoe_name, t3.full_name ".
+                    "FROM tb_headquarters_shoes AS t1 ".
+                    "LEFT JOIN tb_footwear AS t2 ON t1.id_footwear = t2.id ".
+                    "LEFT JOIN tb_branch_offices AS t3 ON t1.id_branch = t3.id";
+        $sqlCount   = "SELECT COUNT(t1.id) AS total ".
+                    "FROM tb_headquarters_shoes AS t1 ".
+                    "LEFT JOIN tb_footwear AS t2 ON t1.id_footwear = t2.id ".
+                    "LEFT JOIN tb_branch_offices AS t3 ON t1.id_branch = t3.id";
+        $arrayFields    = array("t2.time_name", "t3.full_name");
+        $val    = new MasterModel();
+        echo $val->sqlQuery($sqlQuery, $sqlCount, $arrayFields, $query, $start, $limit);
+    }
+
+    /**
+     * Servicios por sucursal
+     */
+    public function getBranchServices(Request $request)
+    {       
+        $table  = $request->input('pdbTable');
+        $query  = $request->input('query');
+        $start  = $request->input('start');
+        $limit  = $request->input('limit');
+        $sqlQuery   = "SELECT t1.*, t2.time_name, t3.full_name ".
+                    "FROM  tb_branch_services AS t1 ".
+                    "LEFT JOIN tb_service_time AS t2 ON t1.id_time	 = t2.id ".
+                    "LEFT JOIN tb_branch_offices AS t3 ON t1.id_branch = t3.id";
+        $sqlCount   = "SELECT COUNT(t1.id) AS total ".
+                    "FROM  tb_branch_services AS t1 ".
+                    "LEFT JOIN tb_service_time AS t2 ON t1.id_time	 = t2.id ".
+                    "LEFT JOIN tb_branch_offices AS t3 ON t1.id_branch = t3.id";
+        $arrayFields    = array("t2.time_name", "t3.full_name");
+        $val    = new MasterModel();
+        echo $val->sqlQuery($sqlQuery, $sqlCount, $arrayFields, $query, $start, $limit);
+    }
+
+
     public function getPreTickets(Request $request)
     {
         $val    = new MasterModel();
@@ -20,7 +66,7 @@ class MasterController extends Controller
         $query  = $request->input('query');
         $start  = $request->input('start');
         $limit  = $request->input('limit');
-        $fields  = $request->input('fields');
+        $fields = $request->input('fields');
         $val    = new MasterModel();
         echo $val->getUsers($query, $start, $limit, $type, $fields);
     }
@@ -40,7 +86,7 @@ class MasterController extends Controller
         $start  = $request->input('start');
         $limit  = $request->input('limit');
         $val    = new MasterModel();
-        echo $val->getTable($table);
+        echo $val->getTable($table, $query, $start, $limit);
     }
 
     public function getSalesService(Request $request)

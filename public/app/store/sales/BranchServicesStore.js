@@ -7,6 +7,12 @@ Ext.define('Admin.store.sales.BranchServicesStore',{
         extraParams : {
             pdbTable    : 'tb_branch_services',
             query       : ''
+        },
+        api: {
+            create  : 'master/insertdata',
+            read    : 'master/getbranchservices',
+            update  : 'master/setdata',
+            destroy : 'master/deletedata'
         }
     },
     requires: [

@@ -40,7 +40,7 @@ Ext.define('Admin.store.NavigationTree', {
                 ]
             },
             {
-                text: 'Ventas',
+                text: 'Servicios',
                 iconCls: 'fas fa-store',
                 leaf: false,
                 expanded: false,
@@ -76,7 +76,7 @@ Ext.define('Admin.store.NavigationTree', {
                 ]
             },
             {
-                text: 'Productos',
+                text: 'FastFood',
                 iconCls: 'fas fa-box-open',
                 leaf     : false,
                 expanded : false,
@@ -89,18 +89,18 @@ Ext.define('Admin.store.NavigationTree', {
                         leaf        : true
                     },
                     {
-                        text: 'Lineas',
-                        iconCls: 'x-fa fa-money',
+                        text        : 'Lineas',
+                        iconCls     : 'x-fa fa-money',
                         viewType    : 'linesform',
                         routeId     : 'products/lines',
                         leaf        : true
                     },
                     {
-                        text: 'Categorias',
-                        iconCls: 'x-fa fa-money',
-                        viewType: 'categoriesform',
+                        text        : 'Categorias',
+                        iconCls     : 'x-fa fa-money',
+                        viewType    : 'categoriesform',
                         routeId     : 'products/categories',
-                        leaf: true
+                        leaf        : true
                     }
                 ]
             },
@@ -108,7 +108,7 @@ Ext.define('Admin.store.NavigationTree', {
                 text        : 'Clientes',
                 iconCls     : 'fas fa-user-friends',
                 leaf        : false,
-                expanded    : true,
+                expanded    : false,
                 children    : [
                     {
                         text        : 'Listado de Clientes',
@@ -127,28 +127,23 @@ Ext.define('Admin.store.NavigationTree', {
                 ]
             },
             {
-                text: 'Usuarios',
-                iconCls: 'fas  fa-users-cog',
-                expanded: false,
-                selectable: false,
+                text            : 'Usuarios',
+                iconCls         : 'fas  fa-users-cog',
+                expanded        : false,
                 children: [
                     {
-                        text: 'Login',
-                        iconCls: 'x-fa fa-check',
-                        viewType: 'login',
-                        leaf: true
+                        text        : 'Lista de usuarios',
+                        iconCls     : 'x-fa fa-check',
+                        viewType    : 'usersform',
+                        routeId     : 'users/list',
+                        leaf        : true
                     },
                     {
-                        text: 'Register',
-                        iconCls: 'x-fa fa-pencil-square-o',
-                        viewType: 'register',
-                        leaf: true
-                    },
-                    {
-                        text: 'Password Reset',
-                        iconCls: 'x-fa fa-lightbulb-o',
-                        viewType: 'passwordreset',
-                        leaf: true
+                        text        : 'Perfil',
+                        iconCls     : 'far fa-id-card',
+                        viewType    : 'profileform',
+                        routeId     : 'users/profile',
+                        leaf        : true
                     }
                 ]
             },

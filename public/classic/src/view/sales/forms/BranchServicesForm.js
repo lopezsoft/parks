@@ -13,7 +13,7 @@ Ext.define('Admin.view.sales.forms.BranchServicesForm',{
     controller : 'sales',
     initComponent: function () {
         this.callParent(arguments);
-        this.setTitle('Servcios por sucursal');
+        this.setTitle('Servicios por sucursal');
     },
     buildWindow: function () {
         var
@@ -48,8 +48,8 @@ Ext.define('Admin.view.sales.forms.BranchServicesForm',{
             xtype       : 'customGrid',
             store       : 'BranchServicesStore',
             columns: [
-                { text: 'Surcusal', dataIndex: 'id_branch', width : 100 },
-                { text: 'Servicio', dataIndex: 'id_time', width : 100 },
+                { text: 'Surcusal', dataIndex: 'full_name', width : 150 },
+                { text: 'Servicio', dataIndex: 'time_name', width : 200 },
                 { text: 'Precio', dataIndex: 'price', width : 150, formatter: 'usMoney' },
                 { text: 'T. Ilimitado', dataIndex: 'unlimited_time', width : 120,  xtype: 'checkcolumn' },
                 { text: 'Activo', dataIndex: 'active', width : 80, xtype: 'checkcolumn' }

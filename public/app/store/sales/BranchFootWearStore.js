@@ -7,6 +7,12 @@ Ext.define('Admin.store.sales.BranchFootWearStore',{
         extraParams : {
             pdbTable    : 'tb_headquarters_shoes',
             query       : ''
+        },
+        api: {
+            create  : 'master/insertdata',
+            read    : 'master/getbranchfootWear',
+            update  : 'master/setdata',
+            destroy : 'master/deletedata'
         }
     },
     requires: [

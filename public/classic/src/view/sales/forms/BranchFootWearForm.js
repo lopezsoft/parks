@@ -48,8 +48,8 @@ Ext.define('Admin.view.sales.forms.BranchFootWearForm',{
             xtype       : 'customGrid',
             store       : 'BranchFootWearStore',
             columns: [
-                { text: 'Surcusal', dataIndex: 'id_branch', width : 100 },
-                { text: 'Calcetín', dataIndex: 'id_footwear', width : 100 },
+                { text: 'Surcusal', dataIndex: 'full_name', width : 150 },
+                { text: 'Calcetín', dataIndex: 'shoe_name', width : 250 },
                 { text: 'Precio', dataIndex: 'price', width : 150, formatter: 'usMoney' },
                 { text: 'Activo', dataIndex: 'active', width : 80, xtype: 'checkcolumn' }
             ],

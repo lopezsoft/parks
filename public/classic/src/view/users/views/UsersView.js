@@ -6,7 +6,7 @@ Ext.define('Admin.view.users.views.UsersView',{
     closeAction 	: 'hide',
     initComponent: function () {
         this.callParent(arguments);
-        this.setTitle('Agregar/Editar Cliente');
+        this.setTitle('Agregar/Editar Usuario/Cliente');
     },
     store : 'UsersStore',
     items: [

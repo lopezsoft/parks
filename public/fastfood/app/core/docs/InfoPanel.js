@@ -34,7 +34,7 @@ Ext.define('Admin.core.docs.InfoPanel', {
                         {
                             iconCls		: 'fas fa-chevron-up',
                             iconAlign	: 'left',
-                            scale       : 'large',
+                            // scale       : 'large',
                             disabled    : true,
                             cls         : 'button-up-down',
                             itemId      : 'upButton',
@@ -45,7 +45,7 @@ Ext.define('Admin.core.docs.InfoPanel', {
                         {
                             iconCls		: 'fas fa-chevron-down',
                             iconAlign	: 'left',
-                            scale       : 'large',
+                            // scale       : 'large',
                             disabled    : true,
                             cls         : 'button-up-down',
                             itemId      : 'downButton',
@@ -57,7 +57,7 @@ Ext.define('Admin.core.docs.InfoPanel', {
                             iconCls		: 'fas fa-trash-alt',
                             tooltip     : 'Eliminar producto seleccionado',
                             iconAlign	: 'left',
-                            scale       : 'large',
+                            // scale       : 'large',
                             disabled    : true,
                             cls         : 'button-delete',
                             itemId      : 'deleteButton',
@@ -69,8 +69,9 @@ Ext.define('Admin.core.docs.InfoPanel', {
                             iconCls		: 'fas fa-print',
                             tooltip     : 'Guarda el predido y genera el PRE-TICKET de venta.',
                             cls         : 'button-print',
+                            text        : 'Aceptar',
                             iconAlign	: 'left',
-                            scale       : 'large',
+                            // scale       : 'large',
                             handler : function (btn) {
                                 btn.up('form').onTiket(btn);
                             }
@@ -81,7 +82,7 @@ Ext.define('Admin.core.docs.InfoPanel', {
                             iconAlign	: 'left',
                             text        : 'Cancelar',
                             tooltip     : 'Cancela el pedido y limpia la venata.',
-                            scale       : 'large',  
+                            // scale       : 'large',  
                             handler : function (btn) {
                                 btn.up('form').onClearGrid(btn);
                             }
@@ -156,7 +157,7 @@ Ext.define('Admin.core.docs.InfoPanel', {
         this.callParent();
         if (!Ext.isWebKit) {
             this.el.on('click', function(){
-                alert('The Sencha Touch examples are intended to work on WebKit browsers. They may not display correctly in other browsers.');
+                alert('Los ejemplos de Sencha Touch están diseñados para funcionar en los navegadores WebKit. Es posible que no se muestren correctamente en otros navegadores.');
             }, this, {delegate: 'a'});
         }    
     },

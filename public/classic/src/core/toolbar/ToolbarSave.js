@@ -8,12 +8,12 @@ Ext.define('Admin.core.toolbar.ToolbarSave',{
 	itemId	: 'toolbarSave',
 	dock	: 'bottom',
 	items 	: [
-		{
-			xtype	: 'facebookButton'
-		},
-		{
-			xtype	: 'youtubeButton'
-		},
+		// {
+		// 	xtype	: 'facebookButton'
+		// },
+		// {
+		// 	xtype	: 'youtubeButton'
+		// },
 		'->',
         {
         	xtype	: 'saveButton',

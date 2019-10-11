@@ -11,7 +11,7 @@ Ext.define('Admin.view.sales.forms.ServicesForm',{
     controller: 'sales',
     initComponent: function () {
         this.callParent(arguments);
-        this.setTitle('Servcios');
+        this.setTitle('Servicios');
     },
     buildWindow: function () {
         var
