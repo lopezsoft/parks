@@ -66,7 +66,7 @@ class Report extends MasterModel
                     $nro_folio  = $value->nro_sale;
                     $nro_user   = $value->id_user;
                     $pdf->setX($leftSpace);
-                    $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->first_name." ".$value->last_name."  Nº. CLIENTE: ".$value->id_user));
+                    $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->customers."  Nº. CLIENTE: ".$value->id_user));
                 }
                 $path_report = "reports/tiket-f".$nro_folio."-u".$nro_user."-t".date('d-m-Y-h-i-s-A').".pdf";
                 DB::update('UPDATE tb_sales_master SET document_ok = "'.$path_report.'" where id = ?', [$id_sale], ' LIMIT 1');
