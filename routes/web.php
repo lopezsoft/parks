@@ -27,16 +27,20 @@ Route::get('/client/services', function () {
     return view('users/index');
 });
 
-Route::get('/fastfood/login', function () {
-    return view('fastfoot/login');
-});
+// Route::get('/fastfood/login', function () {
+//     return view('fastfoot/login');
+// });
 
-Route::get('/fastfood/menu', function () {
-    return view('fastfoot/index');
-});
+// Route::get('/fastfood/menu', function () {
+//     return view('fastfoot/index');
+// });
 
 Route::get('/dashboard', function () {
     return view('dashboard/index');
+});
+
+Route::get('/dashboard/login', function () {
+    return view('dashboard/login');
 });
 
 Auth::routes();

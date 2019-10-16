@@ -11,6 +11,11 @@ Ext.define('Admin.model.products.ProductsModel',{
         { name: 'price', type: 'float' },
         { name: 'image' },
         { name: 'mime' },
-        { name: 'active', type : 'bool' }
+        { name: 'active', type : 'bool' },
+        { name: 'category_name'},
+        { name: 'color_category' },
+        { name: 'line_name' },
+        { name: 'line_color' },
+        { name: 'full_name' }
     ]
 });

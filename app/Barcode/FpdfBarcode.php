@@ -61,7 +61,7 @@ class FpdfBarcode extends FPDF
 
 	function EAN13($x, $y, $barcode, $h=16, $w=.35)
 	{
-		$this->Barcode($x,$y,$barcode,$h,$w,13);
+		return $this->Barcode($x,$y,$barcode,$h,$w,13);
 	}
 
 	function UPC_A($x, $y, $barcode, $h=16, $w=.35)
@@ -146,5 +146,6 @@ class FpdfBarcode extends FPDF
 		//Print text uder barcode
 		$this->SetFont('Arial','',12);
 		$this->Text($x,$y+$h+11/$this->k,substr($barcode,-$len));
+		return substr($barcode,-$len);
 	}
 }

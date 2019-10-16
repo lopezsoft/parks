@@ -41,6 +41,7 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
             columns: [
                 { text: 'Nº. PRE-TICKET', dataIndex: 'nro_sale', width : 120 },
                 { text: 'Total', dataIndex: 'total', width : 125, formatter  : 'usMoney' },
+                { text: 'Cliente', dataIndex: 'customers', width : 250},
                 { text: 'Fecha y hora', dataIndex: 'date', width : 200,  xtype: 'datecolumn',   format:'d-m-Y h:1:s A' },
                 { text: 'Documento', dataIndex: 'document', width : 120,
                     renderer : function (val) {
@@ -51,6 +52,7 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
                         return rVal;
                     }
                 },
+                { text: 'Código de barras', dataIndex: 'barcode', width : 125 },
                 { text: 'Tipo', dataIndex: 'type_name', width : 150 }
             ],
             dockedItems: [

@@ -18,8 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
+    Route::get('roles', 'AuthController@roles');
     Route::post('loginclient', 'AuthController@loginclient');
     Route::post('signup', 'AuthController@signup');
+    Route::post('updateuser', 'AuthController@updateuser');
     Route::post('register', 'AuthController@registercustomer');
   
     Route::group(['middleware' => 'auth:api'], function() {

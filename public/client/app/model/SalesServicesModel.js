@@ -3,7 +3,9 @@ Ext.define('Admin.model.SalesServicesModel',{
     fields  : [
         { name: 'id', type : 'int' },
         { name: 'id_branc', type : 'int' },
+        { name: 'cant', type : 'int' },
         { name: 'price'},
+        { name: 'total'},
         { name: 'unlimited_time'},
         { name: 'shoe_name' },
         { name: 'full_name' },

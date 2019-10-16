@@ -14,10 +14,11 @@ Ext.define('Admin.view.users.UsersController',{
             var 
                 values  = win.down('form').getValues();
             dataSend    = xData.data;
-            dataSend.discount       = values.discount;
+            dataSend.discount       = parseFloat(values.discount) > 0 ? values.discount : 0;
             dataSend.value_paid     = values.value_paid;
             dataSend.value_to_pay   = values.value_to_pay;
             dataSend.change         = values.change;
+            win.mask('Generando venta, espere por favor');
             Ext.Ajax.request({
                 url     : Global.getUrlBase() + 'api/report/settickets',
                 headers: {
@@ -40,8 +41,10 @@ Ext.define('Admin.view.users.UsersController',{
                     }else{
                         app.showResult('Ocurrio un error al generar el ticket.');
                     }
+                    win.unmask();
                 },
                 failure: function(response, opts) {
+                    win.unmask();
                     app.showResult('server-side failure with status code ' + response.status);
                 }
             });

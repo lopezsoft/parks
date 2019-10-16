@@ -108,25 +108,31 @@ class MasterController extends Controller
     {       
         $table      = $request->input('pdbTable');
         $records    = json_decode($request->input('records'));
+        $ip         = $request->ip();
+        $user       = $request->input('user');
         $val        = new MasterModel();
-        echo $val->setTable($records,$table);
+        echo $val->setTable($records,$table, $ip, $user);
     }
 
     public function insertData(Request $request)
     {       
         $table      = $request->input('pdbTable');
+        $ip         = $request->ip();
+        $user       = $request->input('user');
         $records    = json_decode($request->input('records'));
         $val        = new MasterModel();
         $file       = $request->file('image');
-        echo $val->insertData($records,$table, $file);
+        echo $val->insertData($records,$table, $ip, $user);
     }
 
     public function deleteData(Request $request)
     {       
         $table      = $request->input('pdbTable');
         $records    = json_decode($request->input('records'));
+        $ip         = $request->ip();
+        $user       = $request->input('user');
         $val        = new MasterModel();
-        echo $val->deleteData($records,$table);
+        echo $val->deleteData($records,$table, $ip, $user);
     }
 
 

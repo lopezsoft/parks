@@ -33,7 +33,7 @@ Ext.define('Admin.view.main.Main', {
                     reference: 'senchaLogo',
                     cls: 'sencha-logo',
                     html: '<div class="main-logo"><img src="resources/images/company-logo.png">PEQUE PARKS</div>',
-                    width: 300
+                    width: 290
                 },
                 {
                     margin: '0 0 0 8',
@@ -43,39 +43,6 @@ Ext.define('Admin.view.main.Main', {
                     handler: 'onToggleNavigationSize'
                 },
                 '->',
-                // {
-                //     xtype: 'segmentedbutton',
-                //     margin: '0 16 0 0',
-
-                //     platformConfig: {
-                //         ie9m: {
-                //             hidden: true
-                //         }
-                //     },
-
-                //     items: [{
-                //         iconCls: 'x-fa fa-desktop',
-                //         pressed: true
-                //     }, {
-                //         iconCls: 'x-fa fa-tablet',
-                //         handler: 'onSwitchToModern',
-                //         tooltip: 'Switch to modern toolkit'
-                //     }]
-                // },
-                // {
-                //     iconCls:'x-fa fa-search',
-                //     ui: 'header',
-                //     href: '#searchresults',
-                //     hrefTarget: '_self',
-                //     tooltip: 'See latest search'
-                // },
-                {
-                    iconCls:'x-fa fa-question',
-                    ui: 'header',
-                    href: '#faq',
-                    hrefTarget: '_self',
-                    tooltip: 'Ayuda'
-                },
                 {
                     iconCls:'x-fa fa-th-large',
                     ui: 'header',
@@ -91,17 +58,19 @@ Ext.define('Admin.view.main.Main', {
                     tooltip     : 'Cerrar sesión y salir del sistema'
                 },
                 {
-                    xtype: 'tbtext',
-                    text: 'Usuario en línea',
-                    cls: 'top-user-name'
+                    xtype   : 'tbtext',
+                    text    : 'Usuario en línea',
+                    itemId  : 'tbuser',
+                    cls     : 'top-user-name'
                 },
                 {
-                    xtype: 'image',
-                    cls: 'header-right-profile-image',
-                    height: 35,
-                    width: 35,
-                    alt:'Imagen de usuario',
-                    src: 'resources/images/user-profile/2.png'
+                    xtype   : 'image',
+                    cls     : 'header-right-profile-image',
+                    height  : 35,
+                    width   : 35,
+                    alt     :'Imagen de usuario',
+                    itemId  : 'userImg',
+                    src     : 'resources/images/user-profile/2.png'
                 }
             ]
         },
@@ -117,7 +86,7 @@ Ext.define('Admin.view.main.Main', {
                     itemId: 'navigationTreeList',
                     ui: 'navigation',
                     store: 'NavigationTree',
-                    width: 300,
+                    width: 290,
                     expanderFirst: false,
                     expanderOnly: false,
                     listeners: {
@@ -140,7 +109,9 @@ Ext.define('Admin.view.main.Main', {
     ],
     listeners : {
         afterrender : function(e,o){
-            var loadingMask = Ext.get('global-spinner');
+            var loadingMask = Ext.get('global-spinner'),
+                me          = e,
+                params      = AuthToken.recoverParams();
             // Ocultando la máscara
             if (loadingMask) {
                 loadingMask.setOpacity(1);
@@ -150,6 +121,11 @@ Ext.define('Admin.view.main.Main', {
                     opacity: 0
                 });
             };
+            if(me && params){
+                me.down('#tbuser').setText(params.user.first_name);
+                me.down('#userImg').setSrc(params.user.avatar);
+            }
+            
         }
     }
 });

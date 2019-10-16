@@ -11,9 +11,9 @@ Ext.define('Admin.store.general.UsersStore',{
     model   : 'Admin.model.general.UsersModel',
     proxy   : {
         api: {
-            create  : 'master/insertdata',
+            // create  : 'auth/signup',
             read    : 'master/getusers',
-            update  : 'master/setdata',
+            // update  : 'auth/updateuser',
             destroy : 'master/deletedata'
         },
         extraParams : {

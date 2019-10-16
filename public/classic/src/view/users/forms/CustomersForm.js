@@ -5,9 +5,11 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
     requires: [
         'Admin.view.users.UsersController',
         'Admin.store.general.UsersStore',
+        'Admin.store.general.RolesStore',
         'Admin.core.field.CheckBoxField',
         'Admin.core.combo.ComboLines',
-        'Admin.core.field.NumberField'
+        'Admin.core.field.NumberField',
+        'Admin.view.users.views.RolesView'
     ],
     controller : 'users',
     initComponent: function () {
@@ -34,12 +36,34 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
             }
             form = ts.winObject.down('form');
             if (btn.itemId == 'editButton') {
+                form.down('#password').setVisible(false);
+                form.down('#password').allowBlank   = true;
+                form.down('#confirm').setVisible(false);
+                form.down('#confirm').allowBlank   = true;
                 form.loadRecord(data);
             } else {
+                form.down('#password').setVisible(true);
+                form.down('#password').allowBlank   = false;
+                form.down('#confirm').setVisible(true);
+                form.down('#confirm').allowBlank   = false;
                 form.reset(true);
             };
             ts.winObject.show();
         });
+    },
+    viewRole : function(btn){
+        var  
+            me      = this.getApp(),
+            token   = AuthToken.recoverParams(),
+            data    = this.down('grid').getSelection()[0];
+        me.onStore('general.RolesStore');
+        me.setParamStore('RolesStore',{
+            user_id     : data.id,
+            pdbTable    : 'tb_roles',
+            type        : 2
+        });            
+        win = Ext.create('Admin.view.users.views.RolesView');
+        win.show();
     },
     showSaveButton  : false,
     items: [
@@ -60,6 +84,7 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
                         return rVal;
                     }
                 },
+                { text: 'Tipo', dataIndex: 'type', width : 60},
                 { text: 'Activo', dataIndex: 'active', width : 80, xtype : 'checkcolumn' }
 
             ],
@@ -95,7 +120,34 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
                     ]	
                 },
                 {
-                    xtype  : 'toolbarCrud'
+                    xtype  : 'toolbarCrud',
+                    items 	: [
+                        '->',
+                        {
+                            itemId  : 'buttonRoles',
+                            text    : 'Permisos',
+                            ui      : 'facebook',
+                            disabled: true,
+                            iconCls : 'fas fa-user-tag',
+                            handler : function (btn) {
+                                var 
+                                    ts = btn.up('window') || btn.up('form');
+                                ts.viewRole(btn);
+                            }
+                        },'-',
+                        {
+                            xtype	: 'addButton'
+                        },'-',
+                        {
+                            xtype	: 'editButton'
+                        },'-',
+                        {
+                            xtype	: 'deleteButton'
+                        },'-',
+                        {
+                            xtype 	: 'closeButton'
+                        }
+                    ]
                 }
             ]
         }

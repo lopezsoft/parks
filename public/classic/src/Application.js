@@ -17,7 +17,7 @@ Ext.define('Admin.Application', {
         'NavigationTree'
     ],
 
-    defaultToken : 'dashboard',
+    // defaultToken : 'dashboard',
 
     // The name of the initial view to create. This class will gain a "viewport" plugin
     // if it does not extend Ext.Viewport.
@@ -32,6 +32,320 @@ Ext.define('Admin.Application', {
                 }
             }
         );
+    },
+
+    launch: function() {
+       var 
+        me      = this,
+        token   = null,
+        tStore  = Ext.getStore('NavigationTree')
+        children=[];
+       if(AuthToken.isAuthenticated()){
+           token    = AuthToken.recover();
+           if(token){
+                Ext.Ajax.request({
+                    url: Global.getUrlBase() + 'api/auth/roles',
+                    params : {
+                        user_id : token.user.id,
+                        type    : 1
+                    },
+                    method      : 'GET',
+                    success: function(response, opts) {
+                        var 
+                            obj     = Ext.decode(response.responseText),
+                            child   = [],
+                            oldMenu = 0,
+                            oldEle  = null,
+                            iconCls = null,
+                            xRoot   = {};
+                        if(obj.success == true){
+                            records = obj.records;
+                            if(token.user.type == 1){
+                                me.setDefaultToken('dashboard');
+                                children.push({
+                                    text    : 'Dashboard',
+                                    iconCls : 'x-fa fa-desktop',
+                                    viewType: 'admindashboard',
+                                    routeId : 'dashboard', // routeId defaults to viewType
+                                    leaf    : true
+                                });
+                            }
+                            Ext.Array.each(records, function(ele) {
+                                if(oldMenu > 0 && oldMenu !== ele.tag_menu){
+                                    switch (oldMenu) {
+                                        case 2:
+                                            iconCls     = 'fas fa-building';
+                                            break;
+                                        case 3: // Servicios
+                                            iconCls     = 'fas fa-store';
+                                            break;
+                                        case 4: // Fastfood
+                                            iconCls     = 'fas fa-box-open';
+                                            break;
+                                        case 5: // Clientes
+                                            iconCls     = 'fas fa-user-friends';
+                                            break; 
+                                        case 6: // Usuarios
+                                            iconCls     = 'fas fa-users-cog';
+                                            break;
+                                        case 7: // Ajustes
+                                            iconCls     = 'fas fa-cogs';
+                                            break;
+                                    }
+                                    children.push({
+                                        text        : oldEle.name_menu,
+                                        iconCls     : iconCls,
+                                        leaf        : false,
+                                        expanded    : false,
+                                        children    : child
+                                    });
+                                    oldMenu = 0;
+                                    child   = [];
+                                }
+                                if(oldMenu == 0){
+                                    oldMenu = ele.tag_menu;
+                                }
+                                oldEle  =  ele;
+                                switch (ele.tag_menu) {
+                                    case 2: // Empresa
+                                        switch (ele.tag_submenu) {
+                                            case 1:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-building',
+                                                        viewType    : 'companyform',
+                                                        routeId     : 'company',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                            case 2:                                                
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-home',
+                                                        viewType    : 'branchsform',
+                                                        routeId     : 'branchoffices',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                        }
+                                        break;
+                                    case 3: // Servicios
+                                        switch (ele.tag_submenu) {
+                                            case 1:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'x-fa fa-money',
+                                                        viewType    : 'servicesform',
+                                                        routeId     : 'sales/services',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 2:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'x-fa fa-money',
+                                                        viewType    : 'branchservicesform',
+                                                        routeId     : 'sales/branchservices',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 3:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-shoe-prints',
+                                                        viewType    : 'footwearform',
+                                                        routeId     : 'sales/footwear',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 4:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-shoe-prints',
+                                                        viewType    : 'branchfoorwearform',
+                                                        routeId     : 'sales/branchfootwear',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                        }
+                                        break;
+                                    case 4: // Fastfood
+                                        switch (ele.tag_submenu) {
+                                            case 1:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-box-open',
+                                                        viewType    : 'productsform',
+                                                        routeId     : 'products',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 2:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'x-fa fa-money',
+                                                        viewType    : 'linesform',
+                                                        routeId     : 'products/lines',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 3:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'x-fa fa-money',
+                                                        viewType    : 'categoriesform',
+                                                        routeId     : 'products/categories',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 4:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-cart-plus',
+                                                        viewType    : 'fastfoodform',
+                                                        routeId     : 'products/fastfood',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                        }
+                                        break;
+                                    case 5: // Clientes
+                                        switch (ele.tag_submenu) {
+                                            case 1:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-user-friends',
+                                                        viewType    : 'customersform',
+                                                        routeId     : 'customers',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                            case 2:                                                
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-receipt',
+                                                        viewType    : 'preticketsform',
+                                                        routeId     : 'customers/pretikets',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                        }
+                                        break; 
+                                    case 6: // Usuarios
+                                        switch (ele.tag_submenu) {
+                                            case 1:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'x-fa fa-check',
+                                                        viewType    : 'usersform',
+                                                        routeId     : 'users/list',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                            case 2:                                                
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'far fa-id-card',
+                                                        viewType    : 'profileform',
+                                                        routeId     : 'users/profile',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                        }
+                                        break;
+                                    case 7: // Ajustes
+                                        switch (ele.tag_submenu) {
+                                            case 1:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-receipt',
+                                                        viewType    : 'confinvoiceform',
+                                                        routeId     : 'settings/invoice',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                        }
+                                        break;
+                                }
+                            });
+                            if(oldMenu > 0 && child.length > 0){
+                                switch (oldMenu) {
+                                    case 2:
+                                        iconCls     = 'fas fa-building';
+                                        break;
+                                    case 3: // Servicios
+                                        iconCls     = 'fas fa-store';
+                                        break;
+                                    case 4: // Fastfood
+                                        iconCls     = 'fas fa-box-open';
+                                        break;
+                                    case 5: // Clientes
+                                        iconCls     = 'fas fa-user-friends';
+                                        break; 
+                                    case 6: // Usuarios
+                                        iconCls     = 'fas fa-users-cog';
+                                        break;
+                                    case 7: // Ajustes
+                                        iconCls     = 'fas fa-cogs';
+                                        break;
+                                }
+                                children.push({
+                                    text        : oldEle.name_menu,
+                                    iconCls     : iconCls,
+                                    leaf        : false,
+                                    expanded    : false,
+                                    children    : child
+                                });
+                                oldMenu = 0;
+                                child   = [];
+                            }
+                            if(children.length > 0 ){
+                                xRoot   = {
+                                    expanded    : true,
+                                    children    : children
+                                };
+                                if(tStore){
+                                    tStore.setRoot(xRoot);
+                                }
+                            }
+                        }
+                    },
+                    failure: function(response, opts) {
+                        app.showResult('server-side failure with status code ' + response.status);
+                    }
+                });
+           }
+       }
     },
 
     /**
