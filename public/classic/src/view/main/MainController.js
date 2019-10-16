@@ -38,11 +38,15 @@ Ext.define('Admin.view.main.MainController', {
         lastView = mainLayout.getActiveItem();
 
         if (!existingItem) {
-            newView = Ext.create({
-                xtype: view,
-                routeId: hashTag,  // for existingItem search later
-                hideMode: 'offsets'
-            });
+            if (view == 'page404') {
+                return true;
+            }else{
+                newView = Ext.create({
+                    xtype: view,
+                    routeId: hashTag,  // for existingItem search later
+                    hideMode: 'offsets'
+                });
+            }
         }
 
         if (!newView || !newView.isWindow) {
@@ -86,7 +90,7 @@ Ext.define('Admin.view.main.MainController', {
             navigationList = refs.navigationTreeList,
             wrapContainer = refs.mainContainerWrap,
             collapsing = !navigationList.getMicro(),
-            new_width = collapsing ? 64 : 300;
+            new_width = collapsing ? 64 : 290;
 
         if (Ext.isIE9m || !Ext.os.is.Desktop) {
             Ext.suspendLayouts();
@@ -205,6 +209,21 @@ Ext.define('Admin.view.main.MainController', {
                         me.setCurrentView(id);
                     });
                     break;            
+                case 'products/fastfood':
+                    Ext.require([
+                        'Admin.core.docs.ProductsBrowser',
+                        'Admin.core.docs.InfoPanel',
+                        'Admin.view.products.forms.FastFoodForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('fastfood.ProductsSalesStore');
+                        app.onStore('products.ProductsStore');
+                        app.onStore('products.CategoriesStore');
+                        app.onStore('products.LinesStore');
+                        me.setCurrentView(id);
+                    });
+                    break;            
                 case 'sales/services':
                     Ext.require([
                         'Admin.view.sales.forms.ServicesForm'
@@ -311,14 +330,7 @@ Ext.define('Admin.view.main.MainController', {
                     break;
             }
         }else{
-            Ext.require([
-                'Admin.view.auth.Login'
-            ]);
-            Ext.onReady(function(){
-                var win = Admin.getApplication().getWindow(null,'Admin.view.auth.Login');
-                win.show();
-                me.setCurrentView("login");
-            })
+            AuthToken.redirectTo();
         }
     },
 

@@ -33,15 +33,39 @@ Ext.define('Admin.view.Main',{
                     title   : 'CALCETINES',
                     itemId  : 'gridSer',
                     store   : 'SalesFootWearStore',
+                    plugins: {
+                        ptype       : 'cellediting',
+                        clicksToEdit: 1
+                    },
+                    selModel: {
+                        type: 'cellmodel'
+                    },
                     autoLoad: false,
                     columns: [
+                        { text: 'Cant', dataIndex: 'cant', width : 70, 
+                            editor: {
+                                xtype       : 'numberfield',
+                                value       : 1,
+                                maxValue    : 999,
+                                allowBlank  : false,
+                                minValue    : 0,
+                                listeners   : {
+                                    change : function(ts, newValue){
+                                        var me	= this;
+                                        me.up('form').onSuma(ts);
+                                    }
+                                }
+                            }
+                        },
                         { text: 'Servicio', dataIndex: 'shoe_name', flex : 2 },
-                        { text: 'Precio', dataIndex: 'price', flex: 1, formatter : 'usMoney' }
+                        { text: 'Precio', dataIndex: 'price', flex: 1, formatter : 'usMoney' },
+                        { text: 'Total', dataIndex: 'total', flex: 1, formatter : 'usMoney' }
                     ],
                     listeners: {
-                        selectionchange: function(grid, selected, eOpts) {
+                        edit : function(editor, e){
+                            e.record.commit();
                             var me	= this;
-                            me.up('form').onSuma(grid);
+                            me.up('form').onSuma(editor);
                         }
                     }
                 }
@@ -54,16 +78,39 @@ Ext.define('Admin.view.Main',{
                     title   : 'TIEMPO',
                     itemId  : 'gridTime',
                     store   : 'SalesServicesStore',
+                    plugins: {
+                        ptype       : 'cellediting',
+                        clicksToEdit: 1
+                    },
+                    selModel: {
+                        type: 'cellmodel'
+                    },
                     margin  : '0 0 0 5',
                     autoLoad: false,
                     columns: [
+                        { text: 'Cant', dataIndex: 'cant', width : 70, 
+                        editor: {
+                            xtype       : 'numberfield',
+                            value       : 1,
+                            maxValue    : 999,  
+                            allowBlank  : false,
+                            minValue    : 0,
+                            listeners   : {
+                                change : function(ts, newValue){
+                                    var me	= this;
+                                    me.up('form').onSuma(ts);
+                                }
+                            }
+                        }},
                         { text: 'Servicio', dataIndex: 'shoe_name', flex : 2 },
-                        { text: 'Precio', dataIndex: 'price', flex: 1, formatter : 'usMoney' }
+                        { text: 'Precio', dataIndex: 'price', flex: 1, formatter : 'usMoney' },
+                        { text: 'Total', dataIndex: 'total', flex: 1, formatter : 'usMoney' }
                     ],
                     listeners: {
-                        selectionchange: function(grid, selected, eOpts) {
+                        edit : function(editor, e){
+                            e.record.commit();
                             var me	= this;
-                            me.up('form').onSuma(grid);
+                            me.up('form').onSuma(editor);
                         }
                     }
                 }
@@ -145,22 +192,24 @@ Ext.define('Admin.view.Main',{
     },
     onTiket : function (btn) {
         var me      = this,
-            xValue  = me.down('#gridTime').getSelection(),
+            xValue  = me.down('#gridTime').getStore(),
             xData   = [],
             params  = AuthToken.recoverParams();
             app     = Admin.getApplication(), 
-            yValue  = me.down('#gridSer').getSelection();
+            yValue  = me.down('#gridSer').getStore();
         
-        if (yValue.length > 0) {
-            Ext.Array.each(yValue, function(data, index) {
-                xData.push(data.data);
-            });
-        }
-        if (xValue.length > 0) {
-            Ext.Array.each(xValue, function(data, index) {
-                xData.push(data.data);
-            });
-        }
+        yValue.each(function(re,ind){
+            if (parseInt(re.data.cant) > 0 ) {
+                xData.push(re.data);
+            }
+        });
+
+        xValue.each(function(re,ind){
+            if (parseInt(re.data.cant) > 0 ) {
+                xData.push(re.data);
+            }
+        });
+        
         if(xData.length > 0){
             Ext.Ajax.request({
                 url     : Global.getUrlBase() + 'api/report/getticketservices',
@@ -194,20 +243,38 @@ Ext.define('Admin.view.Main',{
 
     onSuma (ojb){
         var me      = this,
-            xValue  = me.down('#gridTime').getSelection(),
+            xStore  = me.down('#gridTime').getStore(),
             xSum    = 0,
-            yValue  = me.down('#gridSer').getSelection();
+            yStore  = me.down('#gridSer').getStore();
         
-        if (yValue.length > 0) {
-            Ext.Array.each(yValue, function(data, index) {
-                xSum    += parseFloat(data.data.price);
-            });
-        }
-        if (xValue.length > 0) {
-            Ext.Array.each(xValue, function(data, index) {
-                xSum    += parseFloat(data.data.price);
-            });
-        }
+        xStore.each(function(re, ind){
+            value   = re.data;
+            if (parseInt(re.data.cant) > 0) {
+                xSum    += parseInt(re.data.cant) *  parseFloat(re.data.price);
+                value.total = parseInt(re.data.cant) *  parseFloat(re.data.price);
+                re.set(value);   
+                re.commit();
+            }else{
+                value.total = 0;
+                re.set(value);   
+                re.commit();
+            }
+        });
+
+        yStore.each(function(re, ind){
+            value   = re.data;
+            if (parseInt(re.data.cant) > 0) {
+                xSum    += parseInt(re.data.cant) *  parseFloat(re.data.price);
+                value.total = parseInt(re.data.cant) *  parseFloat(re.data.price);
+                re.set(value);   
+                re.commit();
+            }else{
+                value.total = 0;
+                re.set(value);   
+                re.commit();
+            }
+        });
+
         me.down('#total').setValue(Ext.util.Format.usMoney(xSum));
     }
 });

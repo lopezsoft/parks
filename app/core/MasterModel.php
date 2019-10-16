@@ -17,6 +17,12 @@ class MasterModel
     public $queryField = "";
     public $queryString = "";
 
+    public function getRoles($user_id = 0, $type    = 0)
+    {
+        $table = DB::select("CALL sp_select_roles(" . $user_id .",". $type .")");
+        return $this->json_response($table);
+    }
+
     public function getSaleDetail($id = 0, $type = 1)
     {
         $table = DB::select("CALL sp_sales_detail(" . $id . "," . $type . ")");
@@ -117,16 +123,35 @@ class MasterModel
      *
      * @$tb
      */
-    public function deleteData($fields = null, string $tb = null)
+    public function deleteData($fields = null, string $tb = null, $ip, $user_id = 0)
     {
         if ($fields) {
-            foreach ($fields as $key => $value) {
-                $data[$key] = $value;
+            try {
+                DB::beginTransaction();
+                foreach ($fields as $key => $value) {
+                    $data[$key] = $value;
+                }
+                $result = DB::table($tb)
+                    ->where($data)
+                    ->delete();
+
+                $audit  = [
+                    'id_user'   => $user_id,
+                    'ip'        => $ip,
+                    'table'     => $tb,
+                    'what_did'  => "DELETE",
+                    'data'      => json_encode($data)
+                ];
+
+                DB::table('tb_audit')->insert($audit);  
+                DB::commit();
+                $result = $this->json_response_succes($result);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $result = $this->json_response_succes_error('Error al tratar de eliminar el registro');
+                throw $th;
             }
-            $result = DB::table($tb)
-                ->where($data)
-                ->delete();
-            return $this->json_response_succes($result);
+            return  $result;
         }
     }
 
@@ -135,29 +160,47 @@ class MasterModel
      *
      * @$tb
      */
-    public function insertData($fields = null, string $tb = null)
+    public function insertData($fields = null, string $tb = null, $ip, $user_id = 0)
     {
         if ($fields) {
-            $fieldstb   = $this->getColumns($tb); // Listado de las columnas de la tabla
-            $data       = [];
-            foreach ($fields as $key => $value) {
-                if ($key !== $this->primaryKey) {
-                    foreach ($fieldstb as $field) {
-                        if($field->Field == $key ){
-                            $data[$key] = $value;
-                            break;
+            try {
+                DB::beginTransaction();            
+                $fieldstb   = $this->getColumns($tb); // Listado de las columnas de la tabla
+                $data       = [];
+                foreach ($fields as $key => $value) {
+                    if ($key !== $this->primaryKey) {
+                        foreach ($fieldstb as $field) {
+                            if($field->Field == $key ){
+                                $data[$key] = $value;
+                                break;
+                            }
                         }
                     }
                 }
+                $result = DB::table($tb)
+                    ->insertGetId($data);
+
+                $audit  = [
+                    'id_user'   => $user_id,
+                    'ip'        => $ip,
+                    'table'     => $tb,
+                    'what_did'  => "INSERT",
+                    'data'      => json_encode($data)
+                ];
+                DB::table('tb_audit')->insert($audit);
+                DB::commit();
+                $data = DB::table($tb)
+                    ->get()
+                    ->where($this->primaryKey, $result);
+
+                $result =  $this->json_response($data, $result);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $result = $this->json_response_succes_error('Error en la base de datos');
+                throw $th;
             }
-            $result = DB::table($tb)
-                ->insertGetId($data);
 
-            $data = DB::table($tb)
-                ->get()
-                ->where($this->primaryKey, $result);
-
-            return $this->json_response($data, $result);
+            return  $result;
         }
     }
 
@@ -166,26 +209,72 @@ class MasterModel
      *
      * @$tb
      */
-    public function setTable($fields = null, string $tb = null)
+    public function setTable($fields = null, string $tb = null, $ip, $user_id = 0)
     {
         if ($fields) {
-            $fieldstb   = $this->getColumns($tb); // Listado de las columnas de la tabla
+            try {
+                DB::beginTransaction();
+                $fieldstb   = $this->getColumns($tb); // Listado de las columnas de la tabla
+                if (is_array($fields)) {
+                    foreach ($fields as $value) {
+                        foreach ($value as $key => $val) {
+                            foreach ($fieldstb as $field) {
+                                if($field->Field == $key ){
+                                    $data[$key] = $val;
+                                    break;
+                                }
+                            }
+                            if ($key == $this->primaryKey) {
+                                $pKey = $val;
+                            }
+                        }
+                        $result = DB::table($tb)
+                                ->where($this->primaryKey, $pKey)
+                                ->limit(1)
+                                ->update($data);
 
-            foreach ($fields as $key => $value) {
-                foreach ($fieldstb as $field) {
-                    if($field->Field == $key ){
-                        $data[$key] = $value;
-                        break;
+                        $audit  = [
+                            'id_user'   => $user_id,
+                            'ip'        => $ip,
+                            'table'     => $tb,
+                            'what_did'  => "UPDATE",
+                            'data'      => json_encode($data)
+                        ];
+                        DB::table('tb_audit')->insert($audit);
                     }
+                }else{
+                    foreach ($fields as $key => $value) {
+                        foreach ($fieldstb as $field) {
+                            if($field->Field == $key ){
+                                $data[$key] = $value;
+                                break;
+                            }
+                        }
+                        if ($key == $this->primaryKey) {
+                            $pKey = $value;
+                        }
+                    };
+                    $result = DB::table($tb)
+                        ->where($this->primaryKey, $pKey)
+                        ->limit(1)
+                        ->update($data);
+                    $audit  = [
+                        'id_user'   => $user_id,
+                        'ip'        => $ip,
+                        'table'     => $tb,
+                        'what_did'  => "UPDATE",
+                        'data'      => json_encode($data)
+                    ];
+                    DB::table('tb_audit')->insert($audit);
                 }
-                if ($key == $this->primaryKey) {
-                    $pKey = $value;
-                }
-            };
-            $result = DB::table($tb)
-                ->where($this->primaryKey, $pKey)
-                ->update($data);
-            return $this->json_response_succes($result);
+                DB::commit();
+                $result = $this->json_response_succes($result);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                $result = $data->json_response_succes_error('Error en la base de datos');
+                throw $th;
+            }
+            return  $result;
         }
     }
 

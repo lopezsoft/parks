@@ -8,7 +8,8 @@
         <title>Darsboard</title>
         <!-- Fonts -->
         <link href  = "https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link rel   = "stylesheet" href="{{ ('css/site.css') }}"> 
+        <link rel   = "stylesheet" href="{{ asset('css/site.css') }}"> 
+        <link rel   = "stylesheet" href="{{ asset('css/chooser.css') }}"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
         <script type="text/javascript">

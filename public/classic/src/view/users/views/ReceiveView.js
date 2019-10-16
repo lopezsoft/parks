@@ -12,12 +12,13 @@ Ext.define('Admin.view.users.views.ReceiveView',{
         });
     },
     maxWidth    : 450,
+    alwaysOnTop : true,
+    defaultFocus: 'numberField',
     items: [
         {
             xtype       : 'customForm',
             defaultType : 'numberField',
-            defaultFocus: '#discount',
-            defaultFocus: 'discount',
+            defaultFocus: 'numberField',
             defaults    : {
                 fieldStyle          : {
                     height          : '48px',
@@ -113,9 +114,9 @@ Ext.define('Admin.view.users.views.ReceiveView',{
             value_paid      = me.down('#value_paid').getValue() ? parseFloat(me.down('#value_paid').getValue()) : 0;
 
             me.down('#value_to_pay').setValue( value_to_pay );
-            if(value_paid == 0){
-                me.down('#value_paid').setValue(value_to_pay);
-            }
+            // if(value_paid == 0){
+            //     me.down('#value_paid').setValue(value_to_pay);
+            // }
             value_paid      = parseFloat(me.down('#value_paid').getValue());
                         
             me.down('#change').setValue( value_paid - value_to_pay);

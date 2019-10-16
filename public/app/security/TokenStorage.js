@@ -6,13 +6,23 @@ Ext.define('Admin.security.TokenStorage', {
         me.initConfig(cfg);
     },
     config: {
-        storageKey  : 'JWT'
-    },    
+        storageKey  : 'JWT',
+        storageOut   : 'token-dashboard'
+    },  
+
+    redirectTo : function(){
+        var url = Global.getUrlBase() + 'dashboard/login';
+        window.location.href = url;
+    },
+    
+    clearOut : function (cont) {
+        localStorage.removeItem(this.getStorageOut());
+    },
 
     clear: function (cont) {
+        var url = Global.getUrlBase() + 'dashboard/login';
         localStorage.removeItem(this.getStorageKey());
-        cont.redirectTo("login");
-        window.location.reload();
+        window.location.href = url;
     },
 
     recoverParams : function(){
@@ -23,11 +33,25 @@ Ext.define('Admin.security.TokenStorage', {
                 token 		: token.access_token,
 				expires_at	: token.expires_at,
                 token_type	: token.token_type,
-                user        : token.user
+                user        : token.user,
+                access_id   : token.access_id
             }
         }
         return token;
     },
+
+    recoverOut: function() {
+        var 
+            valToken= localStorage.getItem(this.getStorageOut()),
+            token   = {};
+        if (valToken){
+            token   = Ext.decode(valToken)
+        }else{
+            token   = null 
+        }
+        return token;
+    },
+
     recover: function() {
         var 
             valToken= localStorage.getItem(this.getStorageKey()),
@@ -42,20 +66,29 @@ Ext.define('Admin.security.TokenStorage', {
 
     save: function (token) {
         localStorage.setItem(this.getStorageKey(), token);
+        this.clearOut();
     },
 
     isAuthenticated : function (){
+        var out = this.recoverOut();
+        if(out){
+            this.save(JSON.stringify(out));
+        }
         return this.recover() ? true : false;
     },
 
     onLogout: function (cont) {
-        var me  = this,
-            params = me.recoverParams(),
-            app = Admin.getApplication();
+        var me      = this,
+            params  = me.recoverParams(),
+            app     = Admin.getApplication();
         Ext.Ajax.request({
             url     : Global.getUrlBase() + 'api/auth/logout',
             headers: {
-                'Authorization ' : params.token_type +' ' + params.access_token
+                'Authorization' : params.token_type +' ' + params.token
+            },
+            params      : {
+                user        : params.user.access_id,
+                access_id   : params.access_id ? params.access_id : 0
             },
             method      : 'GET',
             success: function(response, opts) {

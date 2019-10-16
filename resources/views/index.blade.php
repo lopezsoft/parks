@@ -27,20 +27,20 @@
                 <!-- End: Intro -->
                 <!-- Start: People -->
                 <div class="row people">
-                    <div class="col-md-6 col-lg-4 item">
+                    <div class="col-md-6 col-lg-6 item">
                         <div class="box"><i class="fa fa-map-marker" style="height: 128px;width: 128px;font-size: 128px;"></i>                            
                             <h3 class="name"><a href="{{ url('/parks') }}">Juegos</a></h3>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 item">
+                    {{-- <div class="col-md-6 col-lg-6 item">
                         <div class="box"><i class="fas fa-diagnoses" style="height: 128px;width: 128px;font-size: 128px;"></i>
                             <h3 class="name"><a href="{{ url('/fastfood/menu') }}">Comida rapida</a></h3>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 item">
+                    </div> --}}
+                    <div class="col-md-6 col-lg-6 item">
                         <div class="box">
                             <i class="material-icons" style="height: 128px;width: 128px;font-size: 128px;">dashboard</i>
-                            <h3 class="name"><a href="{{ url('/dashboard') }}">Dashboard</a></h3>
+                            <h3 class="name"><a href="{{ url('/dashboard/login') }}">Dashboard</a></h3>
                         </div>
                     </div>
                 </div>

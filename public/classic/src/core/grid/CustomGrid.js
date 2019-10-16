@@ -102,8 +102,30 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
             }
 		},
 		'selectionchange': function(grid, selected, eOpts) {
-			var me	= this;
+			var me			= this,
+				data		= {},
+				disabled	= false;
+			if (me.down('#buttonRoles')){
+				if (selected.length > 0) {
+					data	= selected[0].data;
+					if(parseInt(data.type) == 1 || parseInt(data.type) == 3){
+						disabled	= true;
+					}else{
+						disabled	= false;
+					}
+					me.down('#buttonRoles').setDisabled(disabled);
+				}else{
+					me.down('#buttonRoles').setDisabled(!selected.length);
+				}
+			}
 
+			if (me.down('#plusButton')){
+				me.down('#plusButton').setDisabled(!selected.length);
+			}
+
+			if (me.down('#minusButton')){
+				me.down('#minusButton').setDisabled(!selected.length);
+			}
 
 			if (me.down('#saveButton')){
 				me.down('#saveButton').setDisabled(!selected.length);

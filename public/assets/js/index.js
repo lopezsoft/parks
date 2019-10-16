@@ -9,7 +9,6 @@
        $('#password_confirmation').keyboard();
    });
 
-
 $('.register').on('submit', function(e) {
   e.preventDefault();
   var url_e   = $(this).attr("action"),
@@ -84,12 +83,12 @@ $('.login').on('submit', function(e) {
     });
 });
 
-$('.login-fast').on('submit', function(e) {
+$('.login-dash').on('submit', function(e) {
   e.preventDefault();
   var $this = $(this),
       url_e   = $(this).attr("action"),
       elem	  = document,
-      redirec   = '/fastfood/menu',
+      redirec   = '/dashboard',
       data      = {};
     data = {
         email       : elem.getElementById('email').value,
@@ -103,8 +102,8 @@ $('.login-fast').on('submit', function(e) {
     }).done( function(data) {
         var
             req = data.success;
-        if (req == true && data.user.type == 1) {
-            localStorage.setItem('token-fastfood', JSON.stringify(data));
+        if (req == true && data.user.type !== 3) {
+            localStorage.setItem('token-dashboard', JSON.stringify(data));
             alertify.message('Ingresando al sistema');
             window.location.href =  redirec;  
         } else {

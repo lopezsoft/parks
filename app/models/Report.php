@@ -367,6 +367,11 @@ class Report extends MasterModel
                         $data['unit_price']     = $value->price;
                         DB::table('tb_sales_detail')->insertGetId($data);
                     }
+
+                    $data   = [];
+                    $data['id_sale']        = $id_sale;
+                    $data['id_user']        = $user;
+                    DB::table('tb_sales_users')->insertGetId($data);
                     
                     DB::commit();
                     $config     = $this->getConfigInvoive();
@@ -469,11 +474,17 @@ class Report extends MasterModel
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                     $textypos= 1 + $pdf->GetY();
                     $pdf->setY($textypos);
-                    $pdf->EAN13(20,$textypos,$nro_folio,6);
+                    $barcode = $pdf->EAN13(20,$textypos,$nro_folio,6);
+                    $data = [];
+                    $data['barcode']       = $barcode;
+                    $res    = DB::table('tb_sales_master')
+                                    ->where('id', $id_sale)
+                                    ->update($data);
                     $pdf->AutoPrint();
                     $pdf->output("F",$path_report);
                     $result = $this->json_response(array(
-                        'report'    => $path_report
+                        'report'    => $path_report,
+                        'id_sale'   => $id_sale
                     ));
                 }else{
                     DB::rollback();
@@ -518,11 +529,13 @@ class Report extends MasterModel
                         if($value->type == 1){
                             $data['id_sales']       = $id_sale;
                             $data['id_footwear']    = $value->id;
+                            $data['amount']         = $value->cant;
                             $data['unit_price']     = $value->price;
                             DB::table('tb_sales_detail_footwear')->insertGetId($data);
                         }else{
                             $data['id_sales']       = $id_sale;
                             $data['id_service']     = $value->id;
+                            $data['amount']         = $value->cant;
                             $data['unit_price']     = $value->price;
                             $id_serv = DB::table('tb_sales_detail_services')->insertGetId($data);
                             $data   = [];
@@ -573,7 +586,7 @@ class Report extends MasterModel
                     $pdf->setX($leftSpace);
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                     $pdf->setX($leftSpace);
-                    $pdf->MultiCell(0,$cellHeight,'CONCEPTO                                                    TOTAL');
+                    $pdf->MultiCell(0,$cellHeight,'CANT  DETALLE                          PRECIO         TOTAL');
                     $total =0;
                     $off = $pdf->GetY();
                     $pdf->SetFont('Helvetica','',7);
@@ -581,10 +594,14 @@ class Report extends MasterModel
                     foreach($records as $pro){
                         $pdf->SetY($off);
                         $pdf->setX($leftSpace + 2);
-                        $pdf->Cell(50,$cellHeight,  utf8_decode($pro->shoe_name));
-                        $pdf->setX(53);
+                        $pdf->Cell(5,$cellHeight,  $pro->cant,0,0,"R");
+                        $pdf->setX($leftSpace +6);
+                        $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->shoe_name)));
+                        $pdf->setX(41);
                         $pdf->Cell(15,$cellHeight,  "$".number_format($pro->price,2,".",",") ,0,0,"R");
-                        $total += $pro->price;
+                        $pdf->setX(57);
+                        $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
+                        $total += $pro->total;
                         $off+=3;
                     }
                     $cellHeight = 3;
@@ -625,7 +642,12 @@ class Report extends MasterModel
                     $pdf->MultiCell(0,$cellHeight,$line,0,"C");
                     $textypos= 1 + $pdf->GetY();
                     $pdf->setY($textypos);
-                    $pdf->EAN13(20,$textypos,$nro_folio,6);
+                    $barcode    = $pdf->EAN13(20,$textypos,$nro_folio,6);
+                    $data = [];
+                    $data['barcode']       = $barcode;
+                    $res    = DB::table('tb_sales_master')
+                                    ->where('id', $id_sale)
+                                    ->update($data);
                     $pdf->AutoPrint();
                     $pdf->output("F",$path_report);
                     $result = $this->json_response(array(

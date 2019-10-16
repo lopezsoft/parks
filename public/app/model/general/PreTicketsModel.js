@@ -8,10 +8,10 @@ Ext.define('Admin.model.general.PreTicketsModel',{
     [
         { name  : 'id', type : 'int'},
         { name  : 'nro_sale'},
+        { name  : 'barcode'},
         { name  : 'total'},
         { name  : 'date'},
         { name  : 'document'},
-        { name  : 'first_name'},
-        { name  : 'last_name'}
+        { name  : 'customers'}
     ]
 });

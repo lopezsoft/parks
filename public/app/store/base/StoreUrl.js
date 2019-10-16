@@ -43,7 +43,7 @@ Ext.define('Admin.store.base.StoreUrl',{
 			pUrl	= proxy.url; // Obtenemos la URL que se ha pasado para la consulta el servidor
 			pApi	= proxy.getApi();
 			xparams	= proxy.getExtraParams();
-			// xparams.Authorization 	= param.token_type +' '+ param.token;
+			xparams.user 	= param.user.id;
 			proxy.headers = 
 				{
 					Authorization : param.token_type +' '+ param.token
@@ -90,7 +90,7 @@ Ext.define('Admin.store.base.StoreUrl',{
 			pUrl	= proxy.url; // Obtenemos la URL que se ha pasado para la consulta el servidor
 			pApi	= proxy.getApi();
 			xparams	= proxy.getExtraParams();
-			// xparams.Authorization 	= param.token_type +' '+ param.token;
+			xparams.user 	= param.user.id;
 			proxy.headers = 
 				{
 					Authorization : param.token_type +' '+ param.token

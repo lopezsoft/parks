@@ -5,12 +5,39 @@ namespace App\Http\Controllers;
 use Avatar;
 use Storage;
 use App\User;
+use App\Roles;
+use App\core\MasterModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+    public function updateuser(Request $request)
+    {
+
+        $data = [
+            'first_name'        => $request->first_name,
+            'last_name'         => $request->last_name,
+            'email'             => $request->email,
+            'birthday'          => $request->birthday,
+            'active'            => $request->active,  
+        ];
+        
+        User::where('id',$request->id)->update($data);
+
+        return response()->json([
+            'message' => 'Successfully updated user!'], 201);
+    }
+
+    public function roles(Request $request)
+    {
+        $model  = new MasterModel();
+        echo $model->getRoles($request->input('user_id'),$request->input('type'));
+    }
+
     public function registercustomer(Request $request)
     {
         $request->validate([
@@ -32,9 +59,6 @@ class AuthController extends Controller
         ]);
         $user->save();
 
-        // $avatar = Avatar::create($user->first_name)->getImageObject()->encode('png');
-        // Storage::put('avatars/'.$user->id.'/avatar.png', (string) $avatar);
-
         return response()->json([
             'message'   => 'Cliente registrado con exito!',
             'success'   => true,
@@ -48,12 +72,14 @@ class AuthController extends Controller
             'first_name'        => 'required|string',
             'last_name'         => 'required|string',
             'email'             => 'required|string|email|unique:users',
+            'birthday'          => 'required|date',
             'password'          => 'required|string|confirmed',
         ]);
         $user = new User([
             'first_name'        => $request->first_name,
             'last_name'         => $request->last_name,
             'email'             => $request->email,
+            'birthday'          => $request->birthday,
             'password'          => bcrypt($request->password),
         ]);
         $user->save();
@@ -115,6 +141,12 @@ class AuthController extends Controller
         if ($request->remember_me) {
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
+        $data       = [
+            'id_user'       => $user->id,
+            'ip'            => $request->ip()
+        ];
+        $access_id  = DB::table('tb_access_users')
+                        ->insertGetId($data);
         $token->save();
         return response()->json([
             'access_token' => $tokenResult->accessToken,
@@ -123,15 +155,27 @@ class AuthController extends Controller
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),
-            'user'         => $user
+            'user'          => $user,
+            'access_id'     => $access_id
         ]);
     }
 
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
-        return response()->json(['message' => 
-            'Successfully logged out']);
+        $access_id  = $request->input('access_id');
+        if($access_id > 0){
+            $data       = [
+                'active'            => 0
+            ];
+            DB::table('tb_access_users')
+                            ->where('id', $access_id)
+                            ->limit(1)
+                            ->update($data);
+        }
+        return response()->json([
+            'message'       => 'Successfully logged out',
+            'success'       => true]);
     }
 
     public function user(Request $request)

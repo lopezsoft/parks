@@ -65,7 +65,6 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 		var
 			me		= this,
 			store 	= this.getStore();
-			console.log(store);
 		if (store) {
 			this.saveData(store, me.getReloadStore());
 		}
