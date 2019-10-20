@@ -140,17 +140,19 @@ class Report extends MasterModel
                 $pdf->setY($textypos);
                 $pdf->setX($leftSpace);
                 foreach ($config as $key => $value) {
+                    $pdf->SetFont('Helvetica','',7);
                     if (!empty(trim($value->footline1))) {
                         $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline1)),0,"C");
                     }
                     if (!empty(trim($value->footline2))) {
-                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline2)),0,"C");
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline2)),0,"C");
                     }
                     if (!empty(trim($value->footline3))) {
-                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline3)),0,"C");
                     }
                     if (!empty(trim($value->footline4))) {
-                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                        $pdf->SetFont('Helvetica','',5);
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline4)),0,"C");
                     }
                 }
                 $textypos= $pdf->GetY();
@@ -313,9 +315,9 @@ class Report extends MasterModel
                     if (!empty(trim($value->footline3))) {
                         $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
                     }
-                    if (!empty(trim($value->footline4))) {
-                        $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
-                    }
+                    // if (!empty(trim($value->footline4))) {
+                    //     $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                    // }
                 }
                 $textypos= $pdf->GetY();
                 $pdf->setY($textypos);
@@ -464,9 +466,9 @@ class Report extends MasterModel
                         if (!empty(trim($value->footline3))) {
                             $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
                         }
-                        if (!empty(trim($value->footline4))) {
-                            $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
-                        }
+                        // if (!empty(trim($value->footline4))) {
+                        //     $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                        // }
                     }
                     $textypos= $pdf->GetY();
                     $pdf->setY($textypos);
@@ -579,7 +581,7 @@ class Report extends MasterModel
                         $nro_folio  = $value->nro_sale;
                         $nro_user   = $value->id_user;
                         $pdf->setX($leftSpace);
-                        $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->first_name." ".$value->last_name."  Nº. CLIENTE: ".$value->id_user));
+                        $pdf->MultiCell(0,$cellHeight, utf8_decode("CLIENTE: ".$value->customers."  Nº. CLIENTE: ".$value->id_user));
                     }
                     $path_report = "reports/tiket-f".$nro_folio."-u".$nro_user."-t".date('d-m-Y-h-i-s-A').".pdf";
                     $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
@@ -623,17 +625,19 @@ class Report extends MasterModel
                     $pdf->setY($textypos);
                     $pdf->setX($leftSpace);
                     foreach ($config as $key => $value) {
+                        $pdf->SetFont('Helvetica','',7);
                         if (!empty(trim($value->footline1))) {
                             $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline1)),0,"C");
                         }
                         if (!empty(trim($value->footline2))) {
-                            $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline2)),0,"C");
+                            $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline2)),0,"C");
                         }
                         if (!empty(trim($value->footline3))) {
-                            $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline3)),0,"C");
+                            $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline3)),0,"C");
                         }
                         if (!empty(trim($value->footline4))) {
-                            $pdf->MultiCell(0,$cellHeight -3,utf8_decode(trim($value->footline4)),0,"C");
+                            $pdf->SetFont('Helvetica','',5);
+                            $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->footline4)),0,"C");
                         }
                     }
                     $textypos= $pdf->GetY();

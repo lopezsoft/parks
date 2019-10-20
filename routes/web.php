@@ -27,6 +27,10 @@ Route::get('/client/services', function () {
     return view('users/index');
 });
 
+Route::get('/client/terms', function () {
+    return view('users/terms');
+});
+
 // Route::get('/fastfood/login', function () {
 //     return view('fastfoot/login');
 // });
