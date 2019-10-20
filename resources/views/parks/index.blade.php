@@ -51,6 +51,12 @@
                                     <input class="form-control form-control-lg" type="password" id="password" required="" name="password" placeholder="Contraseña">
                                 </div>
                                 <div class="form-group">
+                                    <div class="form-check"><input type="checkbox" class="form-check-input" id="formCheck-1" required /><label class="form-check-label" for="formCheck-1">Al iniciar sesión acepta nuestros Términos y condiciones</label></div>
+                                    <a href="{{ url('/client/terms') }}" target="_blank">
+                                        <span style="text-decoration: underline;">Ver términos y condiciones</span>
+                                    </a>
+                                </div>
+                                <div class="form-group">
                                     <button class="btn btn-primary btn-lg" type="submit" style="width: 100%;">
                                             Iniciar sesión
                                         </button>

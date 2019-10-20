@@ -66,6 +66,11 @@ Ext.define('Admin.view.Main',{
                             e.record.commit();
                             var me	= this;
                             me.up('form').onSuma(editor);
+                        },
+                        rowdblclick :  function(ts , record){
+                            record.data.cant = parseInt(record.data.cant) + 1;
+                            record.commit();
+                            ts.up('form').onSuma(ts);
                         }
                     }
                 }
@@ -111,6 +116,11 @@ Ext.define('Admin.view.Main',{
                             e.record.commit();
                             var me	= this;
                             me.up('form').onSuma(editor);
+                        },
+                        rowdblclick :  function(ts , record){
+                            record.data.cant = parseInt(record.data.cant) + 1;
+                            record.commit();
+                            ts.up('form').onSuma(ts);
                         }
                     }
                 }
