@@ -10,12 +10,6 @@ Ext.define('Admin.store.general.TypeUsersStore',{
     ],
     model   : 'Admin.model.general.TypeUsersModel',
     proxy   : {
-        api: {
-            create  : 'master/insertdata',
-            read    : 'master/getpretickets',
-            update  : 'master/setdata',
-            destroy : 'master/deletedata'
-        },
         extraParams : {
             pdbTable    : 'tb_type_users',
             query       : ''

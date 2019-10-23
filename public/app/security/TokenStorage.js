@@ -87,7 +87,7 @@ Ext.define('Admin.security.TokenStorage', {
                 'Authorization' : params.token_type +' ' + params.token
             },
             params      : {
-                user        : params.user.access_id,
+                user        : params.user.id,
                 access_id   : params.access_id ? params.access_id : 0
             },
             method      : 'GET',

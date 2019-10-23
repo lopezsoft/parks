@@ -8,6 +8,19 @@ use App\models\Report;
 class ReportController extends Controller
 {
 
+    public function CashClosing(Request $request)
+    {
+        $report     = new Report();
+        $user       = $request->input('user');
+        $type       = $request->input('type');
+        $date1      = $request->input('date1');
+        $date2      = $request->input('date2');
+        $name       = $request->input('username');
+
+        $date1 = ($date1) ? $date1 : date('Y-m-d');
+        $date2 = ($date2) ? $date2 : date('Y-m-d');
+        echo $report->CashClosing($user, $type, $date1, $date2, $name);   
+    }
 
     public function setTickets(Request $request)
     {

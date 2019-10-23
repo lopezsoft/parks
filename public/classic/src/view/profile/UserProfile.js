@@ -4,38 +4,17 @@ Ext.define('Admin.view.profile.UserProfile', {
     cls: 'userProfile-container',
 
     requires: [
-        'Ext.ux.layout.ResponsiveColumn'
+        'Ext.ux.layout.ResponsiveColumn',
+        'Admin.view.profile.ProfileView',
+        'Admin.view.profile.Social'
     ],
 
     layout: 'responsivecolumn',
 
     items: [
         {
-            xtype: 'profileshare',
-            
-            // Always 100% of container
+            xtype: 'profilesocial',            
             userCls: 'big-100 small-100 shadow'
-        },
-        {
-            xtype: 'profilesocial',
-            
-            // Use 50% of container when viewport is big enough, 100% otherwise
-            userCls: 'big-50 small-100 shadow'
-        },
-        {
-            xtype: 'profiledescription',
-
-            userCls: 'big-50 small-100 shadow'
-        },
-        {
-            xtype: 'profilenotifications',
-
-            userCls: 'big-50 small-100 shadow'
-        },
-        {
-            xtype: 'profiletimeline',
-
-            userCls: 'big-50 small-100 shadow'
         }
     ]
 });

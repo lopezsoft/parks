@@ -273,7 +273,7 @@ Ext.define('Admin.Application', {
                                                     {
                                                         text        : ele.name_item,
                                                         iconCls     : 'far fa-id-card',
-                                                        viewType    : 'profileform',
+                                                        viewType    : 'profile',
                                                         routeId     : 'users/profile',
                                                         leaf        : true
                                                     }
@@ -287,9 +287,35 @@ Ext.define('Admin.Application', {
                                                 child.push(
                                                     {
                                                         text        : ele.name_item,
-                                                        iconCls     : 'fas fa-receipt',
+                                                        iconCls     : 'fas fa-cogs',
                                                         viewType    : 'confinvoiceform',
                                                         routeId     : 'settings/invoice',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                        }
+                                        break;
+                                    case 8: // Reportes
+                                        switch (ele.tag_submenu) {
+                                            case 1:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-receipt',
+                                                        viewType    : 'cashclosingform',
+                                                        routeId     : 'reports/cashcount',
+                                                        leaf        : true
+                                                    }
+                                                );                                     
+                                                break;
+                                            case 2:           
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-receipt',
+                                                        viewType    : 'cashclosingform',
+                                                        routeId     : 'reports/cashclosing',
                                                         leaf        : true
                                                     }
                                                 );                                     
@@ -318,6 +344,9 @@ Ext.define('Admin.Application', {
                                     case 7: // Ajustes
                                         iconCls     = 'fas fa-cogs';
                                         break;
+                                    case 8: // Reportes
+                                        iconCls     = 'fas fa-newspaper';
+                                        break;
                                 }
                                 children.push({
                                     text        : oldEle.name_menu,
@@ -338,6 +367,12 @@ Ext.define('Admin.Application', {
                                     tStore.setRoot(xRoot);
                                 }
                             }
+
+                            if(token.user.type == 1){
+                                me.redirectTo('dashboard');
+                            }else{
+                                me.redirectTo('users/profile');
+                            }
                         }
                     },
                     failure: function(response, opts) {
@@ -352,7 +387,7 @@ Ext.define('Admin.Application', {
      * Funcion que muestra un Iframe con el informe devuelto del servidor
      * @param xUrl - La ruta del informe
      */
-     getIframe : function (xUrl, xFormat, obj) {
+    getIframe : function (xUrl, xFormat, obj) {
         var
             me  = this;
         Ext.require('Admin.core.docs.IframeView');
@@ -624,7 +659,6 @@ Ext.define('Admin.Application', {
                 }
             }
         });
-
     },
 
 	onRecordDelete : function (records, cStore) {

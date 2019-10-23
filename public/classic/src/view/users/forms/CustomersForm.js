@@ -9,6 +9,7 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
         'Admin.core.field.CheckBoxField',
         'Admin.core.combo.ComboLines',
         'Admin.core.field.NumberField',
+        'Admin.core.combo.ComboTypeUsers',
         'Admin.view.users.views.RolesView'
     ],
     controller : 'users',
@@ -19,6 +20,7 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
     buildWindow: function () {
         var
             me = this.getApp();
+        me.onStore('general.TypeUsersStore');
         this.winObject = Ext.create('Admin.view.users.views.UsersView');
     },
     showWindow: function (btn) {
@@ -151,5 +153,17 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
                 }
             ]
         }
-    ]
+    ],
+    listeners : {
+        activate : function(ts){
+            var app = Admin.getApplication();
+            app.setParamStore('UsersStore',{
+                pdbTable    : 'users',
+                query       : '',
+                type        : 2
+            });
+            store   = Ext.getStore('UsersStore');
+            store.reload();
+        }
+    }
 });

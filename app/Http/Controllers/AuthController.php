@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-
     public function updateuser(Request $request)
     {
 
@@ -22,14 +21,30 @@ class AuthController extends Controller
             'first_name'        => $request->first_name,
             'last_name'         => $request->last_name,
             'email'             => $request->email,
-            'birthday'          => $request->birthday,
-            'active'            => $request->active,  
+            'birthday'          => $request->birthday
         ];
+
+        if($request->active){
+            $data['active'] = $request->active;
+        }
+
+        if($request->type){
+            $data['type'] = $request->type;
+        }
+
+        if(strlen($request->password) > 5){
+            $data['password']   = bcrypt($request->password);
+        }
+
+        $user_id    = $request->user_id;
+        $ip         = $request->ip();
         
         User::where('id',$request->id)->update($data);
-
+        $model  = new MasterModel();
+        $model->audit($user_id,$ip,"users","UPDATE",$data);
         return response()->json([
-            'message' => 'Successfully updated user!'], 201);
+            'message' => 'Successfully updated user!',
+            'success' => true], 201);
     }
 
     public function roles(Request $request)
@@ -58,7 +73,6 @@ class AuthController extends Controller
             'password'          => bcrypt($request->password),
         ]);
         $user->save();
-
         return response()->json([
             'message'   => 'Cliente registrado con exito!',
             'success'   => true,
@@ -80,12 +94,15 @@ class AuthController extends Controller
             'last_name'         => $request->last_name,
             'email'             => $request->email,
             'birthday'          => $request->birthday,
+            'type'              => $request->type,
             'password'          => bcrypt($request->password),
         ]);
         $user->save();
 
-        // $avatar = Avatar::create($user->first_name)->getImageObject()->encode('png');
-        // Storage::put('avatars/'.$user->id.'/avatar.png', (string) $avatar);
+        $user_id    = $request->user_id;
+        $ip         = $request->ip();
+        $model  = new MasterModel();
+        $model->audit($user_id,$ip,"users","INSERT",$user);
 
         return response()->json([
             'message' => 'Successfully created user!'], 201);
