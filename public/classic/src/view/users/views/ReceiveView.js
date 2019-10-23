@@ -62,6 +62,7 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                     fieldLabel  : 'Valor pagado',
                     itemId      : 'value_paid',
                     name        : 'value_paid',
+                    hasFocus    : true,
                     listeners   : {
                         change : function (ts, nv, ov) {
                             ts.up('window').onCalcule(ts);
@@ -75,6 +76,14 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                     name        : 'change'   
                 }
             ],
+            listeners   : {
+                afterrender : function(ts,e){
+                    var comp    = ts.getComponent('value_paid');
+                    if (comp) {
+                        comp.focusEl.dom.focus();
+                    }
+                }
+            },
             dockedItems: [{
                 xtype		: 'toolbarSave',
                 dock	: 'bottom',

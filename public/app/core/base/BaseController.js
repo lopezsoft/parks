@@ -102,7 +102,13 @@ Ext.define('Admin.core.base.BaseController', {
      *
      */
     onRestoreMainCardPanel: function () {
-        this.redirectTo('dashboard');
+        var 
+            params      = AuthToken.recoverParams();
+        if (parseInt(params.user.type) == 1) {
+            this.redirectTo('dashboard');
+        } else {
+            this.redirectTo('users/profile');
+        }
     },
 
 	/**

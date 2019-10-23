@@ -31,6 +31,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'report'], function () {
+    Route::get('cashclosing', 'ReportController@CashClosing');
     Route::get('getticketservices', 'ReportController@getTicketServices');
     Route::get('getticketfastfood', 'ReportController@setTicketFastFood');
     Route::get('settickets', 'ReportController@setTickets');

@@ -15,6 +15,9 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
         this.callParent(arguments);
         this.setTitle('Listado de Tickets pendientes (PRE-TICKETS)');
     },
+    config  : {
+        task    : {}
+    },
     showSaveButton  : false,
     items: [
         {
@@ -84,5 +87,42 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
                 }
             ]
         }
-    ]
+    ],
+    listeners : {
+        afterrender : function(ts){
+            var 
+                runner  = new Ext.util.TaskRunner(),
+                tk ;
+            tk = runner.newTask({
+                run: function(){
+                    var 
+                        store   = Ext.getStore('PreTicketsStore');
+                        store.reload();
+                },
+                interval: 30000
+            });
+            ts.setTask(tk);
+        },
+        activate : function(ts){
+            var 
+                task    = ts.getTask();
+            if (task) {
+                task.start();
+            }
+        },
+        deactivate : function(ts){
+            var 
+                task    = ts.getTask();
+            if (task) {
+                task.stop();
+            }
+        },
+        destroy : function(ts){
+            var 
+                task    = ts.getTask();
+            if (task) {
+                task.stop();
+            }
+        }
+    }
 });

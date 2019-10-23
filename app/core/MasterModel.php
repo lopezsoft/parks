@@ -17,6 +17,25 @@ class MasterModel
     public $queryField = "";
     public $queryString = "";
 
+
+    public function audit($user_id, $ip, $tb, $what_did, $data)
+    {
+        $audit  = [
+            'id_user'   => $user_id,
+            'ip'        => $ip,
+            'table'     => $tb,
+            'what_did'  => $what_did,
+            'data'      => json_encode($data)
+        ];
+        DB::table('tb_audit')->insert($audit);
+    }
+
+    public function getCahsClosing($id = 0, $date1, $date2)
+    {
+        $table = DB::select("CALL sp_select_cashcount(".$id. ",'".$date1."','".$date2."')");
+        return $table;
+    }
+
     public function getRoles($user_id = 0, $type    = 0)
     {
         $table = DB::select("CALL sp_select_roles(" . $user_id .",". $type .")");
@@ -34,41 +53,46 @@ class MasterModel
         return $this->json_response($this->getSaleMaster(0), 0);
     }
 
-    public function getUsers($query = null, $start = 0, $limit = 0, $type = 3, $fields = null)
+    public function getUsers($query = null, $start = 0, $limit = 0, $type = 3, $fields = null, $user)
     {
         try {
             $sign = '=';
-            if ($type != 3) {
-                $sign = "<>";
-                $type = 3;
-            }
-            if (!is_null($query) && !is_null($fields)) {
-                $search = json_decode($fields);
-                foreach ($search as $value) {
-                    $select = User::where($value, 'like', '%' . $query . '%')
-                        ->where('type', $sign, $type)
-                        ->limit(1)
-                        ->get();
-                    if ($select->count() > 0) {
-                        $this->queryField = $value;
-                        break;
+            if($type > 0){
+                if ($type != 3) {
+                    $sign = "<>";
+                    $type = 3;
+                }
+                if (!is_null($query) && !is_null($fields)) {
+                    $search = json_decode($fields);
+                    foreach ($search as $value) {
+                        $select = User::where($value, 'like', '%' . $query . '%')
+                            ->where('type', $sign, $type)
+                            ->limit(1)
+                            ->get();
+                        if ($select->count() > 0) {
+                            $this->queryField = $value;
+                            break;
+                        }
                     }
-                }
-                if (strlen($this->queryField) > 0) {
-                    $select = User::where($this->queryField, 'like', '%' . $query . '%')
-                        ->where('type', $sign, $type)
-                        ->limit($limit, $start)
-                        ->get();
+                    if (strlen($this->queryField) > 0) {
+                        $select = User::where($this->queryField, 'like', '%' . $query . '%')
+                            ->where('type', $sign, $type)
+                            ->limit($limit, $start)
+                            ->get();
+                    } else {
+                        $select = User::where('first_name', 'like', '%' . $query . '%')
+                            ->where('type', $sign, $type)
+                            ->limit($limit, $start)
+                            ->get();
+                    }
                 } else {
-                    $select = User::where('first_name', 'like', '%' . $query . '%')
-                        ->where('type', $sign, $type)
-                        ->limit($limit, $start)
-                        ->get();
+                    $select = User::where('type', $sign, $type)
+                            ->limit($limit, $start)
+                            ->get();
                 }
-            } else {
-                $select = User::where('type', $sign, $type)
-                        ->limit($limit, $start)
-                        ->get();
+            }else{
+                $select = User::where('id', $sign, $user)
+                            ->limit(1)->get();
             }
             $result = $this->json_response($select, $select->count());
         } catch (\Throwable $th) {
@@ -135,15 +159,7 @@ class MasterModel
                     ->where($data)
                     ->delete();
 
-                $audit  = [
-                    'id_user'   => $user_id,
-                    'ip'        => $ip,
-                    'table'     => $tb,
-                    'what_did'  => "DELETE",
-                    'data'      => json_encode($data)
-                ];
-
-                DB::table('tb_audit')->insert($audit);  
+                $this->audit($user_id,$ip,$tb,'DELETE',$data);
                 DB::commit();
                 $result = $this->json_response_succes($result);
             } catch (\Throwable $th) {
@@ -180,14 +196,7 @@ class MasterModel
                 $result = DB::table($tb)
                     ->insertGetId($data);
 
-                $audit  = [
-                    'id_user'   => $user_id,
-                    'ip'        => $ip,
-                    'table'     => $tb,
-                    'what_did'  => "INSERT",
-                    'data'      => json_encode($data)
-                ];
-                DB::table('tb_audit')->insert($audit);
+                $this->audit($user_id,$ip,$tb,'INSERT',$data);
                 DB::commit();
                 $data = DB::table($tb)
                     ->get()
@@ -233,14 +242,7 @@ class MasterModel
                                 ->limit(1)
                                 ->update($data);
 
-                        $audit  = [
-                            'id_user'   => $user_id,
-                            'ip'        => $ip,
-                            'table'     => $tb,
-                            'what_did'  => "UPDATE",
-                            'data'      => json_encode($data)
-                        ];
-                        DB::table('tb_audit')->insert($audit);
+                        $this->audit($user_id,$ip,$tb,'UPDATE',$data);
                     }
                 }else{
                     foreach ($fields as $key => $value) {
@@ -258,20 +260,13 @@ class MasterModel
                         ->where($this->primaryKey, $pKey)
                         ->limit(1)
                         ->update($data);
-                    $audit  = [
-                        'id_user'   => $user_id,
-                        'ip'        => $ip,
-                        'table'     => $tb,
-                        'what_did'  => "UPDATE",
-                        'data'      => json_encode($data)
-                    ];
-                    DB::table('tb_audit')->insert($audit);
+                    $this->audit($user_id,$ip,$tb,'UPDATE',$data);
                 }
                 DB::commit();
                 $result = $this->json_response_succes($result);
             } catch (\Throwable $th) {
                 DB::rollback();
-                $result = $data->json_response_succes_error('Error en la base de datos');
+                $result = $this->json_response_succes_error('Error en la base de datos');
                 throw $th;
             }
             return  $result;

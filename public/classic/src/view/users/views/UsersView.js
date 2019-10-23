@@ -96,6 +96,9 @@ Ext.define('Admin.view.users.views.UsersView',{
                     allowBlank  : true
                 },
                 {
+                    xtype       : 'combotypeusers'
+                },
+                {
                     xtype           : 'checkBoxField',
                     boxLabel        : 'Activo',
                     name            : 'active'

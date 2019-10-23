@@ -1,7 +1,22 @@
 Ext.define('Admin.view.auth.Login', {
-    extend: 'Ext.window.Window',
+    extend: 'Admin.core.base.WindowCrud',
     xtype: 'login',
+    constructor : function (config) {
+        var me  = this;
+        Ext.apply(me.config, config);
+        this.callParent(arguments);
+        me.on('Success', function (data) {
 
+        });
+        return me;
+    },
+
+    initComponent: function () {
+        this.addCls('user-login-register-container');
+        this.callParent(arguments);
+        this.setTitle('Control de accerso');
+    },
+    
     frameHeader : false,
     requires: [
         'Admin.view.auth.Dialog',
@@ -17,11 +32,11 @@ Ext.define('Admin.view.auth.Login', {
     ],
 
     cls: 'auth-locked-window',
-    closable    : false,
+    // closable    : true,
     resizable   : false,
-    autoShow    : true,
+    // autoShow    : true,
     titleAlign  : 'center',
-    maximized   : true,
+    // maximized   : true,
     modal       : true,
 
     layout: {
@@ -77,27 +92,27 @@ Ext.define('Admin.view.auth.Login', {
                     name        : 'password',
                     allowBlank  : false
                 },
-                {
-                    xtype: 'container',
-                    layout: 'hbox',
-                    items: [
-                        {
-                            xtype   : 'checkboxfield',
-                            flex    : 1,
-                            cls     : 'form-panel-font-color rememberMeCheckbox',
-                            height  : 30,
-                            bind    : '{persist}',
-                            boxLabel: 'Recuérdame',
-                            name    : 'remember_me',
-                            inputValue: '1',
-                            uncheckedValue : '0'
-                        },
-                        {
-                            xtype: 'box',
-                            html: '<a href="#passwordreset" class="link-forgot-password">¿Olvidó su contraseña?</a>'
-                        }
-                    ]
-                },
+                // {
+                //     xtype: 'container',
+                //     layout: 'hbox',
+                //     items: [
+                //         {
+                //             xtype   : 'checkboxfield',
+                //             flex    : 1,
+                //             cls     : 'form-panel-font-color rememberMeCheckbox',
+                //             height  : 30,
+                //             bind    : '{persist}',
+                //             boxLabel: 'Recuérdame',
+                //             name    : 'remember_me',
+                //             inputValue: '1',
+                //             uncheckedValue : '0'
+                //         },
+                //         {
+                //             xtype: 'box',
+                //             html: '<a href="#passwordreset" class="link-forgot-password">¿Olvidó su contraseña?</a>'
+                //         }
+                //     ]
+                // },
                 {
                     xtype       : 'button',
                     reference   : 'loginButton',
@@ -111,10 +126,5 @@ Ext.define('Admin.view.auth.Login', {
                 }
             ]
         }
-    ],
-
-    initComponent: function() {
-        this.addCls('user-login-register-container');
-        this.callParent(arguments);
-    }
+    ]
 });

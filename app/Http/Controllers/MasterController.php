@@ -67,8 +67,9 @@ class MasterController extends Controller
         $start  = $request->input('start');
         $limit  = $request->input('limit');
         $fields = $request->input('fields');
+        $user   = $request->input('user');
         $val    = new MasterModel();
-        echo $val->getUsers($query, $start, $limit, $type, $fields);
+        echo $val->getUsers($query, $start, $limit, $type, $fields, $user);
     }
 
     public function getProducts(Request $request)

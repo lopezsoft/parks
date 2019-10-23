@@ -76,12 +76,14 @@ Ext.define('Admin.core.forms.CustomForm',{
             store   = this.getStore(),
             me      = this;
         if (store) {
+            me.mask('Cargando...');
             Ext.onReady(function(){
                 xStore = Ext.getStore(store);
                 if(xStore){
                     xStore.load({
                         scope: this,
                         callback: function (records, operation, success) {
+                            me.unmask();
                             if (records.length > 0) {                            
                                 me.loadRecord(records[0]);
                             }

@@ -12,6 +12,110 @@ class Report extends MasterModel
 {
     public $path_logo_reports  = "resources/images/logo_reports.jpeg";
 
+    public function CashClosing($user, $type, $date1, $date2, $name)
+    {
+        $total  = 0;
+        $data   = [];
+        try {
+            $config         = $this->getConfigInvoive();
+            $clashclosing   = $this->getCahsClosing($user, $date1, $date2);
+            $title          = ($type == 1) ? 'CIERRE DE CAJA' : 'ARQUEO DE CAJA' ;
+
+            $line   = "------------------------------------------------------------------------------";
+            $leftSpace  = 8;
+            $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,550));
+            $pdf->AddPage();
+            $pdf->SetLeftMargin(5);
+            $pdf->SetRightMargin(5);
+            $pdf->SetFont('Helvetica','B',8);    //Letra Helvetica, negrita (Bold), tam. 20
+            $pdf->Image($this->path_logo_reports,2,5,75,45);
+            $textypos   = 50;
+            $cellHeight = 3;
+            $pdf->setY(2);
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$textypos,'',0,"C");
+            foreach ($config as $key => $value) {
+                if (!empty($value->headerline1)) {
+                    $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline1)),0,"C");
+                }
+                if (!empty($value->headerline2)) {
+                    $pdf->MultiCell(0,$cellHeight,utf8_decode(trim($value->headerline2)),0,"C");
+                }
+            }
+            $pdf->SetX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight,utf8_decode($title),0,"C");
+            $pdf->MultiCell(0,$cellHeight,'',0,"C");
+
+            $pdf->setX($leftSpace);
+            $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
+            $pdf->MultiCell(0,$cellHeight,"DEL: ".$date1."  AL ".$date2);
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d-m-Y')." HORA: ".date('h:i:s A'));
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight, utf8_decode("CAJERO : ".$name));
+        
+            $path_report = "reports/tiket-f".$title."-u".$name."-t".date('d-m-Y-h-i-s-A').".pdf";
+
+            $pdf->SetFont('Helvetica','B',7);    //Letra Helvetica, negrita (Bold), tam. 20
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight,'                          --- VENTAS ---                   ');
+            $total =0;
+            $off = $pdf->GetY();
+            $pdf->SetFont('Helvetica','',7);
+            foreach($clashclosing as $pro){
+                $pdf->SetY($off);
+                $pdf->setX($leftSpace + 2);
+                $pdf->Cell(10,$cellHeight,  $pro->nro_sale,0,0,"R");
+                $pdf->setX($leftSpace +11);
+                $pdf->Cell(20,$cellHeight,  utf8_decode(Trim($pro->type_name)));
+                $pdf->setX(21);
+                $pdf->Cell(25,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
+                $pdf->setX(47);
+                $pdf->Cell(25,$cellHeight,  utf8_decode(Trim($pro->date)));
+                $total  += $pro->total;
+                $off+=3;
+            }
+            $textypos= 2 + $pdf->GetY();
+            $pdf->SetY($textypos);
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+
+            $textypos= $cellHeight + $pdf->GetY();
+            $pdf->SetFont('Helvetica','B',8);
+            $pdf->SetY($textypos);
+            $pdf->setX($leftSpace);
+            $pdf->Cell(7,$cellHeight,"TOTAL: " );
+            $pdf->setX(55);
+            $pdf->Cell(15,$cellHeight,"$ ".number_format($total,2,".",","),0,0,"R");
+            
+            $pdf->SetFont('Helvetica','B',6);
+            $textypos+=2;
+            $pdf->SetY($textypos);
+            $pdf->setX($leftSpace);
+            $pdf->MultiCell(0,$cellHeight,$line,0,"C");
+            $textypos= 1 + $pdf->GetY();
+            $pdf->setY($textypos);
+            $pdf->AutoPrint();
+            $pdf->output("F",$path_report);
+            if($type == 1){
+                $data   = [];
+                $data['total']          = $total;
+                $data['id_user']        = $user;
+                $data['document']       = $path_report;
+                DB::table('tb_cash_closing')->insertGetId($data);
+            }
+            $result = $this->json_response(array(
+                'report'    => $path_report
+            ));
+        } catch (\Throwable $th) {
+            $result = $this->json_response_succes_error('Error al intentar guardar los cambios');
+            throw $th;
+        }
+        return  $result;
+    }
+
     public function setTicketsServ($records = null, $user = 0, $type = 0)
     {
         
@@ -28,11 +132,24 @@ class Report extends MasterModel
                                 ->where('id', $records->id)
                                 ->update($data);
                 $id_sale    = $records->id;
+                
+                $data   = [];
+                $data['id_sale']        = $id_sale;
+                $data['id_user']        = $user;
+                DB::table('tb_sales_users')->insertGetId($data);
 
-                DB::commit();
                 $config     = $this->getConfigInvoive();
                 $saleMaster = $this->getSaleMaster($id_sale, 1);
                 $saleDetail = $this->getSaleDetail($id_sale, 1);
+
+                $data   = [];
+                $data['id_sale']            = $id_sale;
+                $data['id_payment']         = 1;
+                $data['amount']             = $saleMaster[0]->total;
+                DB::table('tb_sales_payment')->insertGetId($data);
+
+                DB::commit();
+
                 $line   = "---------------------------------------------------------------------------";
                 $leftSpace  = 8;
                 $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,550));
@@ -196,10 +313,17 @@ class Report extends MasterModel
                                 ->update($data);
                 $id_sale    = $records->id;
 
-                DB::commit();
                 $config     = $this->getConfigInvoive();
                 $saleMaster = $this->getSaleMaster($id_sale, 2);
                 $saleDetail = $this->getSaleDetail($id_sale, 2);
+                
+                $data   = [];
+                $data['id_sale']            = $id_sale;
+                $data['id_payment']         = 1;
+                $data['amount']             = $saleMaster[0]->total;
+                DB::table('tb_sales_payment')->insertGetId($data);
+                DB::commit();   
+
                 $line   = "---------------------------------------------------------------------------";
                 $leftSpace  = 8;
                 $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,350));

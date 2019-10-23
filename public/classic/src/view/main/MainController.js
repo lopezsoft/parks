@@ -39,6 +39,7 @@ Ext.define('Admin.view.main.MainController', {
 
         if (!existingItem) {
             if (view == 'page404') {
+                this.redirectTo('');
                 return true;
             }else{
                 newView = Ext.create({
@@ -318,7 +319,38 @@ Ext.define('Admin.view.main.MainController', {
                         });
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;         
+                case 'users/profile':
+                    Ext.require([
+                        'Admin.view.profile.UserProfile'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.TypeUsersStore');
+                        app.onStore('general.UsersStore');
+                        me.setCurrentView(id);
+                    });
+                    break;   
+                case 'reports/cashcount':
+                    Ext.require([
+                        'Admin.view.sales.forms.CashClosingForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.UsersStore');
+                        me.setCurrentView(id);
+                    });
+                    break;   
+                case 'reports/cashclosing':
+                    Ext.require([
+                        'Admin.view.sales.forms.CashClosingForm'
+                    ]);
+                    Ext.onReady(function () {
+                        me.unMask();
+                        app.onStore('general.UsersStore');
+                        me.setCurrentView(id);
+                    });
+                    break;   
                 default:
                     Ext.require([
                         'Admin.*'

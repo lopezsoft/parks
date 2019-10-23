@@ -5,7 +5,7 @@ Ext.define('Admin.store.products.ProductsStore',{
     pageSize  : 100,
     proxy: {
         extraParams : {
-            pdbTable    : '',
+            pdbTable    : 'tb_products',
             query       : '',
             branch      : '1'
         },
