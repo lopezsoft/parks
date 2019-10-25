@@ -51,7 +51,15 @@ Ext.define('Admin.view.sales.forms.CashClosingForm',{
                         '->',
                         {
                             xtype	: 'addButton',
-                            itemId  : 'buttonRoles',
+                            itemId  : 'buttonCahsSession',
+                            disabled: true,
+                            text    : 'Sesiones de caja',
+                            iconCls : 'fas fa-receipt',
+                            handler : 'onCashClosing'
+                        },'-',
+                        {
+                            xtype	: 'editButton',
+                            itemId  : 'buttonCahsClosing',
                             disabled: true,
                             text    : 'Cierre de caja',
                             iconCls : 'fas fa-receipt',
@@ -60,6 +68,7 @@ Ext.define('Admin.view.sales.forms.CashClosingForm',{
                         {
                             xtype	: 'editButton',
                             text    : 'Arqueo de caja',
+                            itemId  : 'buttonCahsCount',
                             iconCls : 'fas fa-receipt',
                             handler : 'onCashCount'
                         },'-',

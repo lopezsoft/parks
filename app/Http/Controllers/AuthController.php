@@ -164,6 +164,11 @@ class AuthController extends Controller
         ];
         $access_id  = DB::table('tb_access_users')
                         ->insertGetId($data);
+
+        $cashSession= DB::table('tb_cash_closing')
+                            ->where('id_user', $user->id)
+                            ->limit(1)
+                            ->get();
         $token->save();
         return response()->json([
             'access_token' => $tokenResult->accessToken,
@@ -173,7 +178,8 @@ class AuthController extends Controller
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),
             'user'          => $user,
-            'access_id'     => $access_id
+            'access_id'     => $access_id,
+            'cash_session' => $cashSession
         ]);
     }
 

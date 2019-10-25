@@ -16,10 +16,11 @@ class ReportController extends Controller
         $date1      = $request->input('date1');
         $date2      = $request->input('date2');
         $name       = $request->input('username');
+        $session_id = $request->input('session_id');
 
         $date1 = ($date1) ? $date1 : date('Y-m-d');
         $date2 = ($date2) ? $date2 : date('Y-m-d');
-        echo $report->CashClosing($user, $type, $date1, $date2, $name);   
+        echo $report->CashClosing($user, $type, $date1, $date2, $name, $session_id);   
     }
 
     public function setTickets(Request $request)

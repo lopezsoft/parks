@@ -31,11 +31,11 @@
                 <!-- Start: Intro -->
                 <div class="intro">
                     <h2 class="text-center">MENÚ DE REGISTRO</h2>
-                    <p class="text-center">En la parte inferior puede registrar sus datos personales para tener acceso a nuestra aplicación</p>
+                    {{-- <p class="text-center">En la parte inferior puede registrar sus datos personales para tener acceso a nuestra aplicación</p> --}}
                 </div>
                 <!-- End: Intro -->
                 <!-- Start: People -->
-                <div class="row people">
+                <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-6 item" style="margin: auto;">
                             <div class="box"><i class="fa fa-users" style="font-size: 128px;"></i>
                             <h3 class="name" style="margin: 0px;width: 100%;padding: 5px;">Registrarse</h3>

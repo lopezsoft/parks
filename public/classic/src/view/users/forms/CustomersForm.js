@@ -91,28 +91,6 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
 
             ],
             dockedItems: [
-                // {
-                //     xtype       : 'customToolbar',
-                //     items       : [
-                //         {
-                //             text    : 'Imagen',
-                //             itemId  : 'buttomImage',
-                //             disabled: true,
-                //             handler : function(btn){
-                //                 var 
-                //                     sel = btn.up('form').down('grid').getSelection(),
-                //                     me  = Admin.getApplication(),
-                //                     win = null;
-                //                 if(sel.length > 0){
-                //                     win     = Ext.create('Admin.view.users.views.UsersIgameView');
-                //                     form    = win.down('form');
-                //                     form.loadRecord(sel[0]);
-                //                     win.show();
-                //                 }
-                //             }
-                //         }
-                //     ]
-                // },
                 {
                     xtype 		: 'pagination',
                     items 		: [
@@ -160,7 +138,7 @@ Ext.define('Admin.view.users.forms.CustomersForm',{
             app.setParamStore('UsersStore',{
                 pdbTable    : 'users',
                 query       : '',
-                type        : 2
+                type        : 3
             });
             store   = Ext.getStore('UsersStore');
             store.reload();

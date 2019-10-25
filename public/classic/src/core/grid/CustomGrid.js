@@ -49,7 +49,7 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
     loadmask 	: true,
     border		: true,
     autoLoad	: true,
-	selModel	: 'CheckboxModel',
+	// selModel	: 'CheckboxModel',
     columnLines	: true,
 	reserveScrollbar	: true,
 	frame   	: false,
@@ -104,7 +104,9 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 		'selectionchange': function(grid, selected, eOpts) {
 			var me			= this,
 				data		= {},
+				params  	= AuthToken.recoverParams(),
 				disabled	= false;
+
 			if (me.down('#buttonRoles')){
 				if (selected.length > 0) {
 					data	= selected[0].data;
@@ -118,6 +120,49 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 					me.down('#buttonRoles').setDisabled(!selected.length);
 				}
 			}
+
+			if (me.down('#buttonCahsSession')){
+				if (selected.length > 0) {
+					data	= params.user;
+					if(parseInt(data.type) == 1 ){
+						disabled	= false;
+					}else{
+						disabled	= true;
+					}
+					me.down('#buttonCahsSession').setDisabled(disabled);
+				}else{
+					me.down('#buttonCahsSession').setDisabled(!selected.length);
+				}
+			}
+
+			if (me.down('#buttonCahsClosing')){
+				if (selected.length > 0) {
+					data	= params.user;
+					if(parseInt(data.type) == 1 ){
+						disabled	= true;
+					}else{
+						disabled	= false;
+					}
+					me.down('#buttonCahsClosing').setDisabled(disabled);
+				}else{
+					me.down('#buttonCahsClosing').setDisabled(!selected.length);
+				}
+			}
+
+			if (me.down('#buttonCahsCount')){
+				if (selected.length > 0) {
+					data	= params.user;
+					if(parseInt(data.type) == 1 ){
+						disabled	= true;
+					}else{
+						disabled	= false;
+					}
+					me.down('#buttonCahsCount').setDisabled(disabled);
+				}else{
+					me.down('#buttonCahsCount').setDisabled(!selected.length);
+				}
+			}
+
 
 			if (me.down('#plusButton')){
 				me.down('#plusButton').setDisabled(!selected.length);

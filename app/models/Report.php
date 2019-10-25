@@ -12,7 +12,7 @@ class Report extends MasterModel
 {
     public $path_logo_reports  = "resources/images/logo_reports.jpeg";
 
-    public function CashClosing($user, $type, $date1, $date2, $name)
+    public function CashClosing($user, $type, $date1, $date2, $name, $session_id)
     {
         $total  = 0;
         $data   = [];
@@ -102,9 +102,12 @@ class Report extends MasterModel
             if($type == 1){
                 $data   = [];
                 $data['total']          = $total;
-                $data['id_user']        = $user;
+                $data['opened']         = 0;
                 $data['document']       = $path_report;
-                DB::table('tb_cash_closing')->insertGetId($data);
+                DB::table('tb_cash_closing')
+                        ->where('id', $session_id)
+                        ->limit(1)
+                        ->update($data);
             }
             $result = $this->json_response(array(
                 'report'    => $path_report

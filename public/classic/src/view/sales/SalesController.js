@@ -8,7 +8,7 @@ Ext.define('Admin.view.sales.SalesController',{
             win     = btn.up('form'),
             token   = AuthToken.recoverParams();
         if (token.user.type == 1) { // User administrator
-            me.onVerify(btn, 1);
+            me.onPrint(btn, 1);
         }else{
             store   = Ext.getStore('PreTicketsStore');
             if(!store){
@@ -47,7 +47,7 @@ Ext.define('Admin.view.sales.SalesController',{
             me      = this,
             token   = AuthToken.recoverParams();
         if (token.user.type == 1) { // User administrator
-            me.onVerify(btn, 1);
+            me.onPrint(btn, 1);
         }else{
             me.onVerify(btn, 2);
         }
@@ -90,7 +90,8 @@ Ext.define('Admin.view.sales.SalesController',{
             params      : {
                 user    : params.user.id,
                 type    : type,
-                username: data.data.first_name+' ' + data.data.last_name
+                username: data.data.first_name+' ' + data.data.last_name,
+                session_id  : params.cash.id    
             },
             success: function(r, opts) {
                 obj = Ext.decode(r.responseText);
