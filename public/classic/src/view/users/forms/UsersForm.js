@@ -5,5 +5,17 @@ Ext.define('Admin.view.users.forms.UsersForm',{
     initComponent: function () {
         this.callParent(arguments);
         this.setTitle('Usuarios');
+    },
+    listeners : {
+        activate : function(ts){
+            var app = Admin.getApplication();
+            app.setParamStore('UsersStore',{
+                pdbTable    : 'users',
+                query       : '',
+                type        : 2
+            });
+            store   = Ext.getStore('UsersStore');
+            store.reload();
+        }
     }
 });

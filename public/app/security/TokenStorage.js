@@ -34,7 +34,8 @@ Ext.define('Admin.security.TokenStorage', {
 				expires_at	: token.expires_at,
                 token_type	: token.token_type,
                 user        : token.user,
-                access_id   : token.access_id
+                access_id   : token.access_id,
+                cash        : token.cash_session[0]
             }
         }
         return token;

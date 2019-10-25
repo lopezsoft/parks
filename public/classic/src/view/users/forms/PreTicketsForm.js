@@ -88,40 +88,36 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
             ]
         }
     ],
+    onReload : function(){
+        zStore   = Ext.getStore('PreTicketsStore');
+        zStore.load();
+    },
     listeners : {
-        afterrender : function(ts){
-            var 
-                runner  = new Ext.util.TaskRunner(),
-                tk ;
-            tk = runner.newTask({
-                run: function(){
-                    var 
-                        store   = Ext.getStore('PreTicketsStore');
-                        store.reload();
-                },
-                interval: 30000
-            });
-            ts.setTask(tk);
-        },
         activate : function(ts){
             var 
-                task    = ts.getTask();
-            if (task) {
-                task.start();
-            }
+                tk      = {};
+            tk = Ext.TaskManager.start({
+                run: ts.onReload,
+                interval: 5000
+            });
+            ts.setTask(tk);
         },
         deactivate : function(ts){
             var 
                 task    = ts.getTask();
             if (task) {
-                task.stop();
+                Ext.TaskManager.stop(task);
+                Ext.TaskManager.stopAll;
+                Ext.TaskManager.destroy;
             }
         },
         destroy : function(ts){
             var 
                 task    = ts.getTask();
             if (task) {
-                task.stop();
+                Ext.TaskManager.stop(task);
+                Ext.TaskManager.stopAll;
+                Ext.TaskManager.destroy;
             }
         }
     }

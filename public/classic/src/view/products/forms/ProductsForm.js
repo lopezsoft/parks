@@ -8,6 +8,7 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
         'Admin.core.field.CheckBoxField',
         'Admin.core.combo.ComboCategories',
         'Admin.core.combo.ComboLines',
+        'Admin.core.field.TextAreaField',
         'Admin.core.combo.ComboBranchOffices',
         'Admin.core.field.NumberField'
     ],

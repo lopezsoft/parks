@@ -46,6 +46,17 @@ Ext.define('Admin.view.products.views.ProductsView',{
                     xtype           : 'checkBoxField',
                     boxLabel        : 'Activo',
                     name            : 'active'
+                },
+                {
+                    xtype           : 'checkBoxField',
+                    boxLabel        : 'Paquete',
+                    name            : 'package'
+                },
+                {
+                    xtype           : 'textAreaField',
+                    fieldLabel      : 'Contenido del paquete',
+                    name            : 'detail',
+                    allowBlank      : true
                 }
             ]
         }

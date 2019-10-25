@@ -380,6 +380,9 @@ Ext.define('Admin.Application', {
                     }
                 });
            }
+       }else{
+            var url = Global.getUrlBase() + 'dashboard/login';
+            window.location.href = url;
        }
     },
 

@@ -34,11 +34,11 @@
                 <!-- Start: Intro -->
                 <div class="intro">
                     <h2 class="text-center">MENÚ ATRACCIONES</h2>
-                    <p class="text-center">Desde la parte inferior puede ingresar al menú de atracciónes</p>
+                    {{-- <p class="text-center">Desde la parte inferior puede ingresar al menú de atracciónes</p> --}}
                 </div>
                 <!-- End: Intro -->
                 <!-- Start: People -->
-                <div class="row people">
+                <div class="row">
                     <div class="col-md-12 col-lg-6 item" style="margin: auto;">
                             <div class="box"><i class="fa fa-unlock" style="font-size: 128px;"></i>
                             <h3 class="name" style="margin: 0px;width: 100%;padding: 5px;">Entrar al menú</h3>

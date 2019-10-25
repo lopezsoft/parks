@@ -1,6 +1,33 @@
 Ext.define('Admin.view.users.UsersController',{
     extend : 'Admin.core.base.BaseController',
-    alias : 'controller.users',
+    alias  : 'controller.users',
+    taks   : {},
+    
+    /**
+     * Funcion para auto guardar los cambios en la platilla de notas
+    */
+
+    onStopTimer : function (btn) {
+        var
+            me = this;
+            Ext.TaskManager.stop(me.task);
+            Ext.TaskManager.stopAll;
+            Ext.TaskManager.destroy;
+    },
+
+    onStartTimer : function(btn){
+        var
+            me = this;
+        
+        me.task	= Ext.TaskManager.start({
+            run	: function () {
+                var 
+                    store   = Ext.getStore('PreTicketsStore');
+                    store.reload();
+            },
+            interval	: 5000
+        });
+    },
 
     onPrint : function (btn) {
         var me      = btn.up('form'),
