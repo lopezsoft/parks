@@ -17,6 +17,13 @@ class MasterModel
     public $queryField = "";
     public $queryString = "";
 
+    public function getCashSessions()
+    {
+        $date1  = date('Y-m-d');
+        $date2  = date('Y-m-d');
+        $table = DB::select("CALL sp_select_cash_closing('".$date1."','".$date2."')");
+        return $this->json_response($table);
+    }
 
     public function audit($user_id, $ip, $tb, $what_did, $data)
     {
@@ -102,9 +109,9 @@ class MasterModel
         return $result;
     }
 
-    public function getProducts($id = 1)
+    public function getProducts($type, $branch)
     {
-        $table = DB::select("CALL sp_products_fastfood(" . $id . ")");
+        $table = DB::select("CALL sp_products_fastfood(".$type.",".$branch.")");
         return $this->json_response($table);
     }
 

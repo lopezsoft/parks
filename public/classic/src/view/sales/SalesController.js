@@ -1,6 +1,15 @@
 Ext.define('Admin.view.sales.SalesController',{
     extend : 'Admin.core.base.BaseController',
     alias : 'controller.sales',
+
+    onCashSessions : function (btn) {
+      var 
+        app     = Admin.getApplication();
+
+        app.onStore('general.CashSessionsStore');
+        win = Ext.create('Admin.view.sales.forms.CashSessionsView');
+        win.show();
+    },
     onCashClosing : function(btn){
         var 
             app     = Admin.getApplication(),
@@ -47,7 +56,7 @@ Ext.define('Admin.view.sales.SalesController',{
             me      = this,
             token   = AuthToken.recoverParams();
         if (token.user.type == 1) { // User administrator
-            me.onPrint(btn, 1);
+            me.onPrint(btn, 2);
         }else{
             me.onVerify(btn, 2);
         }
@@ -88,7 +97,7 @@ Ext.define('Admin.view.sales.SalesController',{
             },
             method      : 'GET',
             params      : {
-                user    : params.user.id,
+                user    : data.data.id,
                 type    : type,
                 username: data.data.first_name+' ' + data.data.last_name,
                 session_id  : params.cash.id    
@@ -98,7 +107,9 @@ Ext.define('Admin.view.sales.SalesController',{
                 if(obj.success == true){
                     var url = Global.getUrlBase() + obj.records.report;
                     app.showResult('Se ha realizado el cobro correctamente.');
-                    if (type == 1) {
+                    if (type == 2) {
+                        app.getIframe(url,'pdf', me);
+                    }else{
                         Ext.require('Admin.core.docs.IframeView');
                         Ext.onReady(function () {
                             var
@@ -116,8 +127,6 @@ Ext.define('Admin.view.sales.SalesController',{
                             })
                             win.show();
                         });
-                    }else{
-                        app.getIframe(url,'pdf', me);
                     }
                 }else{
                     app.showResult('Ocurrio un error al generar el ticket.');

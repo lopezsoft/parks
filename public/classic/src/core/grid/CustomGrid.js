@@ -60,12 +60,6 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 	allowDeselect : true,
     stripeRows      : true,
 	plugins		: [
-	    // {
-        //     ptype: 'rowexpander',
-        //     rowBodyTpl : new Ext.XTemplate(
-        //         '<p><b>Descripción:</b> {descripcion}</p>'
-        //    	)
-		// },
 		{
 		 	ptype : 'gridfilters'
 		},
@@ -138,10 +132,15 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 			if (me.down('#buttonCahsClosing')){
 				if (selected.length > 0) {
 					data	= params.user;
-					if(parseInt(data.type) == 1 ){
-						disabled	= true;
+					ydata	= selected[0].data;
+					if(ydata.id == data.id){
+						disabled	= !selected.length;
 					}else{
-						disabled	= false;
+						if(parseInt(data.type) == 1 ){
+							disabled	= true;
+						}else{
+							disabled	= false;
+						}
 					}
 					me.down('#buttonCahsClosing').setDisabled(disabled);
 				}else{
@@ -150,17 +149,7 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 			}
 
 			if (me.down('#buttonCahsCount')){
-				if (selected.length > 0) {
-					data	= params.user;
-					if(parseInt(data.type) == 1 ){
-						disabled	= true;
-					}else{
-						disabled	= false;
-					}
-					me.down('#buttonCahsCount').setDisabled(disabled);
-				}else{
-					me.down('#buttonCahsCount').setDisabled(!selected.length);
-				}
+				me.down('#buttonCahsCount').setDisabled(!selected.length);
 			}
 
 

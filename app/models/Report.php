@@ -382,7 +382,15 @@ class Report extends MasterModel
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->unit_price,2,".",",") ,0,0,"R");
                     $pdf->setX(57);
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
-                    $off+=3;
+                    if($pro->package == 1){
+                        $off+=3;
+                        $pdf->SetY($off);
+                        $pdf->setX($leftSpace + 7);
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode($pro->detail));
+                        $off = $pdf->GetY();
+                    }else{
+                        $off+=3;
+                    }
                 }
                 $textypos= 2 + $pdf->GetY();
                 $pdf->SetY($textypos);

@@ -11,7 +11,7 @@ Ext.define('Admin.core.forms.CustomForm',{
     defaultType     : 'customText',
     ui		        : 'blue',
     cls             : 'wizardone shadow',
-    margin          : 20,
+    margin          : 5,
     requires: [
         'Admin.core.field.FieldSet',
         'Admin.core.toolbar.ToolbarSave',
@@ -30,7 +30,8 @@ Ext.define('Admin.core.forms.CustomForm',{
         app             : undefined,
         store           : undefined,
         fileStore       : undefined,
-        showSaveButton  : true
+        showSaveButton  : true,
+        reloadStore	    : true
     },
     constructor: function (cfg) {
         var me = this;
@@ -131,9 +132,10 @@ Ext.define('Admin.core.forms.CustomForm',{
 
     onSave: function (btn) {
         var
-            store = this.getStore();
+            me      = this,
+            store   = this.getStore();
         if (store) {
-            this.saveData(store);
+            this.saveData(store, me.getReloadStore());
         }
     },
     saveData: function (storeName, reload) {
