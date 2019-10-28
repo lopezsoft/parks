@@ -26,13 +26,17 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
     config : {
         countRecord : 0 
     },
+    constructor: function (cfg) {
+        this.callParent(arguments);
+        this.on('onClose',function(){
+        });
+	},
     initComponent: function () {
-        // var 
-            // report  = AuthToken.recoverReport();
+        var 
+            app     = Admin.getApplication(),
+            params  = AuthToken.recoverParams();
+    
         this.setTitle('MENÚ - COMIDA RÁPIDA');
-        // if(report){
-        //     Admin.getApplication().getIframe(report,'pdf');
-        // };
 
         this.items = [
             {
@@ -94,12 +98,39 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
         this.callParent(arguments);
         this.onLinesTool();
         this.onCategoryTool();
+        if (params.user.type == 1) {
+            this.onProducts(1);
+        }else{
+            this.onProducts(2);
+        }
+
+    },
+    listeners   : {
+        close : function(ts){
+            ts.fireEvent('onClose');
+        }
     },
     onRefresh : function () {
         var
-         pStore = Ext.getStore('ProductsStore');
+            pStore = Ext.getStore('ProductsStore');
         if(pStore){
             pStore.reload();
+        }
+    },
+    onProducts : function (val) {
+        var
+            app     = Admin.getApplication(),
+            me      = this,
+            name    = (val == 1) ? 'PAQUETES' : 'PRODUCTOS',
+            pStore  = Ext.getStore('ProductsStore');
+        if(pStore){
+            app.setParamStore('ProductsStore',{
+                type        : val,
+                pdbTable    : 'tb_products',
+                branch      : '1'
+            });
+            pStore.reload();
+            me.setTitle('MENÚ - COMIDA RÁPIDA : ' + name );
         }
     },
 
@@ -183,6 +214,7 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
             me      = this,
             xitems  = [],
             item    = {},
+            params  = AuthToken.recoverParams(),
             ztool   = me.down('#toolCat');
         if (zStore) {
             zStore.reload({
@@ -207,6 +239,28 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
                         }
                     };
                     xitems.push(item);
+                    if (params.user.type == 1) {
+                        item    = {
+                            text    : 'Paquetes',
+                            iconCls : 'fas fa-box-open',
+                            tooltip : 'Muestra los productos tipo paquetes',
+                            handler : function(btn){
+                                var me  = this.up('window');
+                                me.onProducts(1);
+                            }
+                        };
+                        xitems.push(item);
+                        item    = {
+                            text    : 'Productos',
+                            iconCls : 'fas fa-archive',
+                            tooltip : 'Muestra solo los productos',
+                            handler : function(btn){
+                                var me  = this.up('window');
+                                me.onProducts(2);
+                            }
+                        };
+                        xitems.push(item);
+                    }
                     item    = '-';
                     xitems.push(item);
 

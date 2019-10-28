@@ -50,6 +50,24 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
         {
             xtype       : 'customGrid',
             store       : 'ProductsStore',
+            autoLoad    : false,
+            plugins		: [
+                {
+                     ptype : 'gridfilters'
+                },
+                {
+                    ptype : 'responsive'
+                },
+                {
+                    ptype			: 'gridSearch',
+                    readonlyIndexes	: ['note'],
+                    disableIndexes	: ['pctChange'],
+                    mode            : 'local',
+                    flex			: 1,
+                    autoFocus		: false,
+                    independent		: true
+                }
+            ],
             columns: [
                 { text: 'Código', dataIndex: 'code', width : 100 },
                 { text: 'Nombre del producto', dataIndex: 'product_name', width : 250 },
@@ -58,12 +76,14 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
                 { text: 'Imagen', dataIndex: 'image', width : 72,
                     renderer : function (val) {
                         var sVal    = '<center><a href='+Global.getUrlBase()+'{0} target="_blank"> '+
-                        '<img src='+Global.getUrlBase()+'{0} width ="32" height = "32" >'+
-                        '</a></center>';
-                        var rVal    = Ext.String.format(sVal,val);
+                            '<img src='+Global.getUrlBase()+'{0} width ="32" height = "32" >'+
+                            '</a></center>';
+                            var rVal    = Ext.String.format(sVal,val);
                         return rVal;
                     }
-                }
+                },
+                { text: 'Paquete', dataIndex: 'package', width : 90, xtype : 'checkcolumn', readOnly : true }
+
             ],
             dockedItems: [
                 {
@@ -101,5 +121,30 @@ Ext.define('Admin.view.products.forms.ProductsForm',{
                 }
             ]
         }
-    ]
+    ],
+    listeners : {
+        activate : function (ts) {
+            var 
+                params  = AuthToken.recoverParams(),
+                app     = Admin.getApplication();
+            if (params.user.type == 1) {
+                app.setParamStore('ProductsStore',{
+                    pdbTable    : 'tb_products',
+                    type        : 0,
+                    branch      : 0
+                });
+            } else {
+                app.setParamStore('ProductsStore',{
+                    pdbTable    : 'tb_products',
+                    type        : 0,
+                    branch      : '1'
+                });
+            }
+
+            yxStore = Ext.getStore('ProductsStore');
+            if (yxStore) {
+                yxStore.reload();
+            }
+        }
+    }
 });

@@ -167,6 +167,7 @@ class AuthController extends Controller
 
         $cashSession= DB::table('tb_cash_closing')
                             ->where('id_user', $user->id)
+                            ->where('opening_date', date('Y-m-d'))
                             ->limit(1)
                             ->get();
         $token->save();

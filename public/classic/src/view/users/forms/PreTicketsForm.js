@@ -45,7 +45,7 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
                 { text: 'Nº. PRE-TICKET', dataIndex: 'nro_sale', width : 120 },
                 { text: 'Total', dataIndex: 'total', width : 125, formatter  : 'usMoney' },
                 { text: 'Cliente', dataIndex: 'customers', width : 250},
-                { text: 'Fecha y hora', dataIndex: 'date', width : 200,  xtype: 'datecolumn',   format:'d-m-Y h:1:s A' },
+                { text: 'Fecha y hora', dataIndex: 'date', width : 200,  xtype: 'datecolumn',   format:'d-m-Y h:i:s A' },
                 { text: 'Documento', dataIndex: 'document', width : 120,
                     renderer : function (val) {
                         var sVal    = '<center><a href='+Global.getUrlBase()+'{0} target="_blank"> '+
@@ -98,7 +98,7 @@ Ext.define('Admin.view.users.forms.PreTicketsForm',{
                 tk      = {};
             tk = Ext.TaskManager.start({
                 run: ts.onReload,
-                interval: 5000
+                interval: 30000
             });
             ts.setTask(tk);
         },

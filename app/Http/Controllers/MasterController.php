@@ -8,6 +8,12 @@ use App\core\MasterModel;
 class MasterController extends Controller
 {
 
+    public function getCashSessions(Request $request)
+    {
+        $model  = new MasterModel();
+        echo $model->getCashSessions();
+    }
+
 
     /**
      * Calcetines por sucursal
@@ -74,9 +80,10 @@ class MasterController extends Controller
 
     public function getProducts(Request $request)
     {
-        $type   = $request->input('branch');
+        $branch = $request->input('branch');
+        $type   = $request->input('type');
         $val    = new MasterModel();
-        echo $val->getProducts($type);
+        echo $val->getProducts($type, $branch);
     }
 
     

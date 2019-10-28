@@ -154,6 +154,7 @@ Ext.define('Admin.view.main.MainController', {
             me  = this,
             app = Admin.getApplication();
         if(AuthToken.isAuthenticated()){
+            var params  = AuthToken.recoverParams();
             me.mask();
             switch (id) {
                 case 'company':
@@ -222,7 +223,13 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('products.ProductsStore');
                         app.onStore('products.CategoriesStore');
                         app.onStore('products.LinesStore');
-                        me.setCurrentView(id);
+
+                        win = Ext.create('Admin.view.products.forms.FastFoodForm');
+                        win.on('onClose', function(){
+                            me.setCurrentView('dashboard');
+                        });
+                        win.show();
+                        // me.setCurrentView(id);
                     });
                     break;            
                 case 'sales/services':
@@ -244,6 +251,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('sales.BranchServicesStore');
                         app.onStore('sales.ServicesStore');
                         app.onStore('company.BranchOfficesStore');
+                        
                         me.setCurrentView(id);
                     });
                     break;            

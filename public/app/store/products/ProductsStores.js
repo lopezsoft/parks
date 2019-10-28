@@ -2,12 +2,13 @@
 Ext.define('Admin.store.products.ProductsStore',{
     extend  : 'Admin.store.base.StoreApi',
     storeId : 'ProductsStore',
-    pageSize  : 100,
+    pageSize  : 0,
     proxy: {
         extraParams : {
             pdbTable    : 'tb_products',
             query       : '',
-            branch      : '1'
+            branch      : '1',
+            type        : 0
         },
         api: {
             create  : 'master/insertdata',

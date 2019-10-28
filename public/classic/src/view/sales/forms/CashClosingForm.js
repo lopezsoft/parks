@@ -6,6 +6,7 @@ Ext.define('Admin.view.sales.forms.CashClosingForm',{
         'Admin.view.sales.SalesController',
         'Admin.store.general.UsersStore',
         'Admin.core.field.CheckBoxField',
+        'Admin.view.sales.forms.CashSessionsView',
         'Admin.core.combo.ComboLines',
         'Admin.core.field.NumberField'
     ],
@@ -55,7 +56,7 @@ Ext.define('Admin.view.sales.forms.CashClosingForm',{
                             disabled: true,
                             text    : 'Sesiones de caja',
                             iconCls : 'fas fa-receipt',
-                            handler : 'onCashClosing'
+                            handler : 'onCashSessions'
                         },'-',
                         {
                             xtype	: 'editButton',
