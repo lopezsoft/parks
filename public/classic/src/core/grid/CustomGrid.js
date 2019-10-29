@@ -103,11 +103,11 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 
 			if (me.down('#buttonRoles')){
 				if (selected.length > 0) {
-					data	= selected[0].data;
-					if(parseInt(data.type) == 1 || parseInt(data.type) == 3){
-						disabled	= true;
-					}else{
+					data	= params.user;
+					if(parseInt(data.type) == 1){
 						disabled	= false;
+					}else{
+						disabled	= true;
 					}
 					me.down('#buttonRoles').setDisabled(disabled);
 				}else{
