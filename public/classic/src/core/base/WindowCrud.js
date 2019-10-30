@@ -78,11 +78,14 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 			values  = form.getValues(),
 			store   = Ext.getStore(storeName);
 
-		if (store.getModifiedRecords().length > 0) {
-			me.onMsgWait('Guardando...');
-		}
 		if (record) { //Edición
+			console.log(values);
 			record.set(values);
+			if (store.getModifiedRecords().length > 0) {
+				form.mask('Guardando...');
+			}else{
+				me.showResult('No hay cambios pendientes por guardar.');
+			}
 			store.sync({
 				success : function(batch, o) {
 					me.showResult('Se han guardado los datos');
@@ -92,11 +95,12 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 					store.rejectChanges();
 				},
 				callback    : function (b) {
-					me.onMsgClose();
+					form.unmask();
 				}
 			});
 		}else{ // Insertar
 			store.insert(0,values);
+			form.mask('Guardando...');
 			store.sync({
 				success : function(batch, o){
 					me.showResult('Se han guardado los datos');
@@ -109,7 +113,7 @@ Ext.define('Admin.core.base.WindowCrud' ,{
 					store.rejectChanges();
 				},
 				callback    : function (b) {
-					me.onMsgClose();
+					form.unmask();
 				}
 			});
 		};

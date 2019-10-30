@@ -96,14 +96,12 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
         ];
 
         this.callParent(arguments);
-        this.onLinesTool();
-        this.onCategoryTool();
         if (params.user.type == 1) {
             this.onProducts(1);
         }else{
             this.onProducts(2);
         }
-
+        this.onCategoryTool();
     },
     listeners   : {
         close : function(ts){
@@ -112,7 +110,7 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
     },
     onRefresh : function () {
         var
-            pStore = Ext.getStore('ProductsStore');
+            pStore = Ext.getStore('ProductsFastStore');
         if(pStore){
             pStore.reload();
         }
@@ -122,21 +120,31 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
             app     = Admin.getApplication(),
             me      = this,
             name    = (val == 1) ? 'PAQUETES' : 'PRODUCTOS',
-            pStore  = Ext.getStore('ProductsStore');
+            pStore  = Ext.getStore('ProductsFastStore');
+            console.log(me);
         if(pStore){
-            app.setParamStore('ProductsStore',{
+            app.setParamStore('ProductsFastStore',{
                 type        : val,
                 pdbTable    : 'tb_products',
                 branch      : '1'
             });
-            pStore.reload();
-            me.setTitle('MENÚ - COMIDA RÁPIDA : ' + name );
+            try {
+                // me.mask('Cargando productos y lineas de productos');
+                pStore.reload({
+                    callback : function(record){
+                        me.onLinesTool();
+                    }
+                });
+                me.setTitle('MENÚ - COMIDA RÁPIDA : ' + name );
+            } catch (error) {
+                // me.unmask();
+            }
         }
     },
 
     onClear : function(){
         var me  = this;
-        pStore = Ext.getStore('ProductsStore');
+        pStore = Ext.getStore('ProductsFastStore');
         if(pStore){
             if(pStore.isFiltered()){
                 pStore.clearFilter();
@@ -175,7 +183,8 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
     },
     onLinesTool : function(){
         var 
-            xStore  = Ext.getStore('LinesStore'),
+            xStore  = Ext.getStore('LinesFastStore'),
+            zStore  = Ext.getStore('ProductsFastStore'),
             me      = this,
             items   = [],
             item    = {},
@@ -184,25 +193,35 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
         if (xStore) {
             xStore.reload({
                 callback : function(records, o, e){
-                    xStore.each(function(d, index){
-                        if(d.data.active == 1){
-                            item    = {
-                                active  : d.data.active,
-                                color   : d.data.color,
-                                value   : d.data.id,
-                                text    : d.data.line_name,
-                                iconCls : null,
-                                tooltip : d.data.line_name,
-                                handler : function(btn){
-                                    var me  = this.up('window');
-                                    me.onFilterLines(btn);
+                    try {
+                        xtool.removeAll();
+                        zStore.each(function(dt){
+                            xStore.each(function(d, index){
+                                if(d.data.active == 1 && d.data.id == dt.data.id_line){
+                                    item    = {
+                                        active  : d.data.active,
+                                        color   : d.data.color,
+                                        value   : d.data.id,
+                                        itemId  : d.data.id,
+                                        text    : d.data.line_name,
+                                        iconCls : null,
+                                        tooltip : d.data.line_name,
+                                        handler : function(btn){
+                                            var me  = this.up('window');
+                                            me.onFilterLines(btn);
+                                        }
+                                    };
+                                    items.push(item);
+                                    return false;
                                 }
-                            };
-                            items.push(item);
+                            });
+                        });
+                        if(items.length > 0){
+                            xtool.add(items);
                         }
-                    });
-                    if(items.length > 0){
-                        xtool.add(items);
+                        // me.unmask();
+                    } catch (error) {
+                        // me.unmask();
                     }
                 }
             })
@@ -210,7 +229,7 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
     },
     onCategoryTool : function(){
         var 
-            zStore  = Ext.getStore('CategoriesStore')
+            zStore  = Ext.getStore('CategoriesFastStore')
             me      = this,
             xitems  = [],
             item    = {},
@@ -260,25 +279,26 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
                             }
                         };
                         xitems.push(item);
-                    }
-                    item    = '-';
-                    xitems.push(item);
-
-                    zStore.each(function(d, index){
-                        item    = {
-                            active  : d.data.active,
-                            color   : d.data.color,
-                            value   : d.data.id,
-                            text    : d.data.category_name,
-                            iconCls : null,
-                            tooltip : d.data.category_name,
-                            handler : function(btn){
-                                var me  = this.up('window');
-                                me.onFilterCategories(btn);
-                            }
-                        };
+                    }else{
+                        item    = '-';
                         xitems.push(item);
-                    });
+
+                        zStore.each(function(d, index){
+                            item    = {
+                                active  : d.data.active,
+                                color   : d.data.color,
+                                value   : d.data.id,
+                                text    : d.data.category_name,
+                                iconCls : null,
+                                tooltip : d.data.category_name,
+                                handler : function(btn){
+                                    var me  = this.up('window');
+                                    me.onFilterCategories(btn);
+                                }
+                            };
+                            xitems.push(item);
+                        });
+                    }
                     if(xitems.length > 0){
                         ztool.add(xitems);
                     }

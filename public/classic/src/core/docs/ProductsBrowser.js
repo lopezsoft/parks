@@ -10,7 +10,7 @@ Ext.define('Admin.core.docs.ProductsBrowser', {
     extend: 'Ext.view.View',
     alias: 'widget.productsbrowser',
     
-    uses: 'Admin.store.products.ProductsStore',
+    uses: 'Admin.store.products.ProductsFastStore',
     
 	singleSelect    : true,
     overItemCls: 'x-view-over',
@@ -30,7 +30,7 @@ Ext.define('Admin.core.docs.ProductsBrowser', {
     ],
     
     initComponent: function() {
-        this.store = Ext.create('Admin.store.products.ProductsStore', {
+        this.store = Ext.create('Admin.store.products.ProductsFastStore', {
             autoLoad: true,
             sorters: 'line_name'
         });

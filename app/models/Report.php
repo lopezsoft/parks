@@ -23,7 +23,7 @@ class Report extends MasterModel
 
             $line   = "------------------------------------------------------------------------------";
             $leftSpace  = 8;
-            $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,550));
+            $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,850));
             $pdf->AddPage();
             $pdf->SetLeftMargin(5);
             $pdf->SetRightMargin(5);
@@ -155,7 +155,7 @@ class Report extends MasterModel
 
                 $line   = "---------------------------------------------------------------------------";
                 $leftSpace  = 8;
-                $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,550));
+                $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,850));
                 $pdf->AddPage();
                 $pdf->SetLeftMargin(5);
                 $pdf->SetRightMargin(5);
@@ -686,7 +686,7 @@ class Report extends MasterModel
                     $saleMaster = $this->getSaleMaster($id_sale);
                     $line   = "---------------------------------------------------------------------------";
                     $leftSpace  = 8;
-                    $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,550));
+                    $pdf = new FpdfBarcode($orientation='P',$unit='mm', array(80,850));
                     $pdf->AddPage();
                     $pdf->SetLeftMargin(5);
                     $pdf->SetRightMargin(5);
