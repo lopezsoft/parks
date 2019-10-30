@@ -16,10 +16,10 @@ Ext.application({
     requires: [
         'Admin.security.TokenStorage',
         'Admin.core.grid.CustomGrid',
+        'Admin.view.config.Configs',
         'Admin.view.Main',
         'Admin.core.button.CustomButton',
-        'Admin.core.toolbar.CustomToolbar',
-        'Admin.view.config.Configs'
+        'Admin.core.toolbar.CustomToolbar'
     ],
 
     stores: [
