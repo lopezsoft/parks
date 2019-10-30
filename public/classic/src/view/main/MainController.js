@@ -220,9 +220,9 @@ Ext.define('Admin.view.main.MainController', {
                     Ext.onReady(function () {
                         me.unMask();
                         app.onStore('fastfood.ProductsSalesStore');
-                        app.onStore('products.ProductsStore');
-                        app.onStore('products.CategoriesStore');
-                        app.onStore('products.LinesStore');
+                        app.onStore('products.ProductsFastStore');
+                        app.onStore('products.CategoriesFastStore');
+                        app.onStore('products.LinesFastStore');
 
                         win = Ext.create('Admin.view.products.forms.FastFoodForm');
                         win.on('onClose', function(){
