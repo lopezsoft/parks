@@ -646,7 +646,7 @@ class Report extends MasterModel
             $total  = 0;
             $data   = [];
             foreach ($records as $key => $value) {
-                $total  += $value->price;
+                $total  += $value->total;
             }
             try {
                 DB::beginTransaction();
@@ -733,13 +733,18 @@ class Report extends MasterModel
                         $pdf->setX($leftSpace + 2);
                         $pdf->Cell(5,$cellHeight,  $pro->cant,0,0,"R");
                         $pdf->setX($leftSpace +6);
-                        $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->shoe_name)));
+                        // $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->shoe_name)));
                         $pdf->setX(41);
                         $pdf->Cell(15,$cellHeight,  "$".number_format($pro->price,2,".",",") ,0,0,"R");
                         $pdf->setX(57);
                         $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
-                        $total += $pro->total;
                         $off+=3;
+                        $pdf->SetY($off);
+                        $pdf->setX($leftSpace + 5);
+                        $pdf->MultiCell(0,$cellHeight,utf8_decode($pro->shoe_name));
+                        $off = $pdf->GetY();
+                        $total += $pro->total;
+                        // $off+=3;
                     }
                     $cellHeight = 3;
                     $textypos= 2 + $pdf->GetY();
