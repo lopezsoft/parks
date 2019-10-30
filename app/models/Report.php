@@ -204,12 +204,17 @@ class Report extends MasterModel
                     $pdf->setX($leftSpace + 2);
                     $pdf->Cell(5,$cellHeight,  $pro->amount,0,0,"R");
                     $pdf->setX($leftSpace +6);
-                    $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->detail)));
+                    // $pdf->Cell(40,$cellHeight,  utf8_decode(Trim($pro->detail)));
                     $pdf->setX(41);
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->unit_price,2,".",",") ,0,0,"R");
                     $pdf->setX(57);
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
                     $off+=3;
+                    $pdf->SetY($off);
+                    $pdf->setX($leftSpace + 5);
+                    $pdf->MultiCell(0,$cellHeight,utf8_decode($pro->detail));
+                    $off = $pdf->GetY();
+                    // $off+=3;
                 }
                 $textypos= 2 + $pdf->GetY();
                 $pdf->SetY($textypos);

@@ -16,7 +16,6 @@ Ext.define('Admin.view.Main',{
             Admin.getApplication().getIframe(report,'pdf');
             // this.openForPrint(report);
         }
-       
     },
     layout: 'hbox',
     defaults: {
@@ -188,6 +187,16 @@ Ext.define('Admin.view.Main',{
                         'text-align'    : 'right'
                     },
                     disabledCls     : 'class-text'
+                }
+            ]
+        },
+        {
+            xtype		: 'customToolbar',
+            items   : [
+                {
+                    xtype   : 'image',
+                    height  : 156,
+                    src     : Global.getUrlBase() +  'assets/img/footwear.gif'
                 }
             ]
         }
