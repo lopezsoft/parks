@@ -164,10 +164,10 @@ class AuthController extends Controller
         ];
         $access_id  = DB::table('tb_access_users')
                         ->insertGetId($data);
-
+        $date   = date('Y-m-d');
         $cashSession= DB::table('tb_cash_closing')
                             ->where('id_user', $user->id)
-                            ->where('opening_date', date('Y-m-d'))
+                            ->where('opening_date', $date)
                             ->limit(1)
                             ->get();
         $token->save();
@@ -180,7 +180,8 @@ class AuthController extends Controller
                     ->toDateTimeString(),
             'user'          => $user,
             'access_id'     => $access_id,
-            'cash_session' => $cashSession
+            'cash_session'  => $cashSession,
+            'date'          => $date
         ]);
     }
 
