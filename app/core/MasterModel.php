@@ -162,11 +162,17 @@ class MasterModel
                 foreach ($fields as $key => $value) {
                     $data[$key] = $value;
                 }
+
+                $delete  = DB::table($tb)
+                                ->where($data)
+                                ->get();
+
                 $result = DB::table($tb)
                     ->where($data)
                     ->delete();
+                
+                $this->audit($user_id,$ip,$tb,'DELETE',$delete);
 
-                $this->audit($user_id,$ip,$tb,'DELETE',$data);
                 DB::commit();
                 $result = $this->json_response_succes($result);
             } catch (\Throwable $th) {
