@@ -12,13 +12,13 @@ class Report extends MasterModel
 {
     public $path_logo_reports  = "resources/images/logo_reports.jpeg";
 
-    public function CashClosing($user, $type, $date1, $date2, $name, $session_id)
+    public function CashClosing($user, $type, $date1, $date2, $name, $cash)
     {
         $total  = 0;
         $data   = [];
         try {
             $config         = $this->getConfigInvoive();
-            $clashclosing   = $this->getCahsClosing($user, $date1, $date2);
+            $clashclosing   = $this->getCahsClosing($cash, $date1, $date2);
             $title          = ($type == 1) ? 'CIERRE DE CAJA' : 'ARQUEO DE CAJA' ;
 
             $line   = "------------------------------------------------------------------------------";
@@ -105,7 +105,7 @@ class Report extends MasterModel
                 $data['opened']         = 0;
                 $data['document']       = $path_report;
                 DB::table('tb_cash_closing')
-                        ->where('id', $session_id)
+                        ->where('id', $cash)
                         ->limit(1)
                         ->update($data);
             }
@@ -119,7 +119,7 @@ class Report extends MasterModel
         return  $result;
     }
 
-    public function setTicketsServ($records = null, $user = 0, $type = 0)
+    public function setTicketsServ($records = null, $user = 0, $type = 0,  $cash = 0)
     {
         
         if (!is_null($records)) {
@@ -138,7 +138,7 @@ class Report extends MasterModel
                 
                 $data   = [];
                 $data['id_sale']        = $id_sale;
-                $data['id_user']        = $user;
+                $data['id_cash']        = $cash;
                 DB::table('tb_sales_users')->insertGetId($data);
 
                 $config     = $this->getConfigInvoive();
@@ -304,7 +304,7 @@ class Report extends MasterModel
         return  $result;
     }
 
-    public function setTicketsFast($records = null, $user = 0, $type = 0)
+    public function setTicketsFast($records = null, $user = 0, $type = 0, $cash = 0)
     {
         
         if (!is_null($records)) {
@@ -320,6 +320,11 @@ class Report extends MasterModel
                                 ->where('id', $records->id)
                                 ->update($data);
                 $id_sale    = $records->id;
+
+                $data   = [];
+                $data['id_sale']        = $id_sale;
+                $data['id_cash']        = $cash;
+                DB::table('tb_sales_users')->insertGetId($data);
 
                 $config     = $this->getConfigInvoive();
                 $saleMaster = $this->getSaleMaster($id_sale, 2);
@@ -387,7 +392,7 @@ class Report extends MasterModel
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->unit_price,2,".",",") ,0,0,"R");
                     $pdf->setX(57);
                     $pdf->Cell(15,$cellHeight,  "$".number_format($pro->total,2,".",",") ,0,0,"R");
-                    if($pro->package == 1){
+                    if(strlen(Trim($pro->detail)) > 0){
                         $off+=3;
                         $pdf->SetY($off);
                         $pdf->setX($leftSpace + 7);
@@ -510,11 +515,6 @@ class Report extends MasterModel
                         DB::table('tb_sales_detail')->insertGetId($data);
                     }
 
-                    $data   = [];
-                    $data['id_sale']        = $id_sale;
-                    $data['id_user']        = $user;
-                    DB::table('tb_sales_users')->insertGetId($data);
-                    
                     DB::commit();
                     $config     = $this->getConfigInvoive();
                     $saleMaster = $this->getSaleMaster($id_sale, 2);

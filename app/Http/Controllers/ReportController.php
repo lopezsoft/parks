@@ -16,11 +16,11 @@ class ReportController extends Controller
         $date1      = $request->input('date1');
         $date2      = $request->input('date2');
         $name       = $request->input('username');
-        $session_id = $request->input('session_id');
+        $cash       = $request->input('cash');
 
         $date1 = ($date1) ? $date1 : date('Y-m-d');
         $date2 = ($date2) ? $date2 : date('Y-m-d');
-        echo $report->CashClosing($user, $type, $date1, $date2, $name, $session_id);   
+        echo $report->CashClosing($user, $type, $date1, $date2, $name, $cash);   
     }
 
     public function setTickets(Request $request)
@@ -29,10 +29,11 @@ class ReportController extends Controller
         $records    = json_decode($request->input('records'));
         $user       = $request->input('user');
         $type       = $request->input('type');
+        $cash       = $request->input('cash');
         if($type == 2){
-            echo $report->setTicketsFast($records, $user, $type);   
+            echo $report->setTicketsFast($records, $user, $type, $cash);   
         }else{
-            echo $report->setTicketsServ($records, $user, $type);   
+            echo $report->setTicketsServ($records, $user, $type, $cash);   
         }
     }
 

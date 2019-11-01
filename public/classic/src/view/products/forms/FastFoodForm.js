@@ -121,7 +121,7 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
             me      = this,
             name    = (val == 1) ? 'PAQUETES' : 'PRODUCTOS',
             pStore  = Ext.getStore('ProductsFastStore');
-            console.log(me);
+            // console.log(me);
         if(pStore){
             app.setParamStore('ProductsFastStore',{
                 type        : val,
@@ -313,8 +313,10 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
             params  = AuthToken.recoverParams(),
             app     = Admin.getApplication(),
             total   = me.down('#total').getValue(),
+            Button  = btn,
             dataSend=[],
             contr   = me.getController();
+        Button.setDisabled(false);
         uStore.each(function(r,i){
             if (r.data.cant) {
                 xData.push(r.data);
@@ -355,9 +357,10 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
                                 },
                                 method      : 'GET',
                                 params      : {
-                                    records : JSON.stringify(dataSend),
-                                    user    : params.user.id,
-                                    type    : 2
+                                    records     : JSON.stringify(dataSend),
+                                    user        : params.user.id,
+                                    type        : 2,
+                                    cash        : params.cash.id
                                 },
                                 success: function(r, opts) {
                                     obj = Ext.decode(r.responseText);
@@ -370,26 +373,31 @@ Ext.define('Admin.view.products.forms.FastFoodForm',{
                                         app.showResult('Ocurrio un error al generar el ticket.');
                                     }
                                     win.unmask();
+                                    Button.setDisabled(false);
                                 },
                                 failure: function(response, opts) {
                                     win.unmask();
+                                    Button.setDisabled(false);
                                     app.showResult('server-side failure with status code ' + response.status);
                                 }
                             });
                             me.onClearGrid(me);                            
                         }else{
                             win.unmask();
+                            Button.setDisabled(false);
                             app.showResult('Ocurrio un error al generar el ticket.');
                         }
                     },
                     failure: function(response, opts) {
                         win.unmask();
+                        Button.setDisabled(false);
                         app.showResult('server-side failure with status code ' + response.status);
                     }
                 });
             });
             win.show();
         }else{
+            Button.setDisabled(false);
             app.showResult('No hay productos para generar el recibo.');
         }
     },

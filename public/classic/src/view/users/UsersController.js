@@ -55,7 +55,8 @@ Ext.define('Admin.view.users.UsersController',{
                 params      : {
                     records : JSON.stringify(dataSend),
                     user    : params.user.id,
-                    type    : dataSend.type
+                    type    : dataSend.type,
+                    cash    : params.cash.id
                 },
                 success: function(r, opts) {
                     obj = Ext.decode(r.responseText);
