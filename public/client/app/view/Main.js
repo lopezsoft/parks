@@ -216,7 +216,7 @@ Ext.define('Admin.view.Main',{
             params  = AuthToken.recoverParams();
             app     = Admin.getApplication(), 
             yValue  = me.down('#gridSer').getStore();
-        
+        btn.setDisabled(true);
         yValue.each(function(re,ind){
             if (parseInt(re.data.cant) > 0 ) {
                 xData.push(re.data);
@@ -252,10 +252,12 @@ Ext.define('Admin.view.Main',{
                     }
                 },
                 failure: function(response, opts) {
+                    btn.setDisabled(false);
                     app.showResult('server-side failure with status code ' + response.status);
                 }
             });
         }else{
+            btn.setDisabled(false);
             app.showResult('No hay servicios que guardar');
         }
     },
