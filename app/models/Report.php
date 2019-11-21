@@ -50,7 +50,7 @@ class Report extends MasterModel
             $pdf->SetFont('Helvetica','B',6);    //Letra Helvetica, negrita (Bold), tam. 20
             $pdf->MultiCell(0,$cellHeight,"DEL: ".$date1."  AL ".$date2);
             $pdf->setX($leftSpace);
-            $pdf->MultiCell(0,$cellHeight, "FECHA: ".date('d-m-Y')." HORA: ".date('h:i:s A'));
+            $pdf->MultiCell(0,$cellHeight, "FECHA IMPRESO: ".date('d-m-Y')." HORA: ".date('h:i:s A'));
             $pdf->setX($leftSpace);
             $pdf->MultiCell(0,$cellHeight, utf8_decode("CAJERO : ".$name));
         

@@ -10,6 +10,10 @@ Ext.define('Admin.view.sales.SalesController',{
         win = Ext.create('Admin.view.sales.forms.CashSessionsView');
         win.show();
     },
+    onReCashClosing : function(btn){
+        this.onRePrint(btn, 1);
+    },
+
     onCashClosing : function(btn){
         var 
             app     = Admin.getApplication(),
@@ -80,7 +84,6 @@ Ext.define('Admin.view.sales.SalesController',{
             win.show();
         });
     },
-
     onPrint : function (btn, type) {
         var me      = btn.up('form'),
             win     = me,
@@ -124,6 +127,65 @@ Ext.define('Admin.view.sales.SalesController',{
                             win.on('cancel', function(){
                                 win.close();
                                 AuthToken.onLogout();
+                            })
+                            win.show();
+                        });
+                    }
+                }else{
+                    app.showResult('Ocurrio un error al generar el ticket.');
+                }
+                win.unmask();
+            },
+            failure: function(response, opts) {
+                win.unmask();
+                app.showResult('server-side failure with status code ' + response.status);
+            }
+        });
+    },
+    onRePrint : function (btn, type) {
+        var me      = btn.up('window'),
+            win     = me,
+            params  = AuthToken.recoverParams(),
+            data    = btn.up('window').down('grid').getSelection()[0];
+            
+            app     = Admin.getApplication();
+        
+        win.mask('Generando informe, espere por favor');
+        Ext.Ajax.request({
+            url     : Global.getUrlBase() + 'api/report/cashclosing',
+            headers: {
+                'Authorization ' : params.token_type +' ' + params.access_token
+            },
+            method      : 'GET',
+            params      : {
+                user    : data.data.id_user,
+                type    : type,
+                username: data.data.username,
+                date1   : data.data.opening_date,
+                date2   : data.data.opening_date,
+                cash    : data.id    
+            },
+            success: function(r, opts) {
+                obj = Ext.decode(r.responseText);
+                if(obj.success == true){
+                    var url = Global.getUrlBase() + obj.records.report;
+                    app.showResult('Se ha realizado el cobro correctamente.');
+                    if (type == 2) {
+                        app.getIframe(url,'pdf', me);
+                    }else{
+                        Ext.require('Admin.core.docs.IframeView');
+                        Ext.onReady(function () {
+                            var
+                                cHtml = '<object><embed width="100%" height="100%" src="'+url+'"></object>';
+                            var win	= Ext.create('Admin.core.docs.IframeView',{
+                                title 	: 'Vista previa del enlace',
+                                html  	: cHtml,
+                                width   : 700,
+                                height  : 550,
+                                maximized   : true
+                            });
+                            win.on('cancel', function(){
+                                win.close();
                             })
                             win.show();
                         });
