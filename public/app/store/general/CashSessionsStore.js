@@ -9,6 +9,7 @@ Ext.define('Admin.store.general.CashSessionsStore',{
         'Admin.model.general.CashSessionsModel'
     ],
     model   : 'Admin.model.general.CashSessionsModel',
+    groupField: 'username',
     proxy   : {
         api: {
             create  : 'master/insertdata',

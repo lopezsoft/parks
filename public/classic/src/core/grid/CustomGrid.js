@@ -152,6 +152,10 @@ Ext.define('Admin.core.grid.CustomGrid' ,{
 				me.down('#buttonCahsCount').setDisabled(!selected.length);
 			}
 
+			if (me.down('#buttonReCahsClosing')){
+				me.down('#buttonReCahsClosing').setDisabled(!selected.length);
+			}
+
 
 			if (me.down('#plusButton')){
 				me.down('#plusButton').setDisabled(!selected.length);

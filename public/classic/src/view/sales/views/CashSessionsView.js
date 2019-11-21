@@ -5,6 +5,7 @@ Ext.define('Admin.view.sales.forms.CashSessionsView',{
     requires: [
         'Admin.view.sales.SalesController',
         'Admin.store.general.CashSessionsStore',
+        'Ext.grid.feature.Grouping',
         'Admin.core.field.CheckBoxField',
         'Admin.core.field.NumberField'
     ],
@@ -20,9 +21,9 @@ Ext.define('Admin.view.sales.forms.CashSessionsView',{
                 {
                     ptype : 'gridfilters'
                 },
-                {
-                    ptype : 'responsive'
-                },
+                // {
+                //     ptype : 'responsive'
+                // },
                 {
                     ptype			: 'gridSearch',
                     readonlyIndexes	: ['note'],
@@ -33,14 +34,13 @@ Ext.define('Admin.view.sales.forms.CashSessionsView',{
                     independent		: true
                 }
             ],
-            selModel	: 'rowmodel',
+            // selModel	: 'rowmodel',
             store       : 'CashSessionsStore',
             columns: [
                 { text: 'Usuario', dataIndex: 'username', width : 250 },
                 { text: 'Total', dataIndex: 'total', width : 125, formatter  : 'usMoney' },
                 { text: 'Abierta', dataIndex: 'opened', width : 80, xtype : 'checkcolumn' },
                 { text: 'F. Apertura', dataIndex: 'opening_date', width : 100
-                //   xtype: 'datecolumn',   format:'d-m-Y'
                 },
                 { text: 'H. Apertura', dataIndex: 'opening_time', width : 180,  xtype: 'datecolumn',   format:'d-m-Y h:i:s A'},
                 { text: 'F. Y hora cierre', dataIndex: 'closing_date', width : 200,  xtype: 'datecolumn',   format:'d-m-Y h:i:s A' },
@@ -55,6 +55,12 @@ Ext.define('Admin.view.sales.forms.CashSessionsView',{
                 },
                 { text: 'Tipo', dataIndex: 'user_type_name', width : 150 }
             ],
+            features: [{
+                ftype           : 'grouping',
+                startCollapsed  : true,
+                depthToIndent   : 28,
+                groupHeaderTpl: '{columnName}: {name} ({rows.length} Sesion{[values.rows.length > 1 ? "es" : ""]})'
+            }],
             dockedItems: [
                 {
                     xtype 		: 'pagination',
@@ -68,6 +74,14 @@ Ext.define('Admin.view.sales.forms.CashSessionsView',{
                     xtype  : 'toolbarCrud',
                     items 	: [
                         '->',
+                        {
+                            xtype	: 'editButton',
+                            itemId  : 'buttonReCahsClosing',
+                            disabled: true,
+                            text    : 'Cierre de caja',
+                            iconCls : 'fas fa-receipt',
+                            handler : 'onReCashClosing'
+                        },'-',
                         {
                             xtype 	: 'closeButton'
                         }
