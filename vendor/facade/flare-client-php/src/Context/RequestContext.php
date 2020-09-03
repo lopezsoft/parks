@@ -2,6 +2,7 @@
 
 namespace Facade\FlareClient\Context;
 
+use Symfony\Component\Mime\Exception\InvalidArgumentException;
 use Throwable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -47,10 +48,22 @@ class RequestContext implements ContextInterface
                 return;
             }
 
+            try {
+                $fileSize = $file->getSize();
+            } catch (\RuntimeException $e) {
+                $fileSize = 0;
+            }
+
+            try {
+                $mimeType = $file->getMimeType();
+            } catch (InvalidArgumentException $e) {
+                $mimeType = 'undefined';
+            }
+
             return [
                 'pathname' => $file->getPathname(),
-                'size' => $file->getSize(),
-                'mimeType' => $file->getMimeType(),
+                'size' => $fileSize,
+                'mimeType' => $mimeType,
             ];
         }, $files);
     }

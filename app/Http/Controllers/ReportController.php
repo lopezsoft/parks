@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\models\Report;
+use App\models\ReportSales;
 
 class ReportController extends Controller
 {
 
     public function CashClosing(Request $request)
     {
+        $report_sales   = new ReportSales();
+        $report_sales->Sales();
+
         $report     = new Report();
         $user       = $request->input('user');
         $type       = $request->input('type');

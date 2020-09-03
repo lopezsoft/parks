@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="hello_world" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="09ce4c10-88e5-4cc4-8644-f806caa4c6eb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="84"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="parks"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<parameter name="SQL_PARAM" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM tb_products]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="bar_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bar_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="id_category" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id_category"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="id_line" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id_line"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="id_branch" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id_branch"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="product_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="product_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="price" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="price"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="image" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="image"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="mime" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="mime"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="detail" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="detail"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="package" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="package"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<field name="active" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="active"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_products"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="176" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="79" uuid="600e17d0-4120-4427-91c6-2f15f596e2da"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="30"/>
+				</textElement>
+				<text><![CDATA[Hello World!]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="80" width="555" height="60" uuid="1e2d03a8-e3d4-4616-abad-5a5d04aa3e80"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SQL_PARAM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="340" height="30" uuid="fca2d1af-3abc-4098-b2c8-0d84b6b056e0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b756122a-6491-4cf5-acee-6f14dad1592b"/>
+				</reportElement>
+				<text><![CDATA[product_name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="0" width="100" height="30" uuid="a9a18bfa-db9f-4a76-b227-317af24f59fe">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a51e38cb-b1f8-461a-af3c-a24c3d07ed8e"/>
+				</reportElement>
+				<text><![CDATA[price]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="340" height="20" uuid="2989dc24-a932-433f-8fe9-1ddcbf9b4051">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b756122a-6491-4cf5-acee-6f14dad1592b"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="100" height="20" uuid="f15ce0dd-e6c7-4151-a55b-7445a59aee66">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a51e38cb-b1f8-461a-af3c-a24c3d07ed8e"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="52" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="11" width="555" height="30" uuid="aab9cbb1-8c5a-4b43-81f2-bfc60136ebcf"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{SUBREPORT_DIR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="54" uuid="4c3772ce-ee6a-42ae-b13d-babb1692d0d4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Made with JasperPHP]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
