@@ -170,7 +170,7 @@ class MasterModel
                 $result = DB::table($tb)
                     ->where($data)
                     ->delete();
-                
+
                 $this->audit($user_id,$ip,$tb,'DELETE',$delete);
 
                 DB::commit();
@@ -193,7 +193,7 @@ class MasterModel
     {
         if ($fields) {
             try {
-                DB::beginTransaction();            
+                DB::beginTransaction();
                 $fieldstb   = $this->getColumns($tb); // Listado de las columnas de la tabla
                 $data       = [];
                 foreach ($fields as $key => $value) {
@@ -296,7 +296,7 @@ class MasterModel
         $table = DB::select("CALL sp_services(" . $type . ")");
         return $this->json_response($table);
     }
-    
+
     /**
      * Retorna los datos de un query
      *
@@ -415,7 +415,7 @@ class MasterModel
         }else {
             $select = null;
         }
-        
+
         return $select;
     }
 }

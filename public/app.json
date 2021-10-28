@@ -3,7 +3,7 @@
      * The application's namespace.
      */
     "name": "Admin",
-    
+
     /**
      * The version of the application.
      */
@@ -279,7 +279,7 @@
                 "enable": false,
                 "path": "../cache.appcache"
             }
-            
+
         },
         "loader": {
             "cache": "${build.timestamp}"
@@ -288,7 +288,7 @@
             "enable": false
         }
     },
-    
+
     /**
      * Settings specific to testing builds.
      */
@@ -302,7 +302,7 @@
             "enable": false
         }
     },
-    
+
     /**
      * Settings specific to development builds.
      */
@@ -390,14 +390,14 @@
      *      }
      *
      */
-    // "output": {
-    //     "base": "${ext.dir}/build/examples/admin-dashboard/${build.id}",
-    //     "page": "../index.html",
-    //     "manifest": "../${build.id}.json",
-    //     "appCache": {
-    //         "enable": false
-    //     }
-    // },
+    "output": {
+        "base": "dist",
+        "page": "../index.html",
+        "manifest": "../${build.id}.json",
+        "appCache": {
+            "enable": false
+        }
+    },
 
     /**
     * Controls for localStorage caching

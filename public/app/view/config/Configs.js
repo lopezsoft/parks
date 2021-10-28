@@ -14,8 +14,10 @@ Ext.define('Admin.view.config.Configs',{
 		userData	: [],
 		hostSocket	: 'http://localhost:3001',
 		socket		: null,
-		urlBase 	: "http://parks/",
-		urlLocation : "http://parks/"
+		// urlBase 	: "http://parks/",
+		// urlLocation : "http://parks/"
+		urlBase 	: "https://valerikids.info/",
+		urlLocation : "https://valerikids.info/"
 	},
 	/**
 	 * Función para comparar objetos
