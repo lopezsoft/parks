@@ -1,9 +1,0 @@
-.idea/
-/vendor
-tests/PHPJasper/*.jasper
-
-# IDE
-## Eclipse
-.buildpath
-.project
-.settings

@@ -35,7 +35,7 @@ class SqlServerConnector extends Connector implements ConnectorInterface
     /**
      * Create a DSN string from a configuration.
      *
-     * @param  array   $config
+     * @param  array  $config
      * @return string
      */
     protected function getDsn(array $config)
@@ -154,6 +154,10 @@ class SqlServerConnector extends Connector implements ConnectorInterface
 
         if (isset($config['key_store_secret'])) {
             $arguments['KeyStoreSecret'] = $config['key_store_secret'];
+        }
+
+        if (isset($config['login_timeout'])) {
+            $arguments['LoginTimeout'] = $config['login_timeout'];
         }
 
         return $this->buildConnectString('sqlsrv', $arguments);

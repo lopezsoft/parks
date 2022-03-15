@@ -3,11 +3,11 @@
 namespace Facade\Ignition\Actions;
 
 use Exception;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Facade\FlareClient\Http\Client;
 use Facade\FlareClient\Truncation\ReportTrimmer;
 use Facade\Ignition\Exceptions\UnableToShareErrorException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class ShareReportAction
 {
@@ -150,10 +150,11 @@ class ShareReportAction
             'context',
             'logs',
             'dumps',
+            'exception',
         ];
 
         return Collection::make($contextItems)
-            ->reject(function ($value, $group) use ($predefinedContextItemGroups) {
+            ->reject(function ($_value, $group) use ($predefinedContextItemGroups) {
                 return in_array($group, $predefinedContextItemGroups);
             })
             ->keys()

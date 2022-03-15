@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,10 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -23,7 +28,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('signup', 'AuthController@signup');
     Route::post('updateuser', 'AuthController@updateuser');
     Route::post('register', 'AuthController@registercustomer');
-  
+
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
@@ -51,4 +56,3 @@ Route::group(['prefix' => 'master'], function () {
     Route::post('insertdata', 'MasterController@insertData');
     Route::post('deletedata', 'MasterController@deleteData');
 });
-

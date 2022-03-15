@@ -2,13 +2,13 @@
 
 namespace Facade\Ignition\SolutionProviders;
 
-use Throwable;
-use Illuminate\Support\Str;
-use UnexpectedValueException;
-use Facade\IgnitionContracts\BaseSolution;
 use Facade\Ignition\Support\ComposerClassMap;
 use Facade\Ignition\Support\StringComparator;
+use Facade\IgnitionContracts\BaseSolution;
 use Facade\IgnitionContracts\HasSolutionsForThrowable;
+use Illuminate\Support\Str;
+use Throwable;
+use UnexpectedValueException;
 
 class InvalidRouteActionSolutionProvider implements HasSolutionsForThrowable
 {
@@ -60,10 +60,10 @@ class InvalidRouteActionSolutionProvider implements HasSolutionsForThrowable
         $composerClassMap = app(ComposerClassMap::class);
 
         $controllers = collect($composerClassMap->listClasses())
-            ->filter(function (string $file, string $fqcn) {
+            ->filter(function (string $_file, string $fqcn) {
                 return Str::endsWith($fqcn, 'Controller');
             })
-            ->mapWithKeys(function (string $file, string $fqcn) {
+            ->mapWithKeys(function (string $_file, string $fqcn) {
                 return [$fqcn => class_basename($fqcn)];
             })
             ->toArray();

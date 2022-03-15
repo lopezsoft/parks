@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Avatar;
-use Storage;
 use App\User;
-use App\Roles;
 use App\core\MasterModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,7 +35,7 @@ class AuthController extends Controller
 
         $user_id    = $request->user_id;
         $ip         = $request->ip();
-        
+
         User::where('id',$request->id)->update($data);
         $model  = new MasterModel();
         $model->audit($user_id,$ip,"users","UPDATE",$data);
@@ -79,7 +76,7 @@ class AuthController extends Controller
             'user'      => $user
         ], 201);
     }
-    
+
     public function signup(Request $request)
     {
         $request->validate([
@@ -131,7 +128,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
-            'success'      => true, 
+            'success'      => true,
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),
@@ -152,9 +149,9 @@ class AuthController extends Controller
                 'message' => 'No autorizado',
                 'success' => false], 401);
         }
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
+        $user           = $request->user();
+        $tokenResult    = $user->createToken('Personal Access Token');
+        $token          = $tokenResult->token;
         if ($request->remember_me) {
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
@@ -164,7 +161,7 @@ class AuthController extends Controller
         ];
         $access_id  = DB::table('tb_access_users')
                         ->insertGetId($data);
-        $date   = date('Y-m-d');
+        $date       = date('Y-m-d');
         $cashSession= DB::table('tb_cash_closing')
                             ->where('id_user', $user->id)
                             ->where('opening_date', $date)
@@ -175,7 +172,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type'   => 'Bearer',
-            'success'      => true, 
+            'success'      => true,
             'expires_at'   => Carbon::parse(
                 $tokenResult->token->expires_at)
                     ->toDateTimeString(),

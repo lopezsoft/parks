@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +12,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
 
 Route::get('/', function () {
     return view('index');
@@ -31,14 +38,6 @@ Route::get('/client/terms', function () {
     return view('users/terms');
 });
 
-// Route::get('/fastfood/login', function () {
-//     return view('fastfoot/login');
-// });
-
-// Route::get('/fastfood/menu', function () {
-//     return view('fastfoot/index');
-// });
-
 Route::get('/dashboard', function () {
     return view('dashboard/index');
 });
@@ -47,6 +46,6 @@ Route::get('/dashboard/login', function () {
     return view('dashboard/login');
 });
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

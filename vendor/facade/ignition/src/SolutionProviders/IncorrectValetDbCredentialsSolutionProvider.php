@@ -2,18 +2,18 @@
 
 namespace Facade\Ignition\SolutionProviders;
 
-use Throwable;
-use Illuminate\Database\QueryException;
-use Facade\IgnitionContracts\HasSolutionsForThrowable;
 use Facade\Ignition\Solutions\UseDefaultValetDbCredentialsSolution;
+use Facade\IgnitionContracts\HasSolutionsForThrowable;
+use Illuminate\Database\QueryException;
+use Throwable;
 
 class IncorrectValetDbCredentialsSolutionProvider implements HasSolutionsForThrowable
 {
-    const MYSQL_ACCESS_DENIED_CODE = 1045;
+    public const MYSQL_ACCESS_DENIED_CODE = 1045;
 
     public function canSolve(Throwable $throwable): bool
     {
-        if (! PHP_OS === 'Darwin') {
+        if (PHP_OS !== 'Darwin') {
             return false;
         }
 

@@ -54,7 +54,7 @@ trait FormatsMessages
         // messages out of the translator service for this validation rule.
         $key = "validation.{$lowerRule}";
 
-        if ($key != ($value = $this->translator->get($key))) {
+        if ($key !== ($value = $this->translator->get($key))) {
             return $value;
         }
 
@@ -98,6 +98,16 @@ trait FormatsMessages
         // that is not attribute specific. If we find either we'll return it.
         foreach ($keys as $key) {
             foreach (array_keys($source) as $sourceKey) {
+                if (strpos($sourceKey, '*') !== false) {
+                    $pattern = str_replace('\*', '([^.]*)', preg_quote($sourceKey, '#'));
+
+                    if (preg_match('#^'.$pattern.'\z#u', $key) === 1) {
+                        return $source[$sourceKey];
+                    }
+
+                    continue;
+                }
+
                 if (Str::is($sourceKey, $key)) {
                     return $source[$sourceKey];
                 }
@@ -106,7 +116,7 @@ trait FormatsMessages
     }
 
     /**
-     * Get the custom error message from translator.
+     * Get the custom error message from the translator.
      *
      * @param  string  $key
      * @return string
@@ -197,7 +207,7 @@ trait FormatsMessages
      * @param  string  $message
      * @param  string  $attribute
      * @param  string  $rule
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return string
      */
     public function makeReplacements($message, $attribute, $rule, $parameters)
@@ -250,7 +260,9 @@ trait FormatsMessages
         // an implicit attribute we will display the raw attribute's name and not
         // modify it with any of these replacements before we display the name.
         if (isset($this->implicitAttributes[$primaryAttribute])) {
-            return $attribute;
+            return ($formatter = $this->implicitAttributesFormatter)
+                            ? $formatter($attribute)
+                            : $attribute;
         }
 
         return str_replace('_', ' ', Str::snake($attribute));
@@ -295,7 +307,7 @@ trait FormatsMessages
         $actualValue = $this->getValue($attribute);
 
         if (is_scalar($actualValue) || is_null($actualValue)) {
-            $message = str_replace(':input', $actualValue, $message);
+            $message = str_replace(':input', $this->getDisplayableValue($attribute, $actualValue), $message);
         }
 
         return $message;
@@ -305,7 +317,7 @@ trait FormatsMessages
      * Get the displayable name of the value.
      *
      * @param  string  $attribute
-     * @param  mixed   $value
+     * @param  mixed  $value
      * @return string
      */
     public function getDisplayableValue($attribute, $value)
@@ -324,7 +336,11 @@ trait FormatsMessages
             return $value ? 'true' : 'false';
         }
 
-        return $value;
+        if (is_null($value)) {
+            return 'empty';
+        }
+
+        return (string) $value;
     }
 
     /**
@@ -353,7 +369,7 @@ trait FormatsMessages
      * @param  string  $message
      * @param  string  $attribute
      * @param  string  $rule
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @param  \Illuminate\Validation\Validator  $validator
      * @return string|null
      */
@@ -362,7 +378,7 @@ trait FormatsMessages
         $callback = $this->replacers[$rule];
 
         if ($callback instanceof Closure) {
-            return call_user_func_array($callback, func_get_args());
+            return $callback(...func_get_args());
         } elseif (is_string($callback)) {
             return $this->callClassBasedReplacer($callback, $message, $attribute, $rule, $parameters, $validator);
         }
@@ -375,7 +391,7 @@ trait FormatsMessages
      * @param  string  $message
      * @param  string  $attribute
      * @param  string  $rule
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @param  \Illuminate\Validation\Validator  $validator
      * @return string
      */
@@ -383,6 +399,6 @@ trait FormatsMessages
     {
         [$class, $method] = Str::parseCallback($callback, 'replace');
 
-        return call_user_func_array([$this->container->make($class), $method], array_slice(func_get_args(), 1));
+        return $this->container->make($class)->{$method}(...array_slice(func_get_args(), 1));
     }
 }

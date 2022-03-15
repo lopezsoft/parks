@@ -12,7 +12,6 @@
 namespace Symfony\Component\HttpKernel\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -30,7 +29,7 @@ class LocaleAwareListener implements EventSubscriberInterface
     private $requestStack;
 
     /**
-     * @param LocaleAwareInterface[] $localeAwareServices
+     * @param iterable<mixed, LocaleAwareInterface> $localeAwareServices
      */
     public function __construct(iterable $localeAwareServices, RequestStack $requestStack)
     {

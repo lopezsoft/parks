@@ -3,15 +3,16 @@
 namespace Facade\Ignition\Views\Engines;
 
 use Exception;
-use ReflectionProperty;
+use Facade\Ignition\Exceptions\ViewException;
+use Facade\Ignition\Exceptions\ViewExceptionWithSolution;
+use Facade\Ignition\Views\Compilers\BladeSourceMapCompiler;
+use Facade\Ignition\Views\Concerns\CollectsViewExceptions;
+use Facade\IgnitionContracts\ProvidesSolution;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
-use Facade\Ignition\Exceptions\ViewException;
-use Facade\IgnitionContracts\ProvidesSolution;
-use Facade\Ignition\Exceptions\ViewExceptionWithSolution;
-use Facade\Ignition\Views\Concerns\CollectsViewExceptions;
-use Facade\Ignition\Views\Compilers\BladeSourceMapCompiler;
+use ReflectionProperty;
+use Throwable;
 
 class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
 {
@@ -22,8 +23,8 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array $data
+     * @param string $path
+     * @param array $data
      *
      * @return string
      */
@@ -39,14 +40,14 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $baseException
-     * @param  int $obLevel
+     * @param \Throwable $baseException
+     * @param int $obLevel
      *
      * @return void
      *
-     * @throws \Exception
+     * @throws \Throwable
      */
-    protected function handleViewException(Exception $baseException, $obLevel)
+    protected function handleViewException(Throwable $baseException, $obLevel)
     {
         while (ob_get_level() > $obLevel) {
             ob_end_clean();
@@ -58,7 +59,7 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
 
         $viewExceptionClass = ViewException::class;
 
-        if (in_array(ProvidesSolution::class, class_implements($baseException))) {
+        if ($baseException instanceof ProvidesSolution) {
             $viewExceptionClass = ViewExceptionWithSolution::class;
         }
 
@@ -71,9 +72,10 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
             $baseException
         );
 
-        if ($viewExceptionClass === ViewExceptionWithSolution::class) {
+        if ($baseException instanceof ProvidesSolution) {
             $exception->setSolution($baseException->getSolution());
         }
+
 
         $this->modifyViewsInTrace($exception);
 
@@ -83,7 +85,7 @@ class CompilerEngine extends \Illuminate\View\Engines\CompilerEngine
         throw $exception;
     }
 
-    protected function getBladeLineNumber(string $compiledPath, int $exceptionLineNumber):int
+    protected function getBladeLineNumber(string $compiledPath, int $exceptionLineNumber): int
     {
         $viewPath = $this->getCompiledViewName($compiledPath);
 

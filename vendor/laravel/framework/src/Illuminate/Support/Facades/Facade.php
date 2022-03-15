@@ -4,7 +4,7 @@ namespace Illuminate\Support\Facades;
 
 use Closure;
 use Mockery;
-use Mockery\MockInterface;
+use Mockery\LegacyMockInterface;
 use RuntimeException;
 
 abstract class Facade
@@ -59,6 +59,22 @@ abstract class Facade
     }
 
     /**
+     * Initiate a partial mock on the facade.
+     *
+     * @return \Mockery\MockInterface
+     */
+    public static function partialMock()
+    {
+        $name = static::getFacadeAccessor();
+
+        $mock = static::isMock()
+            ? static::$resolvedInstance[$name]
+            : static::createFreshMockInstance();
+
+        return $mock->makePartial();
+    }
+
+    /**
      * Initiate a mock expectation on the facade.
      *
      * @return \Mockery\Expectation
@@ -110,7 +126,7 @@ abstract class Facade
         $name = static::getFacadeAccessor();
 
         return isset(static::$resolvedInstance[$name]) &&
-               static::$resolvedInstance[$name] instanceof MockInterface;
+               static::$resolvedInstance[$name] instanceof LegacyMockInterface;
     }
 
     /**
@@ -229,7 +245,7 @@ abstract class Facade
      * Handle dynamic, static calls to the object.
      *
      * @param  string  $method
-     * @param  array   $args
+     * @param  array  $args
      * @return mixed
      *
      * @throws \RuntimeException

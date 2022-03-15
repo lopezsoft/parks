@@ -2,17 +2,17 @@
 
 namespace Facade\Ignition\SolutionProviders;
 
-use Throwable;
-use Illuminate\Database\QueryException;
 use Facade\Ignition\Solutions\RunMigrationsSolution;
 use Facade\IgnitionContracts\HasSolutionsForThrowable;
+use Illuminate\Database\QueryException;
+use Throwable;
 
 class MissingColumnSolutionProvider implements HasSolutionsForThrowable
 {
     /**
      * See https://dev.mysql.com/doc/refman/8.0/en/server-error-reference.html#error_er_bad_field_error.
      */
-    const MYSQL_BAD_FIELD_CODE = '42S22';
+    public const MYSQL_BAD_FIELD_CODE = '42S22';
 
     public function canSolve(Throwable $throwable): bool
     {

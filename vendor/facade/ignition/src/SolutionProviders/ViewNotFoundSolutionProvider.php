@@ -2,16 +2,16 @@
 
 namespace Facade\Ignition\SolutionProviders;
 
-use Throwable;
-use Illuminate\Support\Arr;
-use InvalidArgumentException;
-use Illuminate\Support\Facades\View;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
-use Facade\IgnitionContracts\BaseSolution;
 use Facade\Ignition\Exceptions\ViewException;
 use Facade\Ignition\Support\StringComparator;
+use Facade\IgnitionContracts\BaseSolution;
 use Facade\IgnitionContracts\HasSolutionsForThrowable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\View;
+use InvalidArgumentException;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use Throwable;
 
 class ViewNotFoundSolutionProvider implements HasSolutionsForThrowable
 {
@@ -23,7 +23,7 @@ class ViewNotFoundSolutionProvider implements HasSolutionsForThrowable
             return false;
         }
 
-        return preg_match(self::REGEX, $throwable->getMessage(), $matches);
+        return (bool)preg_match(self::REGEX, $throwable->getMessage(), $matches);
     }
 
     public function getSolutions(Throwable $throwable): array

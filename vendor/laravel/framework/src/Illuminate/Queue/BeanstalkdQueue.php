@@ -44,14 +44,20 @@ class BeanstalkdQueue extends Queue implements QueueContract
      * @param  string  $default
      * @param  int  $timeToRun
      * @param  int  $blockFor
+     * @param  bool  $dispatchAfterCommit
      * @return void
      */
-    public function __construct(Pheanstalk $pheanstalk, $default, $timeToRun, $blockFor = 0)
+    public function __construct(Pheanstalk $pheanstalk,
+                                $default,
+                                $timeToRun,
+                                $blockFor = 0,
+                                $dispatchAfterCommit = false)
     {
         $this->default = $default;
         $this->blockFor = $blockFor;
         $this->timeToRun = $timeToRun;
         $this->pheanstalk = $pheanstalk;
+        $this->dispatchAfterCommit = $dispatchAfterCommit;
     }
 
     /**
@@ -71,13 +77,21 @@ class BeanstalkdQueue extends Queue implements QueueContract
      * Push a new job onto the queue.
      *
      * @param  string  $job
-     * @param  mixed   $data
+     * @param  mixed  $data
      * @param  string|null  $queue
      * @return mixed
      */
     public function push($job, $data = '', $queue = null)
     {
-        return $this->pushRaw($this->createPayload($job, $this->getQueue($queue), $data), $queue);
+        return $this->enqueueUsing(
+            $job,
+            $this->createPayload($job, $this->getQueue($queue), $data),
+            $queue,
+            null,
+            function ($payload, $queue) {
+                return $this->pushRaw($payload, $queue);
+            }
+        );
     }
 
     /**
@@ -85,7 +99,7 @@ class BeanstalkdQueue extends Queue implements QueueContract
      *
      * @param  string  $payload
      * @param  string|null  $queue
-     * @param  array   $options
+     * @param  array  $options
      * @return mixed
      */
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -100,19 +114,25 @@ class BeanstalkdQueue extends Queue implements QueueContract
      *
      * @param  \DateTimeInterface|\DateInterval|int  $delay
      * @param  string  $job
-     * @param  mixed   $data
+     * @param  mixed  $data
      * @param  string|null  $queue
      * @return mixed
      */
     public function later($delay, $job, $data = '', $queue = null)
     {
-        $pheanstalk = $this->pheanstalk->useTube($this->getQueue($queue));
-
-        return $pheanstalk->put(
+        return $this->enqueueUsing(
+            $job,
             $this->createPayload($job, $this->getQueue($queue), $data),
-            Pheanstalk::DEFAULT_PRIORITY,
-            $this->secondsUntil($delay),
-            $this->timeToRun
+            $queue,
+            $delay,
+            function ($payload, $queue, $delay) {
+                return $this->pheanstalk->useTube($this->getQueue($queue))->put(
+                    $payload,
+                    Pheanstalk::DEFAULT_PRIORITY,
+                    $this->secondsUntil($delay),
+                    $this->timeToRun
+                );
+            }
         );
     }
 

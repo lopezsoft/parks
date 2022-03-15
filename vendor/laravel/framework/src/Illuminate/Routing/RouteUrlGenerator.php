@@ -87,8 +87,8 @@ class RouteUrlGenerator
             $route
         ), $parameters);
 
-        if (preg_match('/\{.*?\}/', $uri)) {
-            throw UrlGenerationException::forMissingParameters($route);
+        if (preg_match_all('/{(.*?)}/', $uri, $matchedMissingParameters)) {
+            throw UrlGenerationException::forMissingParameters($route, $matchedMissingParameters[1]);
         }
 
         // Once we have ensured that there are no missing parameters in the URI we will encode
@@ -217,11 +217,13 @@ class RouteUrlGenerator
      */
     protected function replaceNamedParameters($path, &$parameters)
     {
-        return preg_replace_callback('/\{(.*?)\??\}/', function ($m) use (&$parameters) {
-            if (isset($parameters[$m[1]])) {
+        return preg_replace_callback('/\{(.*?)(\?)?\}/', function ($m) use (&$parameters) {
+            if (isset($parameters[$m[1]]) && $parameters[$m[1]] !== '') {
                 return Arr::pull($parameters, $m[1]);
             } elseif (isset($this->defaultParameters[$m[1]])) {
                 return $this->defaultParameters[$m[1]];
+            } elseif (isset($parameters[$m[1]])) {
+                Arr::pull($parameters, $m[1]);
             }
 
             return $m[0];

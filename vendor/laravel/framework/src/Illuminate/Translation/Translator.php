@@ -6,10 +6,10 @@ use Countable;
 use Illuminate\Contracts\Translation\Loader;
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\NamespacedItemResolver;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
 
 class Translator extends NamespacedItemResolver implements TranslatorContract
 {
@@ -60,7 +60,8 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
     public function __construct(Loader $loader, $locale)
     {
         $this->loader = $loader;
-        $this->locale = $locale;
+
+        $this->setLocale($locale);
     }
 
     /**
@@ -92,7 +93,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      * Get the translation for the given key.
      *
      * @param  string  $key
-     * @param  array   $replace
+     * @param  array  $replace
      * @param  string|null  $locale
      * @param  bool  $fallback
      * @return string|array
@@ -123,7 +124,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
                 if (! is_null($line = $this->getLine(
                     $namespace, $group, $locale, $item, $replace
                 ))) {
-                    return $line ?? $key;
+                    return $line;
                 }
             }
         }
@@ -139,7 +140,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      *
      * @param  string  $key
      * @param  \Countable|int|array  $number
-     * @param  array   $replace
+     * @param  array  $replace
      * @param  string|null  $locale
      * @return string
      */
@@ -181,7 +182,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      * @param  string  $group
      * @param  string  $locale
      * @param  string  $item
-     * @param  array   $replace
+     * @param  array  $replace
      * @return string|array|null
      */
     protected function getLine($namespace, $group, $locale, $item, array $replace)
@@ -205,7 +206,7 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      * Make the place-holder replacements on a line.
      *
      * @param  string  $line
-     * @param  array   $replace
+     * @param  array  $replace
      * @return string
      */
     protected function makeReplacements($line, array $replace)
@@ -214,30 +215,15 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
             return $line;
         }
 
-        $replace = $this->sortReplacements($replace);
+        $shouldReplace = [];
 
         foreach ($replace as $key => $value) {
-            $line = str_replace(
-                [':'.$key, ':'.Str::upper($key), ':'.Str::ucfirst($key)],
-                [$value, Str::upper($value), Str::ucfirst($value)],
-                $line
-            );
+            $shouldReplace[':'.Str::ucfirst($key)] = Str::ucfirst($value);
+            $shouldReplace[':'.Str::upper($key)] = Str::upper($value);
+            $shouldReplace[':'.$key] = $value;
         }
 
-        return $line;
-    }
-
-    /**
-     * Sort the replacements array.
-     *
-     * @param  array  $replace
-     * @return array
-     */
-    protected function sortReplacements(array $replace)
-    {
-        return (new Collection($replace))->sortBy(function ($value, $key) {
-            return mb_strlen($key) * -1;
-        })->all();
+        return strtr($line, $shouldReplace);
     }
 
     /**
@@ -403,9 +389,15 @@ class Translator extends NamespacedItemResolver implements TranslatorContract
      *
      * @param  string  $locale
      * @return void
+     *
+     * @throws \InvalidArgumentException
      */
     public function setLocale($locale)
     {
+        if (Str::contains($locale, ['/', '\\'])) {
+            throw new InvalidArgumentException('Invalid characters present in locale.');
+        }
+
         $this->locale = $locale;
     }
 

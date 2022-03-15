@@ -2,6 +2,7 @@
 
 namespace Illuminate\Filesystem;
 
+use Closure;
 use Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
 use Illuminate\Contracts\Filesystem\FileExistsException as ContractFileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
@@ -11,7 +12,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
@@ -19,8 +22,10 @@ use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Sftp\SftpAdapter as Sftp;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -29,12 +34,23 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class FilesystemAdapter implements CloudFilesystemContract
 {
+    use Macroable {
+        __call as macroCall;
+    }
+
     /**
      * The Flysystem filesystem implementation.
      *
      * @var \League\Flysystem\FilesystemInterface
      */
     protected $driver;
+
+    /**
+     * The temporary URL builder callback.
+     *
+     * @var \Closure|null
+     */
+    protected $temporaryUrlCallback;
 
     /**
      * Create a new filesystem adapter instance.
@@ -51,16 +67,29 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Assert that the given file exists.
      *
      * @param  string|array  $path
+     * @param  string|null  $content
      * @return $this
      */
-    public function assertExists($path)
+    public function assertExists($path, $content = null)
     {
+        clearstatcache();
+
         $paths = Arr::wrap($path);
 
         foreach ($paths as $path) {
             PHPUnit::assertTrue(
                 $this->exists($path), "Unable to find a file at path [{$path}]."
             );
+
+            if (! is_null($content)) {
+                $actual = $this->get($path);
+
+                PHPUnit::assertSame(
+                    $content,
+                    $actual,
+                    "File [{$path}] was found, but content [{$actual}] does not match [{$content}]."
+                );
+            }
         }
 
         return $this;
@@ -74,6 +103,8 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function assertMissing($path)
     {
+        clearstatcache();
+
         $paths = Arr::wrap($path);
 
         foreach ($paths as $path) {
@@ -115,7 +146,13 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function path($path)
     {
-        return $this->driver->getAdapter()->getPathPrefix().$path;
+        $adapter = $this->driver->getAdapter();
+
+        if ($adapter instanceof CachedAdapter) {
+            $adapter = $adapter->getAdapter();
+        }
+
+        return $adapter->getPathPrefix().$path;
     }
 
     /**
@@ -131,7 +168,7 @@ class FilesystemAdapter implements CloudFilesystemContract
         try {
             return $this->driver->read($path);
         } catch (FileNotFoundException $e) {
-            throw new ContractFileNotFoundException($path, $e->getCode(), $e);
+            throw new ContractFileNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -197,7 +234,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Write the contents of a file.
      *
      * @param  string  $path
-     * @param  string|resource  $contents
+     * @param  \Psr\Http\Message\StreamInterface|\Illuminate\Http\File|\Illuminate\Http\UploadedFile|string|resource  $contents
      * @param  mixed  $options
      * @return bool
      */
@@ -228,12 +265,14 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Store the uploaded file on the disk.
      *
      * @param  string  $path
-     * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile  $file
-     * @param  array  $options
+     * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string  $file
+     * @param  mixed  $options
      * @return string|false
      */
     public function putFile($path, $file, $options = [])
     {
+        $file = is_string($file) ? new File($file) : $file;
+
         return $this->putFileAs($path, $file, $file->hashName(), $options);
     }
 
@@ -241,14 +280,14 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Store the uploaded file on the disk with a given name.
      *
      * @param  string  $path
-     * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile  $file
+     * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile|string  $file
      * @param  string  $name
-     * @param  array  $options
+     * @param  mixed  $options
      * @return string|false
      */
     public function putFileAs($path, $file, $name, $options = [])
     {
-        $stream = fopen($file->getRealPath(), 'r');
+        $stream = fopen(is_string($file) ? $file : $file->getRealPath(), 'r');
 
         // Next, we will format the path of the file and store the file using a stream since
         // they provide better performance than alternatives. Once we write the file this
@@ -429,6 +468,8 @@ class FilesystemAdapter implements CloudFilesystemContract
             return $this->driver->getUrl($path);
         } elseif ($adapter instanceof AwsS3Adapter) {
             return $this->getAwsUrl($adapter, $path);
+        } elseif ($adapter instanceof Ftp || $adapter instanceof Sftp) {
+            return $this->getFtpUrl($path);
         } elseif ($adapter instanceof LocalAdapter) {
             return $this->getLocalUrl($path);
         } else {
@@ -487,6 +528,21 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string  $path
      * @return string
      */
+    protected function getFtpUrl($path)
+    {
+        $config = $this->driver->getConfig();
+
+        return $config->has('url')
+                ? $this->concatPathToUrl($config->get('url'), $path)
+                : $path;
+    }
+
+    /**
+     * Get the URL for the file at the given path.
+     *
+     * @param  string  $path
+     * @return string
+     */
     protected function getLocalUrl($path)
     {
         $config = $this->driver->getConfig();
@@ -530,20 +586,28 @@ class FilesystemAdapter implements CloudFilesystemContract
 
         if (method_exists($adapter, 'getTemporaryUrl')) {
             return $adapter->getTemporaryUrl($path, $expiration, $options);
-        } elseif ($adapter instanceof AwsS3Adapter) {
-            return $this->getAwsTemporaryUrl($adapter, $path, $expiration, $options);
-        } else {
-            throw new RuntimeException('This driver does not support creating temporary URLs.');
         }
+
+        if ($this->temporaryUrlCallback) {
+            return $this->temporaryUrlCallback->bindTo($this, static::class)(
+                $path, $expiration, $options
+            );
+        }
+
+        if ($adapter instanceof AwsS3Adapter) {
+            return $this->getAwsTemporaryUrl($adapter, $path, $expiration, $options);
+        }
+
+        throw new RuntimeException('This driver does not support creating temporary URLs.');
     }
 
     /**
      * Get a temporary URL for the file at the given path.
      *
      * @param  \League\Flysystem\AwsS3v3\AwsS3Adapter  $adapter
-     * @param  string $path
-     * @param  \DateTimeInterface $expiration
-     * @param  array $options
+     * @param  string  $path
+     * @param  \DateTimeInterface  $expiration
+     * @param  array  $options
      * @return string
      */
     public function getAwsTemporaryUrl($adapter, $path, $expiration, $options)
@@ -555,21 +619,47 @@ class FilesystemAdapter implements CloudFilesystemContract
             'Key' => $adapter->getPathPrefix().$path,
         ], $options));
 
-        return (string) $client->createPresignedRequest(
+        $uri = $client->createPresignedRequest(
             $command, $expiration
         )->getUri();
+
+        // If an explicit base URL has been set on the disk configuration then we will use
+        // it as the base URL instead of the default path. This allows the developer to
+        // have full control over the base path for this filesystem's generated URLs.
+        if (! is_null($url = $this->driver->getConfig()->get('temporary_url'))) {
+            $uri = $this->replaceBaseUrl($uri, $url);
+        }
+
+        return (string) $uri;
     }
 
     /**
      * Concatenate a path to a URL.
      *
-     * @param  string $url
-     * @param  string $path
+     * @param  string  $url
+     * @param  string  $path
      * @return string
      */
     protected function concatPathToUrl($url, $path)
     {
         return rtrim($url, '/').'/'.ltrim($path, '/');
+    }
+
+    /**
+     * Replace the scheme, host and port of the given UriInterface with values from the given URL.
+     *
+     * @param  \Psr\Http\Message\UriInterface  $uri
+     * @param  string  $url
+     * @return \Psr\Http\Message\UriInterface
+     */
+    protected function replaceBaseUrl($uri, $url)
+    {
+        $parsed = parse_url($url);
+
+        return $uri
+            ->withScheme($parsed['scheme'])
+            ->withHost($parsed['host'])
+            ->withPort($parsed['port'] ?? null);
     }
 
     /**
@@ -581,7 +671,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function files($directory = null, $recursive = false)
     {
-        $contents = $this->driver->listContents($directory, $recursive);
+        $contents = $this->driver->listContents($directory ?? '', $recursive);
 
         return $this->filterContentsByType($contents, 'file');
     }
@@ -606,7 +696,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function directories($directory = null, $recursive = false)
     {
-        $contents = $this->driver->listContents($directory, $recursive);
+        $contents = $this->driver->listContents($directory ?? '', $recursive);
 
         return $this->filterContentsByType($contents, 'dir');
     }
@@ -705,7 +795,18 @@ class FilesystemAdapter implements CloudFilesystemContract
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 
-        throw new InvalidArgumentException("Unknown visibility: {$visibility}");
+        throw new InvalidArgumentException("Unknown visibility: {$visibility}.");
+    }
+
+    /**
+     * Define a custom temporary URL builder callback.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function buildTemporaryUrlsUsing(Closure $callback)
+    {
+        $this->temporaryUrlCallback = $callback;
     }
 
     /**
@@ -719,6 +820,10 @@ class FilesystemAdapter implements CloudFilesystemContract
      */
     public function __call($method, array $parameters)
     {
-        return call_user_func_array([$this->driver, $method], $parameters);
+        if (static::hasMacro($method)) {
+            return $this->macroCall($method, $parameters);
+        }
+
+        return $this->driver->{$method}(...$parameters);
     }
 }

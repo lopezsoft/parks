@@ -5,7 +5,7 @@
     <?php } ?>
 
     <?php if ('compact' !== $style && $trace['function']) { ?>
-        <span class="trace-class"><?= $this->abbrClass($trace['class']); ?></span><?php if ($trace['type']) { ?><span class="trace-type"><?= $trace['type']; ?></span><?php } ?><span class="trace-method"><?= $trace['function']; ?></span><span class="trace-arguments">(<?= $this->formatArgs($trace['args']); ?>)</span>
+        <span class="trace-class"><?= $this->abbrClass($trace['class']); ?></span><?php if ($trace['type']) { ?><span class="trace-type"><?= $trace['type']; ?></span><?php } ?><span class="trace-method"><?= $trace['function']; ?></span><?php if (isset($trace['args'])) { ?><span class="trace-arguments">(<?= $this->formatArgs($trace['args']); ?>)</span><?php } ?>
     <?php } ?>
 
     <?php if ($trace['file']) { ?>
@@ -13,7 +13,7 @@
         $lineNumber = $trace['line'] ?: 1;
         $fileLink = $this->getFileLink($trace['file'], $lineNumber);
         $filePath = strtr(strip_tags($this->formatFile($trace['file'], $lineNumber)), [' at line '.$lineNumber => '']);
-        $filePathParts = explode(DIRECTORY_SEPARATOR, $filePath);
+        $filePathParts = explode(\DIRECTORY_SEPARATOR, $filePath);
         ?>
         <span class="block trace-file-path">
             in
@@ -25,6 +25,9 @@
                 <span class="trace-method"><?= $trace['function']; ?></span>
             <?php } ?>
             (line <?= $lineNumber; ?>)
+            <span class="icon icon-copy hidden" data-clipboard-text="<?php echo implode(\DIRECTORY_SEPARATOR, $filePathParts).':'.$lineNumber; ?>">
+                <?php echo $this->include('assets/images/icon-copy.svg'); ?>
+            </span>
         </span>
     <?php } ?>
 </div>
