@@ -1,0 +1,11 @@
+<!-- Bookmarked Icons -->
+<ul class="nav navbar-nav bookmark-icons">
+  <ng-container *ngFor="let page of bookmarkedItems">
+    <li class="nav-item d-none d-lg-block">
+      <a class="nav-link" [routerLink]="page.link" placement="bottom" ngbTooltip="{{ page.title }}">
+        <span [data-feather]="page.icon" [class]="'ficon'"></span>
+      </a>
+    </li>
+  </ng-container>
+</ul>
+<!-- Bookmarked Icons -->

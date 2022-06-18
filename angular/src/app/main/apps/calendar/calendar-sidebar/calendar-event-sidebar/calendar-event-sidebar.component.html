@@ -1,0 +1,260 @@
+<!-- Calendar Add/Update/Delete event modal-->
+<div class="modal-dialog sidebar-lg">
+  <div class="modal-content p-0">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="toggleEventSidebar()">
+      ×
+    </button>
+    <div class="modal-header mb-1">
+      <h5 class="modal-title">{{ isDataEmpty === true ? 'Agregar' : 'Actualizar' }} evento</h5>
+    </div>
+    <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+      <form class="event-form needs-validation"
+            (ngSubmit)="(eventForm.form.valid);
+            eventForm.reset()"
+            #eventForm="ngForm"
+      >
+        <div class="form-group">
+          <label for="title" class="form-label">Titulo *</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            placeholder="Titulo del evento"
+            required
+            autofocus
+            [(ngModel)]="event.title"
+            [class.error]="eventForm.submitted && formNameRef.invalid"
+            #formNameRef="ngModel"
+            #title
+          />
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Etiqueda *</label>
+          <ng-select
+            [items]="selectLabel"
+            name="calendar"
+            [(ngModel)]="event.calendar"
+            bindLabel="label"
+            bindValue="label"
+            required
+            [class.error]="eventForm.submitted && formLabelRef.invalid"
+            #formLabelRef="ngModel"
+          >
+            <ng-template ng-option-tmp ng-label-tmp let-item="item">
+              <span class="bullet bullet-sm mr-50 bullet-{{ item.bullet }}"></span>
+              {{ item.label }}
+            </ng-template>
+          </ng-select>
+          <span *ngIf="eventForm.submitted && formLabelRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formLabelRef.errors.required">¡El campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group position-relative">
+          <label for="start-date" class="form-label">Fecha entrada *</label>
+          <ng2-flatpickr
+            [config]="startDateOptions"
+            name="startDate"
+            [setDate]="event.start"
+            #startDatePicker
+            required
+            [class.error]="eventForm.submitted"
+          ></ng2-flatpickr>
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group position-relative">
+          <label for="end-date" class="form-label">Fecha salida *</label>
+          <ng2-flatpickr
+            [config]="endDateOptions"
+            name="endDate"
+            [setDate]="event.end"
+            #endDatePicker
+            required
+            [class.error]="eventForm.submitted"
+          ></ng2-flatpickr>
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <div class="custom-control custom-switch">
+            <input
+              type="checkbox"
+              class="custom-control-input allDay-switch"
+              id="customSwitch3"
+              [(ngModel)]="event.allDay"
+              name="allDay"
+            />
+            <label class="custom-control-label" for="customSwitch3">Todo el día</label>
+          </div>
+        </div>
+        <div class="form-group select2-primary">
+          <label class="form-label">Cliente *</label>
+          <ng-select
+            [items]="calendarService.clients"
+            name="userId"
+            bindValue="id"
+            [(ngModel)]="event.client.id"
+            bindLabel="full_name"
+          >
+            <ng-template ng-option-tmp ng-label-tmp let-item="item">
+              <div class="media align-items-center">
+                <img
+                  class="d-block rounded-circle mr-50"
+                  [src]="url + item.avatar"
+                  height="26"
+                  width="26"
+                  [alt]="item.full_name"
+                />
+                <div class="media-body">
+                  <p class="mb-0">{{ item.full_name }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group select2-primary">
+          <label class="form-label">Paquete *</label>
+          <ng-select
+            [items]="calendarService.products"
+            name="productId"
+            bindValue="id"
+            [(ngModel)]="event.detail.productId"
+            bindLabel="product_name"
+            (close)="selectProduct(event.detail.productId)"
+          >
+            <ng-template ng-option-tmp ng-label-tmp let-item="item">
+              <div class="media align-items-center">
+                <img
+                  class="d-block rounded-circle mr-50"
+                  [src]="url + item.image"
+                  height="26"
+                  width="26"
+                  [alt]="item.product_name"
+                />
+                <div class="media-body">
+                  <p class="mb-0">{{ item.product_name }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="event-location" class="form-label">Cantidad de personas *</label>
+          <input
+            type="number"
+            class="form-control"
+            id="event-location"
+            placeholder="Cantidad de personas"
+            required
+            value="3"
+            [(ngModel)]="event.totalPeople"
+            name="totalPeople"
+          />
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="event-location" class="form-label">Total a pagar</label>
+          <p> {{ event.detail.total || 0 | currency }}</p>
+        </div>
+        <div class="form-group select2-primary">
+          <label class="form-label">Forma de pago *</label>
+          <ng-select
+                  [items]="calendarService.payments"
+                  name="paymentId"
+                  bindValue="id"
+                  [(ngModel)]="event.detail.paymentId"
+                  bindLabel="name_payment_method"
+                  (close)="selectPayment(event.detail.paymentId)"
+          >
+            <ng-template ng-option-tmp ng-label-tmp let-item="item">
+              <div class="media align-items-center">
+                <div class="media-body">
+                  <p class="mb-0">{{ item.name_payment_method }}</p>
+                </div>
+              </div>
+            </ng-template>
+          </ng-select>
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group" *ngIf="showAdvance">
+          <label for="anticipo" class="form-label">Anticipo</label>
+          <input
+            type="number"
+            class="form-control"
+            id="anticipo"
+            placeholder="Valor del anticipo"
+            [(ngModel)]="event.detail.advance"
+            (change)="changeAdvance()"
+            name="advance"
+          />
+          <span *ngIf="eventForm.submitted && formNameRef.invalid" class="invalid-form">
+            <small class="form-text text-danger" *ngIf="formNameRef.errors.required">¡Este campo es obligatorio!</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="event-location" class="form-label">Saldo</label>
+          <p> {{ event.detail.balance || 0 | currency }}</p>
+        </div>
+        <div class="form-group">
+          <textarea
+                  class="form-control"
+                  rows="1"
+                  [(ngModel)]="event.detail.info"
+                  name="info"
+                  placeholder="Observación"
+          >
+          </textarea>
+        </div>
+        <div class="form-group d-flex">
+          <button
+            type="submit"
+            class="btn btn-primary add-event-btn mr-1"
+            *ngIf="isDataEmpty !== false; else addEventRef"
+            (click)="addEvent(eventForm)"
+            rippleEffect
+          >
+            Agregar
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-cancel"
+            data-dismiss="modal"
+            (click)="toggleEventSidebar()"
+            *ngIf="isDataEmpty !== false; else deleteEventRef"
+            rippleEffect
+          >
+            Cancelar
+          </button>
+          <ng-template #addEventRef>
+            <button type="submit" class="btn btn-primary update-event-btn mr-1" (click)="updateEvent()" rippleEffect>
+              Actualizar
+            </button>
+            <button type="button" class="btn btn-danger update-event-btn mr-1" (click)="printEvent()" rippleEffect>
+              imprimir
+            </button>
+          </ng-template>
+          <ng-template #deleteEventRef>
+            <button class="btn btn-outline-danger btn-delete-event" (click)="deleteEvent()" rippleEffect>Borrar</button>
+          </ng-template>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--/ Calendar Add/Update/Delete event modal-->
