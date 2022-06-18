@@ -38,7 +38,7 @@ Ext.define('Admin.Application', {
         let me = this,
             token = null,
             tStore = Ext.getStore('NavigationTree');
-        children=[];
+        let children=[];
        if(AuthToken.isAuthenticated()){
            token    = AuthToken.recover();
            if(token){
@@ -57,7 +57,7 @@ Ext.define('Admin.Application', {
                             oldEle  = null,
                             iconCls = null,
                             xRoot   = {};
-                        if(obj.success == true){
+                        if(obj.success === true){
                             records = obj.records;
                             if(token.user.type == 1){
                                 me.setDefaultToken('dashboard');
@@ -90,6 +90,9 @@ Ext.define('Admin.Application', {
                                         case 7: // Ajustes
                                             iconCls     = 'fas fa-cogs';
                                             break;
+                                        case 9: // Events
+                                            iconCls     = 'fas fa-calendar';
+                                            break;
                                     }
                                     children.push({
                                         text        : oldEle.name_menu,
@@ -101,7 +104,7 @@ Ext.define('Admin.Application', {
                                     oldMenu = 0;
                                     child   = [];
                                 }
-                                if(oldMenu == 0){
+                                if(oldMenu === 0){
                                     oldMenu = ele.tag_menu;
                                 }
                                 oldEle  =  ele;
@@ -252,6 +255,18 @@ Ext.define('Admin.Application', {
                                                     }
                                                 );
                                                 break;
+                                            case 3:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-coins',
+                                                        viewType    : 'preticketsform',
+                                                        routeId     : 'customers/cxc',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+
                                         }
                                         break;
                                     case 6: // Usuarios
@@ -321,6 +336,33 @@ Ext.define('Admin.Application', {
                                                 break;
                                         }
                                         break;
+                                    case 9: // Events
+                                        switch (ele.tag_submenu) {
+                                            case 1:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-calendar',
+                                                        viewType    : 'cashclosingform',
+                                                        routeId     : 'reports/cashcount',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                            case 2:
+                                                child.push(
+                                                    {
+                                                        text        : ele.name_item,
+                                                        iconCls     : 'fas fa-calendar',
+                                                        viewType    : 'cashclosingform',
+                                                        routeId     : 'reports/cashclosing',
+                                                        leaf        : true
+                                                    }
+                                                );
+                                                break;
+                                        }
+                                        break;
+
                                 }
                             });
                             if(oldMenu > 0 && child.length > 0){
@@ -370,10 +412,10 @@ Ext.define('Admin.Application', {
                                 }
                             }
 
-                            if(token.user.type == 1){
-                                me.redirectTo('dashboard');
+                            if(token.user.type === 1){
+                                me.redirectTo('dashboard', true);
                             }else{
-                                me.redirectTo('users/profile');
+                                me.redirectTo('users/profile', true);
                             }
                         }
                     },
