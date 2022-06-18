@@ -8,13 +8,13 @@
         <title>Darsboard</title>
         <!-- Fonts -->
         <link href  = "https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-        <link rel   = "stylesheet" href="{{ asset('css/site.css') }}"> 
-        <link rel   = "stylesheet" href="{{ asset('css/chooser.css') }}"> 
+        <link rel   = "stylesheet" href="{{ asset('css/site.css') }}">
+        <link rel   = "stylesheet" href="{{ asset('css/chooser.css') }}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
         <script type="text/javascript">
             var Ext = Ext || {}; // Ext namespace won't be defined yet...
-    
+
             // This function is called by the Microloader after it has performed basic
             // device detection. The results are provided in the "tags" object. You can
             // use these tags here or even add custom tags. These can be used by platform
@@ -23,7 +23,7 @@
             Ext.beforeLoad = function (tags) {
                 var s = location.search,  // the query string (ex "?foo=1&bar")
                     profile;
-    
+
                 // For testing look for "?classic" or "?modern" in the URL to override
                 // device detection default.
                 //
@@ -31,7 +31,7 @@
                     profile = 'classic';
                 }
                 else if (s.match(/\bmodern\b/)) {
-                    profile = 'modern';
+                    profile = 'classic';
                 }
                 // uncomment this if you have added native build profiles to your app.json
                 /*else if (tags.webview) {
@@ -42,11 +42,11 @@
                 }*/
                 else {
                     //profile = tags.desktop ? 'classic' : 'modern';
-                    profile = tags.phone ? 'modern' : 'classic';
+                    profile = tags.phone ? 'classic' : 'classic';
                 }
-    
+
                 Ext.manifest = profile; // this name must match a build profile name
-    
+
                 // This function is called once the manifest is available but before
                 // any data is pulled from it.
                 //
@@ -68,6 +68,6 @@
         <div class="blob blob-4"></div>
         <div class="blob blob-5"></div>
     </div>
-    
+
     </body>
 </html>

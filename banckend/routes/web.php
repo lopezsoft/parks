@@ -42,6 +42,10 @@ Route::get('/dashboard', function () {
     return view('dashboard/index');
 });
 
+Route::get('/apps/calendar', function () {
+    return view('dashboard/events/schedule');
+});
+
 Route::get('/dashboard/login', function () {
     return view('dashboard/login');
 });

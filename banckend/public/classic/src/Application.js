@@ -343,8 +343,8 @@ Ext.define('Admin.Application', {
                                                     {
                                                         text        : ele.name_item,
                                                         iconCls     : 'fas fa-calendar',
-                                                        viewType    : 'cashclosingform',
-                                                        routeId     : 'reports/cashcount',
+                                                        viewType    : '',
+                                                        routeId     : 'events/schedule',
                                                         leaf        : true
                                                     }
                                                 );
@@ -355,7 +355,7 @@ Ext.define('Admin.Application', {
                                                         text        : ele.name_item,
                                                         iconCls     : 'fas fa-calendar',
                                                         viewType    : 'cashclosingform',
-                                                        routeId     : 'reports/cashclosing',
+                                                        routeId     : 'events/schedule',
                                                         leaf        : true
                                                     }
                                                 );
@@ -419,7 +419,7 @@ Ext.define('Admin.Application', {
                             }
                         }
                     },
-                    failure: function(response, opts) {
+                    failure: function(response) {
                         app.showResult('server-side failure with status code ' + response.status);
                     }
                 });
@@ -439,7 +439,7 @@ Ext.define('Admin.Application', {
             me  = this;
         Ext.require('Admin.core.docs.IframeView');
         Ext.onReady(function () {
-            if (xFormat == 'pdf') {
+            if (xFormat === 'pdf') {
                 var
                     cHtml = '<object><embed width="100%" height="100%" src="'+xUrl+'"></object>';
                 var win	= Ext.create('Admin.core.docs.IframeView',{

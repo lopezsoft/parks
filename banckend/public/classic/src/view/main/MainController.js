@@ -150,13 +150,16 @@ Ext.define('Admin.view.main.MainController', {
     },
 
     onRouteChange:function(id){
-        var
-            me  = this,
-            app = Admin.getApplication();
+        let me  = this;
+        let app = Admin.getApplication();
         if(AuthToken.isAuthenticated()){
-            var params  = AuthToken.recoverParams();
             me.mask();
             switch (id) {
+                case 'events/schedule':
+                    window.open('apps/calendar', '_blank');
+                    me.unMask();
+                    me.setCurrentView('dashboard');
+                    break;
                 case 'company':
                     Ext.require([
                         'Admin.view.company.forms.CompanyForm'
@@ -167,7 +170,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('general.CountryStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'branchoffices':
                     Ext.require([
                         'Admin.view.company.forms.BranchsForm'
@@ -177,7 +180,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('company.BranchOfficesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'products':
                     Ext.require([
                         'Admin.view.products.forms.ProductsForm'
@@ -190,7 +193,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('company.BranchOfficesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'products/lines':
                     Ext.require([
                         'Admin.view.products.forms.LinesForm'
@@ -200,7 +203,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('products.LinesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'products/categories':
                     Ext.require([
                         'Admin.view.products.forms.CategoriesForm'
@@ -210,7 +213,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('products.CategoriesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'products/fastfood':
                     Ext.require([
                         'Admin.core.docs.ProductsBrowser',
@@ -231,7 +234,7 @@ Ext.define('Admin.view.main.MainController', {
                         win.show();
                         // me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'sales/services':
                     Ext.require([
                         'Admin.view.sales.forms.ServicesForm'
@@ -241,7 +244,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('sales.ServicesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'sales/branchservices':
                     Ext.require([
                         'Admin.view.sales.forms.BranchServicesForm'
@@ -251,10 +254,10 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('sales.BranchServicesStore');
                         app.onStore('sales.ServicesStore');
                         app.onStore('company.BranchOfficesStore');
-                        
+
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'sales/footwear':
                     Ext.require([
                         'Admin.view.sales.forms.FootWearForm'
@@ -264,7 +267,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('sales.FootWearStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'sales/branchfootwear':
                     Ext.require([
                         'Admin.view.sales.forms.BranchFootWearForm'
@@ -276,7 +279,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('company.BranchOfficesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'settings/invoice':
                     Ext.require([
                         'Admin.view.settings.forms.ConfInvoiceForm'
@@ -287,7 +290,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('company.BranchOfficesStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'customers':
                     Ext.require([
                         'Admin.view.users.forms.CustomersForm'
@@ -302,7 +305,7 @@ Ext.define('Admin.view.main.MainController', {
                         });
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'customers/pretikets':
                     Ext.require([
                         'Admin.view.users.forms.PreTicketsForm'
@@ -312,7 +315,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('general.PreTicketsStore');
                         me.setCurrentView(id);
                     });
-                    break;            
+                    break;
                 case 'users/list':
                     Ext.require([
                         'Admin.view.users.forms.UsersForm'
@@ -327,7 +330,7 @@ Ext.define('Admin.view.main.MainController', {
                         });
                         me.setCurrentView(id);
                     });
-                    break;         
+                    break;
                 case 'users/profile':
                     Ext.require([
                         'Admin.view.profile.UserProfile'
@@ -338,7 +341,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('general.UsersStore');
                         me.setCurrentView(id);
                     });
-                    break;   
+                    break;
                 case 'reports/cashcount':
                     Ext.require([
                         'Admin.view.sales.forms.CashClosingForm'
@@ -348,7 +351,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('general.UsersStore');
                         me.setCurrentView(id);
                     });
-                    break;   
+                    break;
                 case 'reports/cashclosing':
                     Ext.require([
                         'Admin.view.sales.forms.CashClosingForm'
@@ -358,7 +361,7 @@ Ext.define('Admin.view.main.MainController', {
                         app.onStore('general.UsersStore');
                         me.setCurrentView(id);
                     });
-                    break;   
+                    break;
                 default:
                     Ext.require([
                         'Admin.*'
@@ -366,7 +369,7 @@ Ext.define('Admin.view.main.MainController', {
                     Ext.onReady(function(){
                         me.unMask();
                         me.setCurrentView(id);
-                    })
+                    });
                     break;
             }
         }else{
