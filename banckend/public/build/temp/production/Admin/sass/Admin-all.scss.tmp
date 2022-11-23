@@ -34,6 +34,7 @@ $include-admin-core-docs-iframeview: dynamic(true);;
 $include-admin-core-docs-infopanel: dynamic(true);;
 $include-admin-core-docs-productsbrowser: dynamic(true);;
 $include-admin-core-field-checkboxfield: dynamic(true);;
+$include-admin-core-field-currencyfield: dynamic(true);;
 $include-admin-core-field-customdate: dynamic(true);;
 $include-admin-core-field-customtext: dynamic(true);;
 $include-admin-core-field-fieldcontainer: dynamic(true);;

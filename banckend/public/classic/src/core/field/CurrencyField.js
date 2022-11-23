@@ -21,12 +21,11 @@ Ext.define('Admin.core.field.CurrencyField',{
 	enableKeyEvents		: true,
 	disableKeyFilter 	: true,
 	initComponent: function(){
-		let 
-			me	= this;
-		if(me.allowDecimals || (Ext.isEmpty(me.decimalSeparator) || Ext.isEmpty(me.thousandSeparator))){ 
+		let me	= this;
+		if(me.allowDecimals || (Ext.isEmpty(me.decimalSeparator) || Ext.isEmpty(me.thousandSeparator))){
 			me.decimalSeparator = '.';
 			me.thousandSeparator = ',';
-		};
+		}
 		me.callParent(arguments);
 	},
 	processRawValue : function(value){
@@ -46,7 +45,7 @@ Ext.define('Admin.core.field.CurrencyField',{
         var me = this,
             errors = me.getErrors(value),
             isValid = Ext.isEmpty(errors);
- 
+
         if (!me.preventMark) {
             if (isValid) {
                 me.clearInvalid();
@@ -54,13 +53,13 @@ Ext.define('Admin.core.field.CurrencyField',{
                 me.markInvalid(errors);
             }
         }
- 
+
         return isValid;
     },
 	setValue: function(value){
-		let 
+		let
 			me	= this;
-		Admin.core.field.CurrencyField.superclass.setValue.call(me, value);       
+		Admin.core.field.CurrencyField.superclass.setValue.call(me, value);
 		me.setRawValue(me.getFormattedValue(me.getValue()));
 	},
 	/**
@@ -72,7 +71,7 @@ Ext.define('Admin.core.field.CurrencyField',{
      */
 	getErrors: function(value) {
 		value = arguments.length ? (value == null ? '' : value) : this.processRawValue(this.getRawValue());
- 
+
         var me = this,
             errors = me.callParent([value]),
             validator = me.validator,
@@ -81,56 +80,56 @@ Ext.define('Admin.core.field.CurrencyField',{
             regex = me.regex,
             format = Ext.String.format,
             msg, trimmed, isBlank;
- 
+
         if (Ext.isFunction(validator)) {
             msg = validator.call(me, value);
             if (msg !== true) {
                 errors.push(msg);
             }
 		}
-		
+
 		if(isNaN(value)){
 			errors.push('Deber ser un numero.');
 		}
- 
+
         trimmed = me.allowOnlyWhitespace ? value : Ext.String.trim(value);
- 
+
         if (trimmed.length < 1) {
             if (!me.allowBlank) {
                 errors.push(me.blankText);
             }
-            // If we are not configured to validate blank values, there cannot be any additional errors 
+            // If we are not configured to validate blank values, there cannot be any additional errors
             if (!me.validateBlank) {
                 return errors;
             }
             isBlank = true;
         }
- 
-        // If a blank value has been allowed through, then exempt it from the minLength check. 
-        // It must be allowed to hit the vtype validation. 
+
+        // If a blank value has been allowed through, then exempt it from the minLength check.
+        // It must be allowed to hit the vtype validation.
         if (!isBlank && value.length < me.minLength) {
             errors.push(format(me.minLengthText, me.minLength));
         }
- 
+
         if (value.length > me.maxLength) {
             errors.push(format(me.maxLengthText, me.maxLength));
         }
- 
+
         if (vtype) {
             if (!vtypes[vtype](value, me)) {
                 errors.push(me.vtypeText || vtypes[vtype +'Text']);
             }
         }
- 
+
         if (regex && !regex.test(value)) {
             errors.push(me.regexText || me.invalidText);
         }
-		
+
         return errors;
 	},
-	
+
 	getFormattedValue: function(value){
-		let 
+		let
 			me	= this;
 		if(!value) return value;
 		if(value.lastIndexOf(me.currencySign) >= 0) return value;
@@ -139,19 +138,19 @@ Ext.define('Admin.core.field.CurrencyField',{
 		if (me.decimalPrecision > 4 ){
 			me.decimalPrecision = 2;
 		}
-		
+
 		if (Ext.isEmpty(me.thousandSeparator) || Ext.isEmpty(me.decimalSeparator))
 			throw ('NumberFormatException: invalid thousandSeparator or decimalSeparator, property must has a valid character.');
-		
+
 		if (me.thousandSeparator == me.decimalSeparator)
 			throw ('NumberFormatException: invalid thousandSeparator, thousand separator must be different from decimalSeparator.');
-		
+
 		value = value.toString();
-		Ext.util.Format.thousandSeparator 	= me.thousandSeparator;	
-		Ext.util.Format.decimalSeparator 	= me.decimalSeparator;	
-		Ext.util.Format.currencyPrecision 	= me.currencyPrecision;	
-		Ext.util.Format.currencySign 		= me.currencySign;	
-		
+		Ext.util.Format.thousandSeparator 	= me.thousandSeparator;
+		Ext.util.Format.decimalSeparator 	= me.decimalSeparator;
+		Ext.util.Format.currencyPrecision 	= me.currencyPrecision;
+		Ext.util.Format.currencySign 		= me.currencySign;
+
 		value	= Ext.util.Format.usMoney(value);
 		return value ;
     },
@@ -160,7 +159,7 @@ Ext.define('Admin.core.field.CurrencyField',{
      */
     parseValue: function(value){
 		//Replace the currency symbol and thousand separator
-		let 
+		let
 			me = this;
 		if(!value) return value;
 		if(value.lastIndexOf(me.currencySign) == -1) return value;
@@ -171,7 +170,7 @@ Ext.define('Admin.core.field.CurrencyField',{
      * @param {Object} value
      */
     removeFormat: function(value){
-		let 
+		let
 			me	= this;
 		if (Ext.isEmpty(value) || !me.hasFormat()) return value;
 		if(value.lastIndexOf(me.currencySign) == -1) return value;
@@ -184,7 +183,7 @@ Ext.define('Admin.core.field.CurrencyField',{
      * @param {Number} value
      */
     hasFormat: function(){
-		let 
+		let
 			me	= this;
         return !Ext.isEmpty(me.decimalSeparator) && !Ext.isEmpty(me.thousandSeparator) &&  !Ext.isEmpty(me.currencySign);
     },
@@ -193,15 +192,14 @@ Ext.define('Admin.core.field.CurrencyField',{
      * formatting and process of the value because beforeBlur perform a getRawValue and then a setValue.
      */
     onFocus: function(){
-		let 
+		let
 			me		= this;
 		if(me.readOnly) return;
 		me.setRawValue(me.removeFormat(me.getRawValue()));
         me.callParent(arguments);
 	},
 	onFocusLeave : function ( e ){
-		let 
-			me = this;
+		let me = this;
 		if(me.readOnly) return;
 		value	= me.getRawValue();
 		if(value.lastIndexOf(me.currencySign) >= 0) return;
@@ -209,8 +207,7 @@ Ext.define('Admin.core.field.CurrencyField',{
         me.callParent(arguments);
 	},
     listeners: {
-	    'focus' : function (curreccyField, event, eOpts) {
-	        var me = this;
+	    'focus' : function () {
 	        if (!Ext.isEmpty(this.tooltip)) {
 	            new Ext.ToolTip({
 	                target : this.id,

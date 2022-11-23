@@ -23,6 +23,20 @@ CREATE TABLE `tb_events` (
     AUTO_INCREMENT=1
 ;
 
+CREATE TABLE IF NOT EXISTS `payment_methods` (
+     `id` smallint(6) NOT NULL AUTO_INCREMENT,
+     `name_payment_method` varchar(120) DEFAULT NULL,
+     `tag_method` varchar(3) DEFAULT NULL,
+     `active` tinyint(1) NOT NULL DEFAULT 1,
+     PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='Formas de pago';
+
+INSERT INTO `payment_methods` (`id`, `name_payment_method`, `tag_method`, `active`) VALUES
+            (1, 'Efectivo', '001', 1),
+            (2, 'Tarjeta', '002', 1),
+            (3, 'Transferencia', '003', 1),
+            (4, 'Crédito con anticipo', '004', 1),
+            (5, 'Crédito sin anticipo', '005', 1);
 
 CREATE TABLE `tb_detail_events` (
     `id` BIGINT(20) NOT NULL AUTO_INCREMENT,

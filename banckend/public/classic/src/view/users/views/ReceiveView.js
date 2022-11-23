@@ -13,12 +13,12 @@ Ext.define('Admin.view.users.views.ReceiveView',{
     },
     maxWidth    : 450,
     alwaysOnTop : true,
-    defaultFocus: 'numberField',
+    defaultFocus: 'currencyField',
     items: [
         {
             xtype       : 'customForm',
-            defaultType : 'numberField',
-            defaultFocus: 'numberField',
+            defaultType : 'currencyField',
+            defaultFocus: 'currencyField',
             defaults    : {
                 fieldStyle          : {
                     height          : '48px',
@@ -35,7 +35,7 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                     itemId      : 'total',
                     readOnly    : true,
                     listeners   : {
-                        change : function (ts, nv, ov) {
+                        change : function (ts) {
                             ts.up('window').onCalcule(ts);
                         }
                     }
@@ -43,11 +43,11 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                 {
                     fieldLabel  : 'Descuento',
                     itemId      : 'discount',
-                    name        : 'discount', 
+                    name        : 'discount',
                     alias       : 'widget.discount',
                     allowBlank  : true,
                     listeners   : {
-                        change : function (ts, nv, ov) {
+                        change : function (ts) {
                             ts.up('window').onCalcule(ts);
                         }
                     }
@@ -59,12 +59,12 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                     readOnly    : true
                 },
                 {
-                    fieldLabel  : 'Valor pagado',
+                    fieldLabel  : 'Efectivo',
                     itemId      : 'value_paid',
                     name        : 'value_paid',
                     hasFocus    : true,
                     listeners   : {
-                        change : function (ts, nv, ov) {
+                        change : function (ts) {
                             ts.up('window').onCalcule(ts);
                         }
                     }
@@ -73,11 +73,11 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                     fieldLabel  : 'Cambio',
                     itemId      : 'change',
                     readOnly    : true,
-                    name        : 'change'   
+                    name        : 'change'
                 }
             ],
             listeners   : {
-                afterrender : function(ts,e){
+                afterrender : function(ts){
                     var comp    = ts.getComponent('value_paid');
                     if (comp) {
                         comp.focusEl.dom.focus();
@@ -94,7 +94,7 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                         iconAlign	: 'left',
                         text        : 'Guardar cobro',
                         handler		: function (btn) {
-                            var 
+                            var
                                 win = btn.up('window');
                             win.fireEvent('receive',btn);
                         }
@@ -108,26 +108,27 @@ Ext.define('Admin.view.users.views.ReceiveView',{
                                 me.onCloseWin(btn);
                             } else if (btn.up('form')) {
                                 btn.up('form').closeForm(btn);
-                            }	
+                            }
                         }
                     }
                 ]
             }]
         }
     ],
-    onCalcule : function(btn){
-        var me      = this,
-            total   = parseFloat(me.down('#total').getValue()),
-            discount= me.down('#discount').getValue() ? parseFloat(me.down('#discount').getValue()) : 0,
+    onCalcule : function(){
+        var me      = this;
+        var
+            total           = parseFloat(me.down('#total').getValue()),
+            discount        = me.down('#discount').getValue() ? parseFloat(me.down('#discount').getValue()) : 0,
             value_to_pay    = total - discount,
             value_paid      = me.down('#value_paid').getValue() ? parseFloat(me.down('#value_paid').getValue()) : 0;
-
+        
             me.down('#value_to_pay').setValue( value_to_pay );
-            // if(value_paid == 0){
-            //     me.down('#value_paid').setValue(value_to_pay);
-            // }
-            value_paid      = parseFloat(me.down('#value_paid').getValue());
-                        
-            me.down('#change').setValue( value_paid - value_to_pay);
+            if(value_paid > 0){
+                me.down('#change').setValue( value_paid - value_to_pay);
+            }else {
+                me.down('#change').setValue(0);
+            }
+
     }
 });
